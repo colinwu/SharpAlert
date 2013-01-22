@@ -53,6 +53,8 @@ if alert.alert_msg =~ /Misfeed/ and not n.jam.nil?
   period = n.jam * 3600
 elsif alert.alert_msg =~ /Add toner/ and not n.toner_empty.nil?
   period = n.toner_empty * 3600
+elsif alert.alert_msg =~ /Toner supply/i and not n.toner_low.nil?
+  period = n.toner_low * 3600
 elsif alert.alert_msg =~ /Load paper/ and not n.paper.nil?
   period = n.paper * 3600
 elsif alert.alert_msg =~ /Call for service/ and not n.service.nil? and alert.alert_msg == last_alert.alert_msg

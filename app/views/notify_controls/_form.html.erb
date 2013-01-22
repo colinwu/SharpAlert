@@ -17,42 +17,42 @@
   </ul>
 
   <div class="two-columns">
-  <p>
-    <%= f.label 'Paper Jam/Misfeed' %><br />
+  <div>
+    <%= f.label 'Paper Jam/Misfeed' %>
     <%= f.number_field :jam, :size => 10 %>
-  </p>
-  <p>
-    <%= f.label :toner_low %><br />
+  </div>
+  <div>
+    <%= f.label :toner_low %>
     <%= f.number_field :toner_low, :size => 10 %>
-  </p>
-  <p>
-    <%= f.label :toner_empty %><br />
+  </div>
+  <div>
+    <%= f.label :toner_empty %>
     <%= f.number_field :toner_empty, :size => 10 %>
-  </p>
-  <p>
-    <%= f.label 'Out of Paper' %><br />
+  </div>
+  <div>
+    <%= f.label 'Out of Paper' %>
     <%= f.number_field :paper, :size => 10 %>
-  </p>
-  <p>
-    <%= f.label 'Call for Service' %><br />
+  </div>
+  <div>
+    <%= f.label 'Call for Service' %>
     <%= f.number_field :service, :size => 10 %>
-  </p>
-  <p>
-    <%= f.label 'Maintenance Required' %><br />
+  </div>
+  <div>
+    <%= f.label 'Maintenance Required' %>
     <%= f.number_field :pm, :size => 10 %>
-  </p>
-  <p>
-    <%= f.label :waste_almost_full %><br />
+  </div>
+  <div>
+    <%= f.label :waste_almost_full %>
     <%= f.number_field :waste_almost_full, :size => 10 %>
-  </p>
-  <p>
-    <%= f.label :waste_full %><br />
+  </div>
+  <div>
+    <%= f.label :waste_full %>
     <%= f.number_field :waste_full, :size => 10 %>
-  </p>
-  <p>
-    <%= f.label :job_log_full %><br />
+  </div>
+  <div>
+    <%= f.label :job_log_full %>
     <%= f.number_field :job_log_full, :size => 10 %>
-  </p>
+  </div>
   </div>
   <p><%= f.submit %></p>
 <% end %>

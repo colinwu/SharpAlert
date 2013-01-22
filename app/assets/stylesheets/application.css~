@@ -57,9 +57,11 @@ h1 {
 .two-columns {
   border-top: 0;
   padding-top: 0;
-  -moz-columns:2;
-  -webkit-columns:2;
-  columns:2;
+  -o-column-count:2;
+  -moz-column-count:2;
+  -webkit-column-count:2;
+  column-count:2;
+  -o-column-fill: auto;
   -moz-column-fill: auto;
   -webkit-column-fill: auto;
   column-fill: auto;

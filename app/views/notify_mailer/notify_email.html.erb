@@ -22,5 +22,9 @@
       <td>Message:</td><td><strong><%=h @alert.alert_msg -%></strong></td>
     </tr>
     </table>
+
+    <% if not @period.nil? and @num_past_alerts > 0 %>
+    <p>NOTE: In the past <%= @period -%> hours there have been <%= @num_past_alerts -%> alerts for this condition.</p>
+    <% end %>
   </body>
 </html>
