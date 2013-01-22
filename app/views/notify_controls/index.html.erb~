@@ -11,14 +11,14 @@
     <th>Toner<br />Empty</th>
     <th>Paper</th>
     <th>Service</th>
-    <th></th>
+    <th>Maint.</th>
     <th>Waste<br />Almost Full</th>
     <th>Waste<br />Full</th>
     <th>Job Log<br />Full</th>
   </tr>
   <% for notify_control in @notify_controls %>
   <tr class="<%=cycle('dark','light')%>">
-      <td><%= notify_control.device_serial %></td>
+  <td><%= link_to notify_control.device_serial, edit_notify_control_path(notify_control) %></td>
       <td><%= notify_control.who %></td>
       <td><%= notify_control.jam %></td>
       <td><%= notify_control.toner_low %></td>
@@ -29,7 +29,6 @@
       <td><%= notify_control.waste_almost_full %></td>
       <td><%= notify_control.waste_full %></td>
       <td><%= notify_control.job_log_full %></td>
-      <td><%= link_to "Edit", edit_notify_control_path(notify_control) %></td>
     </tr>
   <% end %>
 </table>

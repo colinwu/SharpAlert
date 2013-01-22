@@ -2,16 +2,19 @@
   <%= f.error_messages %>
   <p>
     <%= f.label :device_serial %><br />
-    <%= f.text_field :device_serial %>
+    <%= f.text_field :device_serial, :readonly => true %>
   </p>
   <p>
-    <%= f.label 'Who to notify' %><br />
-    <%= f.text_field :who %>
+    <%= f.label 'Who to notify (comma-separated list of email addresses)' %><br />
+    <%= f.text_field :who, :size => 60 %>
   </p>
   <hr>
-  <p>Values in each of the following fields specify the number of <strong>hours</strong> before a duplicate alert will be forwarded to the email address specified in the <strong>Who</strong> field.</p>
-  <p>An empty field causes those messages to be <strong>ignored.</strong></p>
-  <p>A value of 0 (zero) causes <strong>every</strong> alert (duplicate or not) to be forwarded.</p>
+  For each of the following fields:
+  <ul>
+  <li>A number specifies the number of <strong>hours</strong> before a duplicate alert will be sent to the email address(es) specified in the <strong>Who</strong> field.</li>
+  <li>An empty field causes those messages to be <strong>ignored.</strong></li>
+  <li>A value of 0 (zero) causes <strong>every</strong> alert (duplicate or not) to be sent.</li>
+  </ul>
 
   <div class="two-columns">
   <p>

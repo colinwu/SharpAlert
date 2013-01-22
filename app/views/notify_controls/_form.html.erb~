@@ -2,20 +2,22 @@
   <%= f.error_messages %>
   <p>
     <%= f.label :device_serial %><br />
-    <%= f.text_field :device_serial %>
+    <%= f.text_field :device_serial, :readonly => true %>
   </p>
   <p>
     <%= f.label 'Who to notify' %><br />
-    <%= f.text_field :who %>
+    <%= f.text_field :who, :size => 60 %>
   </p>
   <hr>
-  <p>Values in each of the following fields specify the number of <strong>hours</strong> before a duplicate alert will be forwarded to the email address specified in the <strong>Who</strong> field.</p>
-  <p>An empty field causes those messages to be <strong>ignored.</strong></p>
-  <p>A value of 0 (zero) causes <strong>every</strong> alert (duplicate or not) to be forwarded.</p>
+  <ul>
+  <li>Values in each of the following fields specify the number of <strong>hours</strong> before a duplicate alert will be forwarded to the email address specified in the <strong>Who</strong> field.</li>
+  <li>An empty field causes those messages to be <strong>ignored.</strong></li>
+  <li>A value of 0 (zero) causes <strong>every</strong> alert (duplicate or not) to be forwarded.</li>
+  </ul>
 
   <div class="two-columns">
   <p>
-    <%= f.label :jam %><br />
+    <%= f.label 'Paper Jam/Misfeed' %><br />
     <%= f.number_field :jam %>
   </p>
   <p>
@@ -27,15 +29,15 @@
     <%= f.number_field :toner_empty %>
   </p>
   <p>
-    <%= f.label :paper %><br />
+    <%= f.label 'Out of Paper' %><br />
     <%= f.number_field :paper %>
   </p>
   <p>
-    <%= f.label :service %><br />
+    <%= f.label 'Call for Service' %><br />
     <%= f.number_field :service %>
   </p>
   <p>
-    <%= f.label 'Maintenance' %><br />
+    <%= f.label 'Maintenance Required' %><br />
     <%= f.number_field :pm %>
   </p>
   <p>

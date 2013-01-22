@@ -46,10 +46,12 @@ class AlertsController < ApplicationController
         condition_array << @msg_q
 #         @alerts = Alert.paginate(:page => params[:page], :order => sort, :conditions => ['alert_msg regexp ?', @msg_q], :per_page => 30)
       end
-    end
-    if not where_array.empty?
-      condition_array[0] = where_array.join(' and ')
-      @alerts = Alert.paginate(:page => params[:page], :order => sort, :conditions => condition_array, :per_page => 30)
+      if not where_array.empty?
+        condition_array[0] = where_array.join(' and ')
+        @alerts = Alert.paginate(:page => params[:page], :order => sort, :conditions => condition_array, :per_page => 30)
+      else
+        @alerts = Alert.paginate(:page => params[:page], :per_page => 30, :order => sort)
+      end
     else
       @alerts = Alert.paginate(:page => params[:page], :per_page => 30, :order => sort)
     end
