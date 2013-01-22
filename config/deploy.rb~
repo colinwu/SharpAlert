@@ -4,7 +4,7 @@ set :application, "SharpApp"
 
 set :scm, :git # You can set :scm explicitly or Capistrano will make an intelligent guess based on known version control directory names
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
-set :applicationdir, "appdir"
+set :applicationdir, "/home/sharpmon/src/SharpAlert"
 set :repository,  "/var/www/SharpAlert.git"
 set :git_enable_submodules, 1
 set :branch, 'master'
