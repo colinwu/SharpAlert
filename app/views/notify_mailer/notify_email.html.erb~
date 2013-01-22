@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h1>Alert message from <%=h @alert.device_name -%></h1>
+    <table style="border: 0; padding: .1em .5em;">
+    <tr>
+      <td>Date:</td><td><strong><%=h @alert.alert_date.to_formatted_s(:db) -%></strong></td>
+    </tr>
+    <tr>
+      <td>Device:</td><td><strong><%=h @alert.device_name -%></strong></td>
+    </tr>
+    <tr>
+      <td>Model:</td><td><strong><%=h @alert.device_model -%></strong></td>
+    </tr>
+    <tr>
+      <td>Serial #:</td><td><strong><%=h @alert.device_serial -%></strong></td>
+    </tr>
+    <tr>
+      <td>Message:</td><td><strong><%=h @alert.alert_msg -%></strong></td>
+    </tr>
+    </table>
+  </body>
+</html>

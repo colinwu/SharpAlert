@@ -1,0 +1,43 @@
+<h1>Alerts</h1>
+<p>Please note that the <em>Alert Date</em> shown is the in the device's local time zone rather than your time zone. Unfortunately, the email alerts to not include time zone information in the date/time string so we can not convert.</p>
+<h3>Instructions</h3>
+<ul>
+  <li>You can enter pseudo-regular expressions in the text fields to search within  that column. For example: The search string "^misfeed" in the "Alert Msg" search box will find all messages with the string "misfeed" at the beginning of the message, whereas the search string "misfeed" (without the "^") will find messages with "misfeed" anywhere within the message text.</li>
+  <li>Search terms in more than one column are ANDed together.</li>
+  <li>Clicking on an underlined column title will sort the displayed results by that column. The default sort is by "Alert Date".</li>
+  <li>Clicking on a device's serial number will take you to a page where you can adjust the alert frequencies for that device.</li>
+</ul>
+
+<table>
+  <tr class='searchform'>
+    <%= form_tag '/alerts', :method => 'get' do -%>
+      <td>&nbsp;</td>
+      <td><%= text_field_tag 'name_q', @name_q, :size => 10 -%></td>
+      <td><%= text_field_tag 'model_q', @model_q, :size => 10 -%></td>
+      <td><%= text_field_tag 'serial_q', @serial_q, :size => 10 -%></td>
+      <td>&nbsp;</td>
+      <td><%= text_field_tag 'msg_q', @msg_q -%>&nbsp;<%= submit_tag 'Find' -%></td>
+    <%end%>  
+  </tr>
+  <tr>
+    <th><%= link_to 'Alert Date', "/alerts?sort=alert_date&#{@request}" -%></th>
+    <th><%= link_to 'Device Name', "/alerts?sort=device_name&#{@request}" -%></th>
+    <th><%= link_to 'Device Model', "/alerts?sort=device_model&#{@request}" -%></th>
+    <th><%= link_to 'Device Serial', "/alerts?sort=device_serial&#{@request}" -%></th>
+    <th>Device Code</th>
+    <th><%= link_to 'Alert Msg', "/alerts?sort=alert_msg&#{@request}" -%></th>
+  </tr>
+  <% for alert in @alerts %>
+    <% nc = NotifyControl.find_by_device_serial(alert.device_serial) %>
+    <tr class="<%=cycle('dark','light')%>">
+      <td><%= alert.alert_date.to_formatted_s(:db) %></td>
+      <td><%= alert.device_name %></td>
+      <td><%= alert.device_model %></td>
+      <td><%= link_to alert.device_serial, edit_notify_control_path(nc) %></td>
+      <td><%= alert.device_code %></td>
+      <td><%= alert.alert_msg %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= will_paginate @alerts %></p>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sharp MFP Alerts</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div id="top-menu">
+<%= link_to "Alerts", alerts_path -%> | 
+<%= link_to "Controls", notify_controls_path -%>
+</div>
+<%= yield %>
+
+</body>
+</html>

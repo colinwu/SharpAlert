@@ -1,0 +1,55 @@
+<%= form_for @notify_control do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :device_serial %><br />
+    <%= f.text_field :device_serial %>
+  </p>
+  <p>
+    <%= f.label 'Who to notify' %><br />
+    <%= f.text_field :who %>
+  </p>
+  <hr>
+  <p>Values in each of the following fields specify the number of <strong>hours</strong> before a duplicate alert will be forwarded to the email address specified in the <strong>Who</strong> field.</p>
+  <p>An empty field causes those messages to be <strong>ignored.</strong></p>
+  <p>A value of 0 (zero) causes <strong>every</strong> alert (duplicate or not) to be forwarded.</p>
+
+  <div class="two-columns">
+  <p>
+    <%= f.label 'Paper Jam/Misfeed' %><br />
+    <%= f.number_field :jam %>
+  </p>
+  <p>
+    <%= f.label :toner_low %><br />
+    <%= f.number_field :toner_low %>
+  </p>
+  <p>
+    <%= f.label :toner_empty %><br />
+    <%= f.number_field :toner_empty %>
+  </p>
+  <p>
+    <%= f.label 'Out of Paper' %><br />
+    <%= f.number_field :paper %>
+  </p>
+  <p>
+    <%= f.label 'Call for Service' %><br />
+    <%= f.number_field :service %>
+  </p>
+  <p>
+    <%= f.label 'Maintenance Required' %><br />
+    <%= f.number_field :pm %>
+  </p>
+  <p>
+    <%= f.label :waste_almost_full %><br />
+    <%= f.number_field :waste_almost_full %>
+  </p>
+  <p>
+    <%= f.label :waste_full %><br />
+    <%= f.number_field :waste_full %>
+  </p>
+  <p>
+    <%= f.label :job_log_full %><br />
+    <%= f.number_field :job_log_full %>
+  </p>
+  </div>
+  <p><%= f.submit %></p>
+<% end %>

@@ -1,0 +1,25 @@
+one:
+  device_serial: MyString
+  who: MyString
+  jam: 1
+  toner_low: 1
+  toner: 
+  paper: 1
+  service: 1
+  pm: 1
+  waste_almost_full: 1
+  waste_full: 1
+  job_log_full: 1
+
+two:
+  device_serial: MyString
+  who: MyString
+  jam: 1
+  toner_low: 1
+  toner: 
+  paper: 1
+  service: 1
+  pm: 1
+  waste_almost_full: 1
+  waste_full: 1
+  job_log_full: 1

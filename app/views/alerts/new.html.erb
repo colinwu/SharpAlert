@@ -1,0 +1,33 @@
+<% title "New Alert" %>
+
+<%= form_for @alert do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :alert_date %><br />
+    <%= f.datetime_select :alert_date %>
+  </p>
+  <p>
+    <%= f.label :device_name %><br />
+    <%= f.text_field :device_name %>
+  </p>
+  <p>
+    <%= f.label :device_model %><br />
+    <%= f.text_field :device_model %>
+  </p>
+  <p>
+    <%= f.label :device_serial %><br />
+    <%= f.text_field :device_serial %>
+  </p>
+  <p>
+    <%= f.label :device_code %><br />
+    <%= f.text_field :device_code %>
+  </p>
+  <p>
+    <%= f.label :alert_msg %><br />
+    <%= f.text_field :alert_msg %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>
+
+
+<p><%= link_to "Back to List", alerts_path %></p>

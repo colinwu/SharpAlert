@@ -1,0 +1,15 @@
+one:
+  alert_date: 2013-01-16 08:00:37
+  device_name: MyString
+  device_model: MyString
+  device_serial: MyString
+  device_code: MyString
+  alert_msg: MyString
+
+two:
+  alert_date: 2013-01-16 08:00:37
+  device_name: MyString
+  device_model: MyString
+  device_serial: MyString
+  device_code: MyString
+  alert_msg: MyString

@@ -1,0 +1,8 @@
+<% title "Edit Notify Control" %>
+
+<%= render 'form' %>
+
+<p>
+  <%= link_to "Show", @notify_control %> |
+  <%= link_to "View All", notify_controls_path %>
+</p>

@@ -1,0 +1,37 @@
+<% title "Notify Controls" %>
+
+<p>Values in this table specify how often, in hours, the person(s) in the "Who" column should be notified for each of the conditions.</p>
+
+<table>
+  <tr>
+    <th>Device Serial</th>
+    <th>Who</th>
+    <th>Jam</th>
+    <th>Toner<br />Low</th>
+    <th>Toner<br />Empty</th>
+    <th>Paper</th>
+    <th>Service</th>
+    <th></th>
+    <th>Waste<br />Almost Full</th>
+    <th>Waste<br />Full</th>
+    <th>Job Log<br />Full</th>
+  </tr>
+  <% for notify_control in @notify_controls %>
+  <tr class="<%=cycle('dark','light')%>">
+      <td><%= notify_control.device_serial %></td>
+      <td><%= notify_control.who %></td>
+      <td><%= notify_control.jam %></td>
+      <td><%= notify_control.toner_low %></td>
+      <td><%= notify_control.toner_empty %></td>
+      <td><%= notify_control.paper %></td>
+      <td><%= notify_control.service %></td>
+      <td><%= notify_control.pm %></td>
+      <td><%= notify_control.waste_almost_full %></td>
+      <td><%= notify_control.waste_full %></td>
+      <td><%= notify_control.job_log_full %></td>
+      <td><%= link_to "Edit", edit_notify_control_path(notify_control) %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= will_paginate @notify_controls %></p>
