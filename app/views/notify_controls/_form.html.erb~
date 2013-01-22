@@ -5,52 +5,53 @@
     <%= f.text_field :device_serial, :readonly => true %>
   </p>
   <p>
-    <%= f.label 'Who to notify' %><br />
+    <%= f.label 'Who to notify (comma-separated list of email addresses)' %><br />
     <%= f.text_field :who, :size => 60 %>
   </p>
   <hr>
+  For each of the following fields:
   <ul>
-  <li>Values in each of the following fields specify the number of <strong>hours</strong> before a duplicate alert will be forwarded to the email address specified in the <strong>Who</strong> field.</li>
+  <li>A number specifies the number of <strong>hours</strong> before a duplicate alert will be sent to the email address(es) specified in the <strong>Who</strong> field.</li>
   <li>An empty field causes those messages to be <strong>ignored.</strong></li>
-  <li>A value of 0 (zero) causes <strong>every</strong> alert (duplicate or not) to be forwarded.</li>
+  <li>A value of 0 (zero) causes <strong>every</strong> alert (duplicate or not) to be sent.</li>
   </ul>
 
   <div class="two-columns">
   <p>
     <%= f.label 'Paper Jam/Misfeed' %><br />
-    <%= f.number_field :jam %>
+    <%= f.number_field :jam, :size => 10 %>
   </p>
   <p>
     <%= f.label :toner_low %><br />
-    <%= f.number_field :toner_low %>
+    <%= f.number_field :toner_low, :size => 10 %>
   </p>
   <p>
     <%= f.label :toner_empty %><br />
-    <%= f.number_field :toner_empty %>
+    <%= f.number_field :toner_empty, :size => 10 %>
   </p>
   <p>
     <%= f.label 'Out of Paper' %><br />
-    <%= f.number_field :paper %>
+    <%= f.number_field :paper, :size => 10 %>
   </p>
   <p>
     <%= f.label 'Call for Service' %><br />
-    <%= f.number_field :service %>
+    <%= f.number_field :service, :size => 10 %>
   </p>
   <p>
     <%= f.label 'Maintenance Required' %><br />
-    <%= f.number_field :pm %>
+    <%= f.number_field :pm, :size => 10 %>
   </p>
   <p>
     <%= f.label :waste_almost_full %><br />
-    <%= f.number_field :waste_almost_full %>
+    <%= f.number_field :waste_almost_full, :size => 10 %>
   </p>
   <p>
     <%= f.label :waste_full %><br />
-    <%= f.number_field :waste_full %>
+    <%= f.number_field :waste_ful, :size => 10l %>
   </p>
   <p>
     <%= f.label :job_log_full %><br />
-    <%= f.number_field :job_log_full %>
+    <%= f.number_field :job_log_full, :size => 10 %>
   </p>
   </div>
   <p><%= f.submit %></p>
