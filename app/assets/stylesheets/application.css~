@@ -61,7 +61,7 @@ h1 {
 }
 
 #container {
-  width: 90%;
+  width: 95%;
   margin: 5px auto;
 }
 

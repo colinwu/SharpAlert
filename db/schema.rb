@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130116130427) do
+ActiveRecord::Schema.define(:version => 20130123184515) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -36,8 +36,17 @@ ActiveRecord::Schema.define(:version => 20130116130427) do
     t.integer  "waste_almost_full"
     t.integer  "waste_full"
     t.integer  "job_log_full"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+    t.datetime "jam_sent"
+    t.datetime "toner_low_sent"
+    t.datetime "toner_empty_sent"
+    t.datetime "paper_sent"
+    t.datetime "service_sent"
+    t.datetime "pm_sent"
+    t.datetime "waste_almost_full_sent"
+    t.datetime "waste_full_sent"
+    t.datetime "job_log_full_sent"
   end
 
 end

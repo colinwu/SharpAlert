@@ -25,7 +25,6 @@ while (line = gets)
 end
 
 # retrieve details of the last alert for this device before committing this alert
-last_alert = Alert.find_last_by_device_serial alert.device_serial
 alert.save
 
 # retrieve (or create using defaults) the notification profile for this device.
@@ -51,27 +50,36 @@ end
 # figure out if we need to send notification
 if alert.alert_msg =~ /Misfeed/ and not n.jam.nil?
   period = n.jam * 3600
+  last_time = n.jam_sent
 elsif alert.alert_msg =~ /Add toner/ and not n.toner_empty.nil?
   period = n.toner_empty * 3600
+  last_time = n.toner_empty_sent
 elsif alert.alert_msg =~ /Toner supply/i and not n.toner_low.nil?
   period = n.toner_low * 3600
+  last_time = n.toner_low_sent
 elsif alert.alert_msg =~ /Load paper/ and not n.paper.nil?
   period = n.paper * 3600
+  last_time = n.paper_sent
 elsif alert.alert_msg =~ /Call for service/ and not n.service.nil? and alert.alert_msg == last_alert.alert_msg
   period = n.service * 3600
+  last_time = n.service_sent
 elsif alert.alert_msg =~ /Maintenance required/ and not n.pm.nil? and alert.alert_msg == last_alert.alert_msg
   period = n.pm * 3600
+  last_time = n.pm_sent
 elsif alert.alert_msg =~ /Replace used toner/ and not n.waste_full.nil?
   period = n.waste_full * 3600
+  last_time = n.waste_full_sent
 elsif alert.alert_msg =~ /Replacement the toner/ and not n.waste_almost_full.nil?
   period = n.waste_almost_full * 3600
+  last_time = n.waste_almost_full_sent
 elsif alert.alert_msg =~ /Job/ and not n.job_log_full.nil?
   period = n.job_log_full * 3600
+  last_time = n.job_log_full_sent
 else
   period = nil
 end
 
-if not period.nil? and ((alert.alert_date <=> last_alert.alert_date + period) > 0)
+if not period.nil? and (last_time.nil? or (alert.alert_date <=> last_time + period) > 0)
   # Send alert
   NotifyMailer.notify_email(n.who, alert).deliver
   exit 0
