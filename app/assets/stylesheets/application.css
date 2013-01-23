@@ -56,13 +56,13 @@ h1 {
 
 #top-menu {
   text-align: right;
-  margin: 5% auto;
+  margin: 0 auto;
   width: 90%;
 }
 
 #container {
-  width: 90%;
-  margin: 5% auto;
+  width: 95%;
+  margin: 5px auto;
 }
 
 #form_header {
