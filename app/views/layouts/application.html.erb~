@@ -8,8 +8,8 @@
 </head>
 <body>
 <div id="top-menu">
-<%= link_to "Alerts", alerts_path -%> | 
-<%= link_to "Controls", notify_controls_path -%>
+<%= link_to_unless_current "Alerts", alerts_path -%> |
+<%= link_to_unless_current "Controls", notify_controls_path -%>
 </div>
 <%= yield %>
 

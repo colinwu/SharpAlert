@@ -1,4 +1,4 @@
-<% title "Edit Notify Control" %>
+<h1>Edit Notify Control</h1>
 
 <%= render 'form' %>
 

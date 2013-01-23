@@ -11,7 +11,9 @@
 <%= link_to_unless_current "Alerts", alerts_path -%> |
 <%= link_to_unless_current "Controls", notify_controls_path -%>
 </div>
+<div id="container">
 <%= yield %>
+</div>
 
 </body>
 </html>
