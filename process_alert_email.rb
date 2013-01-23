@@ -35,7 +35,6 @@ if n.nil?
   n = NotifyControl.new
   n.device_serial = alert.device_serial
   n.who = ndef.who
-  n.device_tz = ndef.device_tz
   n.jam = ndef.jam
   n.toner_low = ndef.toner_low
   n.toner_empty = ndef.toner_empty
@@ -46,6 +45,7 @@ if n.nil?
   n.waste_full = ndef.waste_full
   n.job_log_full = ndef.job_log_full
   n.save
+  NotifyMailer.new_device('wuc@sharpsec.com,chapmanc@sharpsec.com',alert,n).deliver
 end
 
 # figure out if we need to send notification

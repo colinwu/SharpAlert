@@ -32,5 +32,11 @@ class NotifyMailer < ActionMailer::Base
     end
     mail(:to => who, :subject => "#{alert.device_name} - Alert Message - #{alert.alert_msg}")
   end
-  
+
+  def new_device(who,alert,n)
+    @who = who
+    @alert = alert
+    @control = n
+    mail(:to => who, :subject => "New device detected")
+  end
 end
