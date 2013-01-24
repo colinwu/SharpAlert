@@ -16,10 +16,14 @@ body {
   font-size: 12px;
   padding: 0 .5em;
 }
-  
+
+table {
+  width: 100%;
+}
+
 table tr td {
   font-size: 12px;
-  padding: 0 .5em;
+  padding: .1em .5em;
 }
 
 td {
@@ -30,7 +34,7 @@ table tr th {
   background-color: #666;
   color: white;
   font-size: 12px;
-  padding: 2px .5em;
+  padding: .1em .5em;
 }
 
 th {
@@ -71,6 +75,11 @@ h1 {
 
 #form_header {
   width: auto;
+}
+
+#form_box {
+  width: 80%;
+  margin: 0 auto;
 }
 
 #form_left {

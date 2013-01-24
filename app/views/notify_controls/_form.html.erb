@@ -1,6 +1,7 @@
 <%= form_for @notify_control do |f| %>
-  <%= f.error_messages %>
+  <div id="form_box">
   <div id="form_header">
+  <%= f.error_messages %>
   <p>
     <%= f.label 'Who to notify (comma-separated list of email addresses)' %><br />
     <%= f.text_field :who, :size => 60 %>
@@ -55,5 +56,6 @@
   </div>
   <div id="form_footer">
     <%= f.submit %>
+  </div>
   </div>
 <% end %>

@@ -2,10 +2,6 @@
   <%= f.error_messages %>
   <div id="form_header">
   <p>
-    <%= f.label :device_serial %><br />
-    <%= f.text_field :device_serial, :readonly => true %>
-  </p>
-  <p>
     <%= f.label 'Who to notify (comma-separated list of email addresses)' %><br />
     <%= f.text_field :who, :size => 60 %>
   </p>

@@ -1,6 +1,10 @@
 class NotifyControlsController < ApplicationController
   def index
-    @notify_controls = NotifyControl.paginate(:page => params[:page], :per_page => 30)
+    @notify_controls = NotifyControl.paginate(:page => params[:page], :per_page => 30, :order => :device_serial)
+    @dev_names = Hash.new
+    @notify_controls.each do |n|
+      @dev_names[n.device_serial] = (n.device_serial == 'default') ? '' : Alert.find_last_by_device_serial(n.device_serial).device_name
+    end
   end
 
   def show
@@ -22,6 +26,7 @@ class NotifyControlsController < ApplicationController
 
   def edit
     @notify_control = NotifyControl.find(params[:id])
+    @device_name = Alert.find_last_by_device_serial( @notify_control.device_serial, :select => :device_name ).device_name
   end
 
   def update
