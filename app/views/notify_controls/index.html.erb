@@ -1,6 +1,7 @@
-<% title "Notify Controls" %>
+<h1>Notification Controls</h1>
 
 <p>Values in this table specify how often, in hours, the person(s) in the "Who" column should be notified for each of the conditions.</p>
+<p>Click on the Device Name to see all alerts for that device. Click on the Device Serail number to edit settings for that device.</p>
 
 <table class="list">
   <tr>
@@ -20,17 +21,17 @@
   <% for notify_control in @notify_controls %>
     <tr class="<%=cycle('dark','light')%>">
       <td><%= link_to notify_control.device_serial, edit_notify_control_path(notify_control) %></td>
-      <td><%= link_to_unless (notify_control == 'default'),  @dev_names[notify_control.device_serial], alerts_path + "?name_q=#{@dev_names[notify_control.device_serial]}&commit=Find" %></td>
-      <td><%= notify_control.who %></td>
-      <td><%= notify_control.jam %></td>
-      <td><%= notify_control.toner_low %></td>
-      <td><%= notify_control.toner_empty %></td>
-      <td><%= notify_control.paper %></td>
-      <td><%= notify_control.service %></td>
-      <td><%= notify_control.pm %></td>
-      <td><%= notify_control.waste_almost_full %></td>
-      <td><%= notify_control.waste_full %></td>
-      <td><%= notify_control.job_log_full %></td>
+      <td><%= link_to_unless (notify_control.device_serial == 'default'),  h(@dev_names[notify_control.device_serial]), alerts_path + "?name_q=#{@dev_names[notify_control.device_serial]}&commit=Find" %></td>
+      <td><%=h notify_control.who %></td>
+      <td><%=h notify_control.jam %></td>
+      <td><%=h notify_control.toner_low %></td>
+      <td><%=h notify_control.toner_empty %></td>
+      <td><%=h notify_control.paper %></td>
+      <td><%=h notify_control.service %></td>
+      <td><%=h notify_control.pm %></td>
+      <td><%=h notify_control.waste_almost_full %></td>
+      <td><%=h notify_control.waste_full %></td>
+      <td><%=h notify_control.job_log_full %></td>
     </tr>
   <% end %>
 </table>

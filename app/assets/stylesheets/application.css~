@@ -15,6 +15,7 @@
 body {
   font-size: 12px;
   padding: 0 .5em;
+  background-color: #EEE;
 }
 
 table tr td {
@@ -51,7 +52,12 @@ h1 {
 }
 
 .dark {
-  background-color: #eee5de;
+  background-color: #f6fbff;
+}
+
+.list {
+  width: 100%;
+  border: 1px solid black;
 }
 
 #top-menu {
@@ -63,6 +69,8 @@ h1 {
 #container {
   width: 95%;
   margin: 5px auto;
+  background-color: white;
+  padding: 1em;
 }
 
 #form_header {
@@ -87,9 +95,4 @@ h1 {
 #form_footer {
   clear: both;
   width: auto;
-}
-
-.list {
-  width: 100%;
-  border: solid 1px black;
 }

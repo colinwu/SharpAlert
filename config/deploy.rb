@@ -3,6 +3,7 @@ set :scm, :git # You can set :scm explicitly or Capistrano will make an intellig
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 set :user, 'sharpmon'
 set :use_sudo, false
+set :keep_releases, 6
 
 set :applicationdir, "/var/www/SharpAlert"
 set :application, "SharpApp"

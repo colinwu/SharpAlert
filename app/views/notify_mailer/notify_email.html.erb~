@@ -5,7 +5,7 @@
   </head>
   <body>
     <h2>Alert message from <%=h @alert.device_name -%></h2>
-    <table style="border: 0; padding: .1em .5em;">
+    <table style="border: 0; padding: .1em .5em; width: 80%">
     <tr>
       <td>Date:</td><td><strong><%=h @alert.alert_date.to_formatted_s(:db) -%></strong></td>
     </tr>
@@ -16,13 +16,13 @@
       <td>Model:</td><td><strong><%=h @alert.device_model -%></strong></td>
     </tr>
     <tr>
-      <td>Serial #:</td><td><strong><%=h @alert.device_serial -%></strong></td>
+    <td>Serial #:</td><td><strong><%= link_to h(@alert.device_serial), "http://seclcsglab.sharpamericas.com" + edit_notify_control_path(h(@alert.device_serial)) -%></strong></td>
     </tr>
     <tr>
       <td>Message:</td><td><strong><%=h @alert.alert_msg -%></strong></td>
     </tr>
     </table>
-
+    <br />
     <% if not @period.nil? and @num_past_alerts > 0 %>
     <p>NOTE: In the past <%= @period -%> hours there have been <%= @num_past_alerts -%> alerts for this condition.</p>
     <% end %>
