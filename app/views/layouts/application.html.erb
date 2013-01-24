@@ -5,10 +5,11 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <meta http-equiv="refresh" content='3600'>
 </head>
 <body>
 <div id="top-menu">
-<%= link_to_unless_current "Alerts", alerts_path -%> |
+<%= link_to "Alerts", alerts_path -%> |
 <%= link_to_unless_current "Controls", notify_controls_path -%>
 </div>
 <div id="container">
