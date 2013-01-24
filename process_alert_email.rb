@@ -1,3 +1,17 @@
+# Parses a Sharp MFP alert email and records it as an Alert object
+#
+# The email has the form
+#    2013/01/20 14:50:56
+# 
+#    Device Name: YR-MF-124
+#    Device Model: MX-4101N
+# 
+#    Serial Number: 0502254100
+#    Machine Code: YR-MF-124
+# 
+#    Device has detected:
+# 
+#    !!!!! Maintenance required. Code:FK3 !!!!!
 alert = Alert.new
 
 # Parse the email
@@ -13,8 +27,8 @@ while (line = gets)
   elsif line =~ /^!!!!! (.+) !!!!!/
     msg = $1
     if msg =~ /Call for service/
-      codes = gets
-      msg += ": $#{codes}"
+      codes = gets.strip
+      msg += ": #{codes}"
     elsif msg =~ /Maintenance required. Code:(.+)$/
       codes = $1
     end

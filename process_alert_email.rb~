@@ -13,8 +13,8 @@ while (line = gets)
   elsif line =~ /^!!!!! (.+) !!!!!/
     msg = $1
     if msg =~ /Call for service/
-      codes = gets
-      msg += ": $#{codes}"
+      codes = gets.strip
+      msg += ": #{codes}"
     elsif msg =~ /Maintenance required. Code:(.+)$/
       codes = $1
     end
@@ -60,10 +60,10 @@ elsif alert.alert_msg =~ /Toner supply/i and not n.toner_low.nil?
 elsif alert.alert_msg =~ /Load paper/ and not n.paper.nil?
   period = n.paper * 3600
   last_time = n.paper_sent
-elsif alert.alert_msg =~ /Call for service/ and not n.service.nil? and alert.alert_msg == last_alert.alert_msg
+elsif alert.alert_msg =~ /Call for service/ and not n.service.nil?
   period = n.service * 3600
   last_time = n.service_sent
-elsif alert.alert_msg =~ /Maintenance required/ and not n.pm.nil? and alert.alert_msg == last_alert.alert_msg
+elsif alert.alert_msg =~ /Maintenance required/ and not n.pm.nil?
   period = n.pm * 3600
   last_time = n.pm_sent
 elsif alert.alert_msg =~ /Replace used toner/ and not n.waste_full.nil?
