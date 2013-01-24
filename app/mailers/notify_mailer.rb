@@ -18,10 +18,10 @@ class NotifyMailer < ActionMailer::Base
     elsif alert.alert_msg =~ /Load paper/ and not n.paper.nil?
       @period = n.paper
       n.paper_sent = alert.alert_date
-    elsif alert.alert_msg =~ /Call for service/ and not n.service.nil? and alert.alert_msg == alert.alert_msg
+    elsif alert.alert_msg =~ /Call for service/ and not n.service.nil?
       @period = n.service
       n.service_sent = alert.alert_date
-    elsif alert.alert_msg =~ /Maintenance required/ and not n.pm.nil? and alert.alert_msg == alert.alert_msg
+    elsif alert.alert_msg =~ /Maintenance required/ and not n.pm.nil?
       @period = n.pm
       n.pm_sent = alert.alert_date
     elsif alert.alert_msg =~ /Replace used toner/ and not n.waste_full.nil?

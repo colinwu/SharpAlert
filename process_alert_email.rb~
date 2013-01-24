@@ -79,7 +79,7 @@ else
   period = nil
 end
 
-if not period.nil? and ((alert.alert_date <=> last_time + period) > 0)
+if not period.nil? and (last_time.nil? or (alert.alert_date <=> last_time + period) > 0)
   # Send alert
   NotifyMailer.notify_email(n.who, alert).deliver
   exit 0
