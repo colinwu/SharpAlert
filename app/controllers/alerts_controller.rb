@@ -47,14 +47,20 @@ class AlertsController < ApplicationController
         @msg_q = params[:msg_q]
         condition_array << @msg_q
       end
-      if not where_array.empty?
+      unless where_array.empty?
         condition_array[0] = where_array.join(' and ')
-        @alerts = Alert.paginate(:page => params[:page], :order => sort, :conditions => condition_array, :per_page => 30)
       else
-        @alerts = Alert.paginate(:page => params[:page], :per_page => 30, :order => sort)
+        condition_array = []
       end
-    else
-      @alerts = Alert.paginate(:page => params[:page], :per_page => 30, :order => sort)
+    end
+    @alerts = Alert.paginate(:page => params[:page], :order => sort, :conditions => condition_array, :per_page => 30)
+    if (not params[:commit].nil? and params[:commit] == 'Export')
+      @request.sub!(/commit=Export/,'commit=Find')
+      csv_data = '"alert data","device name","device_model","serial number","machine code","message"' + "\n"
+      Alert.all(:order => sort, :conditions => condition_array).each do |a|
+        csv_data += a.to_csv + "\n"
+      end
+      send_data(csv_data, :type => "text/csv", :filename => 'alerts.csv', :disposition => "attachment")
     end
   end
 end

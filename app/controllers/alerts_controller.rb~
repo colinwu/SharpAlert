@@ -13,6 +13,11 @@ class AlertsController < ApplicationController
   end
 
   def index
+    @num_alerts = Alert.all.count
+    @num_devices = Alert.all(:group => 'device_serial').count
+    @num_service = Alert.all(:conditions => "alert_msg regexp 'Call for service'").count
+    @num_pm = Alert.all(:conditions => "alert_msg regexp 'Maintenance'").count
+    
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
     if params[:sort].nil?
       sort = 'alert_date'
@@ -42,14 +47,15 @@ class AlertsController < ApplicationController
         @msg_q = params[:msg_q]
         condition_array << @msg_q
       end
-      if not where_array.empty?
+      unless where_array.empty?
         condition_array[0] = where_array.join(' and ')
-        @alerts = Alert.paginate(:page => params[:page], :order => sort, :conditions => condition_array, :per_page => 30)
       else
-        @alerts = Alert.paginate(:page => params[:page], :per_page => 30, :order => sort)
+        condition_array = []
       end
-    else
-      @alerts = Alert.paginate(:page => params[:page], :per_page => 30, :order => sort)
+    end
+    @alerts = Alert.paginate(:page => params[:page], :order => sort, :conditions => condition_array, :per_page => 30)
+    if (not params[:commit].nil? and params[:commit] == 'Export')
+      @request.sub!(/commit=Export/,'commit=Find')
     end
   end
 end
