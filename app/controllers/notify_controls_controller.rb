@@ -26,7 +26,7 @@ class NotifyControlsController < ApplicationController
 
   def edit
     @notify_control = NotifyControl.find(params[:id])
-    @device_name = Alert.find_last_by_device_serial( @notify_control.device_serial, :select => :device_name ).device_name
+    @device_name = (@notify_control.device_serial == 'default') ? 'Default Settings' : Alert.find_last_by_device_serial( @notify_control.device_serial, :select => :device_name ).device_name
   end
 
   def update
