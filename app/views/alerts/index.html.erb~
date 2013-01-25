@@ -20,7 +20,7 @@
 <table class="list">
   <tr class='searchform'>
     <%= form_tag '/alerts', :method => 'get' do -%>
-      <td class="right-justify">Search:</td>
+      <th class="right-justify">Search:</td>
       <td><%= text_field_tag 'name_q', @name_q, :size => 10 -%>&amp;&amp;</td>
       <td><%= text_field_tag 'model_q', @model_q, :size => 10 -%>&amp;&amp;</td>
       <td><%= text_field_tag 'serial_q', @serial_q, :size => 10 -%>&amp;&amp;</td>
