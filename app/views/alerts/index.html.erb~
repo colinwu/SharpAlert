@@ -1,20 +1,29 @@
 <h1>Alerts</h1>
-<p>Please note that the <em>Alert Date</em> shown is the in the device's local time zone rather than your time zone. Unfortunately, the email alerts to not include time zone information in the date/time string so we can not convert.</p>
-<h3>Instructions</h3>
-<ul>
-  <li>You can enter pseudo-regular expressions in the text fields to search within  that column. For example: The search string "^misfeed" in the "Alert Msg" search box will find all messages with the string "misfeed" at the beginning of the message, whereas the search string "misfeed" (without the "^") will find messages with "misfeed" anywhere within the message text.</li>
-  <li>Search terms in more than one column are ANDed together.</li>
-  <li>Clicking on an underlined column title will sort the displayed results by that column. The default sort is by "Alert Date".</li>
-  <li>Clicking on a device's serial number will take you to a page where you can adjust the alert frequencies for that device.</li>
-</ul>
-
+<table class="list">
+  <tr>
+    <th colspan=4>Statistics (Totals)</th>
+  </tr>
+  <tr>
+    <th>Alerts</th>
+    <th>Devices</th>
+    <th>Service</th>
+    <th>Maintenance</th>
+  </tr>
+  <tr class="right-justify">
+    <td><%= number_with_delimiter(@num_alerts) -%></td>
+    <td><%= number_with_delimiter(@num_devices) -%></td>
+    <td><%= number_with_delimiter(@num_service) -%></td>
+    <td><%= number_with_delimiter(@num_pm) -%></td>
+  </tr>
+</table>
+<p>Please note that the <em>Alert Date</em> shown is in the device's local time zone rather than your time zone. Unfortunately, the email alerts to not include time zone information in the date/time string.</p>
 <table class="list">
   <tr class='searchform'>
     <%= form_tag '/alerts', :method => 'get' do -%>
-      <td>&nbsp;</td>
-      <td><%= text_field_tag 'name_q', @name_q, :size => 10 -%></td>
-      <td><%= text_field_tag 'model_q', @model_q, :size => 10 -%></td>
-      <td><%= text_field_tag 'serial_q', @serial_q, :size => 10 -%></td>
+      <td class="right-justify">Search:</td>
+      <td><%= text_field_tag 'name_q', @name_q, :size => 10 -%>&amp;&amp;</td>
+      <td><%= text_field_tag 'model_q', @model_q, :size => 10 -%>&amp;&amp;</td>
+      <td><%= text_field_tag 'serial_q', @serial_q, :size => 10 -%>&amp;&amp;</td>
       <td>&nbsp;</td>
       <td><%= text_field_tag 'msg_q', @msg_q -%>&nbsp;<%= submit_tag 'Find' -%></td>
     <%end%>  

@@ -5,7 +5,8 @@ class NotifyMailer < ActionMailer::Base
     @who = who
     @alert = alert
     @n = NotifyControl.find_by_device_serial alert.device_serial
-    # figure out which alert this is so we know which control to use
+    # figure out which alert this is so we know
+    which control to use
     if alert.alert_msg =~ /Misfeed/ and not @n.jam.nil?
       @period = @n.jam
       @n.jam_sent = alert.alert_date

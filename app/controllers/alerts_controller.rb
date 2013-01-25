@@ -13,6 +13,11 @@ class AlertsController < ApplicationController
   end
 
   def index
+    @num_alerts = Alert.all.count
+    @num_devices = Alert.all(:group => 'device_serial').count
+    @num_service = Alert.all(:conditions => "alert_msg regexp 'Call for service'").count
+    @num_pm = Alert.all(:conditions => "alert_msg regexp 'Maintenance'").count
+    
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
     if params[:sort].nil?
       sort = 'alert_date'

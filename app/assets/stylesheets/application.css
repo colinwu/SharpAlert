@@ -23,10 +23,6 @@ table tr td {
   padding: .1em .5em;
 }
 
-td {
-  vertical-align: top;
-}
-
 table tr th {
   background-color: #666;
   color: white;
@@ -58,6 +54,22 @@ h1 {
 .list {
   width: 100%;
   border: 1px solid black;
+}
+
+.searchform {
+  vertical-align: center;
+}
+
+.right-justify {
+  text-align: right;
+}
+
+.left-justify {
+  text-align: left;
+}
+
+.centre-justify {
+  text-align: center;
 }
 
 #top-menu {
