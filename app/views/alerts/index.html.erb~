@@ -25,7 +25,7 @@
       <td><%= text_field_tag 'model_q', @model_q, :size => 10 -%></td>
       <td><%= text_field_tag 'serial_q', @serial_q, :size => 10 -%></td>
       <td>&nbsp;</td>
-      <td><%= text_field_tag 'msg_q', @msg_q -%>&nbsp;<%= check_box_tag 'csv' -%> Output as CSV <%= submit_tag 'Find' -%></td>
+      <td><%= text_field_tag 'msg_q', @msg_q -%>&nbsp;<%= submit_tag 'Export' -%> <%= submit_tag 'Find' -%></td>
     <%end%>  
   </tr>
   <tr>
@@ -40,9 +40,9 @@
     <% nc = NotifyControl.find_by_device_serial(alert.device_serial) %>
     <tr class="<%=cycle('dark','light')%>">
       <td><%= alert.alert_date.to_formatted_s(:db) %></td>
-      <td><%= alert.device_name %></td>
+      <td><%= link_to alert.device_name, edit_notify_contorl_path(alert.notify_control_id) %></td>
       <td><%= alert.device_model %></td>
-      <td><%= link_to alert.device_serial, edit_notify_control_path(nc) %></td>
+      <td><%= alert.device_serial %></td>
       <td><%= alert.device_code %></td>
       <td><%= alert.alert_msg %></td>
     </tr>

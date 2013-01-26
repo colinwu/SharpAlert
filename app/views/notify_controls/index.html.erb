@@ -5,7 +5,6 @@
 
 <table class="list">
   <tr>
-    <th>Device Serial</th>
     <th>Device Name</th>
     <th>Who</th>
     <th>Jam</th>
@@ -20,8 +19,13 @@
   </tr>
   <% for notify_control in @notify_controls %>
     <tr class="<%=cycle('dark','light')%>">
-      <td><%= link_to notify_control.device_serial, edit_notify_control_path(notify_control) %></td>
-      <td><%= link_to_unless (notify_control.device_serial == 'default'),  h(@dev_names[notify_control.device_serial]), alerts_path + "?name_q=#{@dev_names[notify_control.device_serial]}&commit=Find" %></td>
+      <td>
+        <% if notify_control.alerts.empty? %>
+          &lt;no device&gt;
+        <% else %>
+          <%= link_to h(notify_control.alerts[-1].device_name), alerts_path + "?name_q=#{notify_control.alerts[-1].device_name}&commit=Find" %>
+        <% end %>
+      </td>
       <td><%=h notify_control.who %></td>
       <td><%=h notify_control.jam %></td>
       <td><%=h notify_control.toner_low %></td>
@@ -32,6 +36,7 @@
       <td><%=h notify_control.waste_almost_full %></td>
       <td><%=h notify_control.waste_full %></td>
       <td><%=h notify_control.job_log_full %></td>
+      <td><%= link_to 'Edit', edit_notify_control_path(notify_control) %></td>
     </tr>
   <% end %>
 </table>

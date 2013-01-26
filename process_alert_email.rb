@@ -42,22 +42,23 @@ end
 alert.save
 
 # retrieve (or create using defaults) the notification profile for this device.
-@n = NotifyControl.find_by_device_serial(alert.device_serial)
+@n = NotifyControl.find_by_device_serial_and_device_model(alert.device_serial,alert.device_model)
 if @n.nil?
   ndef = NotifyControl.find_by_device_serial 'default'
-  @n = NotifyControl.new
-  @n.device_serial = alert.device_serial
-  @n.who = ndef.who
-  @n.jam = ndef.jam
-  @n.toner_low = ndef.toner_low
-  @n.toner_empty = ndef.toner_empty
-  @n.paper = ndef.paper
-  @n.service = ndef.service
-  @n.pm = ndef.pm
-  @n.waste_almost_full = ndef.waste_almost_full
-  @n.waste_full = ndef.waste_full
-  @n.job_log_full = ndef.job_log_full
-  @n.save
+  @n = alert.create_notify_control(
+    :device_serial => alert.device_serial,
+    :device_model => alert.device_model,
+    :who => ndef.who,
+    :jam => ndef.jam,
+    :toner_low => ndef.toner_low,
+    :toner_empty => ndef.toner_empty,
+    :paper => ndef.paper,
+    :service => ndef.service,
+    :pm => ndef.pm,
+    :waste_almost_full => ndef.waste_almost_full,
+    :waste_full => ndef.waste_full,
+    :job_log_full => ndef.job_log_full)
+  
   NotifyMailer.new_device('wuc@sharpsec.com,chapmanc@sharpsec.com',alert,@n).deliver
 end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130123184515) do
+ActiveRecord::Schema.define(:version => 20130126010633) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -20,8 +20,9 @@ ActiveRecord::Schema.define(:version => 20130123184515) do
     t.string   "device_serial"
     t.string   "device_code"
     t.string   "alert_msg"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.integer  "notify_control_id"
   end
 
   create_table "notify_controls", :force => true do |t|
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(:version => 20130123184515) do
     t.datetime "waste_almost_full_sent"
     t.datetime "waste_full_sent"
     t.datetime "job_log_full_sent"
+    t.string   "device_model"
   end
 
 end
