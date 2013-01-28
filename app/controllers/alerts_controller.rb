@@ -54,7 +54,7 @@ class AlertsController < ApplicationController
       end
     end
     @alerts = Alert.paginate(:page => params[:page], :order => sort, :conditions => condition_array, :per_page => 30)
-    if (not params[:commit].nil? and params[:commit] == 'Export')
+    if (params[:commit] == 'Export')
       @request.sub!(/commit=Export/,'commit=Find')
       csv_data = '"alert data","device name","device_model","serial number","machine code","message"' + "\n"
       Alert.all(:order => sort, :conditions => condition_array).each do |a|

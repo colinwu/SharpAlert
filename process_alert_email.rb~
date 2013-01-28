@@ -53,7 +53,7 @@ if @n.nil?
     :toner_low => ndef.toner_low,
     :toner_empty => ndef.toner_empty,
     :paper => ndef.paper,
-    :service => ndef.serice,
+    :service => ndef.service,
     :pm => ndef.pm,
     :waste_almost_full => ndef.waste_almost_full,
     :waste_full => ndef.waste_full,

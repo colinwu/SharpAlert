@@ -21,20 +21,20 @@
   <tr class='searchform'>
     <%= form_tag '/alerts', :method => 'get' do -%>
     <th class="right-justify"><%= link_to "Search:", "http://dev.mysql.com/doc/refman/5.5/en/regexp.html", {:title => "Click here for documentation on regular exressions you can use in these search fields"} -%></td>
-      <td><%= text_field_tag 'name_q', @name_q, :size => 10 -%></td>
-      <td><%= text_field_tag 'model_q', @model_q, :size => 10 -%></td>
-      <td><%= text_field_tag 'serial_q', @serial_q, :size => 10 -%></td>
+      <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Search Name" -%></td>
+      <td><%= text_field_tag 'model_q', @model_q, :size => 10, :placeholder => "Search Model" -%></td>
+      <td><%= text_field_tag 'serial_q', @serial_q, :size => 10, :placeholder => "Search Serial #" -%></td>
       <td>&nbsp;</td>
-      <td><%= text_field_tag 'msg_q', @msg_q -%>&nbsp;<%= submit_tag 'Export' -%> <%= submit_tag 'Find' -%></td>
+      <td><%= text_field_tag 'msg_q', @msg_q, :placeholder => "Search message" -%>&nbsp;<%= submit_tag 'Export' -%> <%= submit_tag 'Find' -%></td>
     <%end%>  
   </tr>
   <tr>
-    <th><%= link_to 'Alert Date', "/alerts?sort=alert_date&#{@request}" -%></th>
-    <th><%= link_to 'Device Name', "/alerts?sort=device_name&#{@request}" -%></th>
-    <th><%= link_to 'Device Model', "/alerts?sort=device_model&#{@request}" -%></th>
-    <th><%= link_to 'Device Serial', "/alerts?sort=device_serial&#{@request}" -%></th>
+    <th><%= link_to 'Alert Date', "/alerts?sort=alert_date&#{@request}", :title => "Sort by Date" -%></th>
+    <th><%= link_to 'Device Name', "/alerts?sort=device_name&#{@request}", :title => "Sort by Device Name" -%></th>
+    <th><%= link_to 'Device Model', "/alerts?sort=device_model&#{@request}", :title => "Sort by Model" -%></th>
+    <th><%= link_to 'Device Serial', "/alerts?sort=device_serial&#{@request}", :title => "Sort by Device Code" -%></th>
     <th>Device Code</th>
-    <th><%= link_to 'Alert Message', "/alerts?sort=alert_msg&#{@request}" -%></th>
+    <th><%= link_to 'Alert Message', "/alerts?sort=alert_msg&#{@request}", :title => "Sort by message" -%></th>
   </tr>
   <% for alert in @alerts %>
     <% nc = NotifyControl.find_by_device_serial(alert.device_serial) %>

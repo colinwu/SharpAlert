@@ -23,7 +23,7 @@
         <% if notify_control.alerts.empty? %>
           &lt;no device&gt;
         <% else %>
-          <%= link_to h(notify_control.alerts[-1].device_name), alerts_path + "?name_q=#{notify_control.alerts[-1].device_name}&commit=Find" %>
+          <%= link_to h(notify_control.alerts[-1].device_name), alerts_path + "?name_q=#{notify_control.alerts[-1].device_name}&commit=Find", :title => "Click to view all alerts for this device" %>
         <% end %>
       </td>
       <td><%=h notify_control.who %></td>
@@ -36,7 +36,7 @@
       <td><%=h notify_control.waste_almost_full %></td>
       <td><%=h notify_control.waste_full %></td>
       <td><%=h notify_control.job_log_full %></td>
-      <td><%= link_to 'Edit', edit_notify_control_path(notify_control) %></td>
+      <td><%= link_to 'Edit', edit_notify_control_path(notify_control), :title => "Click to edit controls for this device" %></td>
     </tr>
   <% end %>
 </table>

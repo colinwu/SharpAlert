@@ -60,6 +60,8 @@ if @n.nil?
     :job_log_full => ndef.job_log_full)
   
   NotifyMailer.new_device('wuc@sharpsec.com,chapmanc@sharpsec.com',alert,@n).deliver
+else
+  alert.notify_control_id = @n.id
 end
 
 # figure out if we need to send notification

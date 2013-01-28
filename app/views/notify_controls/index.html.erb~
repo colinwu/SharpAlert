@@ -19,7 +19,13 @@
   </tr>
   <% for notify_control in @notify_controls %>
     <tr class="<%=cycle('dark','light')%>">
-      <td><%= link_to_unless( notify_control.alerts.empty?,  h(notify_control.alerts[-1].device_name), alerts_path + "?name_q=#{notify_control.alerts[-1].device_name}&commit=Find") %></td>
+      <td>
+        <% if notify_control.alerts.empty? %>
+          &lt;no device&gt;
+        <% else %>
+          <%= link_to h(notify_control.alerts[-1].device_name), alerts_path + "?name_q=#{notify_control.alerts[-1].device_name}&commit=Find" %>
+        <% end %>
+      </td>
       <td><%=h notify_control.who %></td>
       <td><%=h notify_control.jam %></td>
       <td><%=h notify_control.toner_low %></td>
