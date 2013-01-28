@@ -62,6 +62,7 @@ if @n.nil?
   NotifyMailer.new_device('wuc@sharpsec.com,chapmanc@sharpsec.com',alert,@n).deliver
 else
   alert.notify_control_id = @n.id
+  alert.save
 end
 
 # figure out if we need to send notification

@@ -40,7 +40,7 @@
     <% nc = NotifyControl.find_by_device_serial(alert.device_serial) %>
     <tr class="<%=cycle('dark','light')%>">
       <td><%= alert.alert_date.to_formatted_s(:db) %></td>
-      <td><%= link_to alert.device_name, edit_notify_control_path(alert.notify_control_id) %></td>
+      <td><%= link_to alert.device_name, edit_notify_control_path(alert.notify_control_id), :title => "Click to edit controls" %></td>
       <td><%= alert.device_model %></td>
       <td><%= alert.device_serial %></td>
       <td><%= alert.device_code %></td>
