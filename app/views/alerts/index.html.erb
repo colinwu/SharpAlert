@@ -24,16 +24,16 @@
       <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Search Name" -%></td>
       <td><%= text_field_tag 'model_q', @model_q, :size => 10, :placeholder => "Search Model" -%></td>
       <td><%= text_field_tag 'serial_q', @serial_q, :size => 10, :placeholder => "Search Serial #" -%></td>
-      <td>&nbsp;</td>
-      <td><%= text_field_tag 'msg_q', @msg_q, :placeholder => "Search message" -%>&nbsp;<%= submit_tag 'Export' -%> <%= submit_tag 'Find' -%></td>
+      <td><%= text_field_tag 'code_q', @code_q, :size => 10, :placeholder => "Search Device Code" -%></td>
+      <td><%= text_field_tag 'msg_q', @msg_q, :placeholder => "Search message" -%>&nbsp;<%= submit_tag 'Find' -%> <%= submit_tag 'Export' -%></td>
     <%end%>  
   </tr>
   <tr>
     <th><%= link_to 'Alert Date', "/alerts?sort=alert_date&#{@request}", :title => "Sort by Date" -%></th>
     <th><%= link_to 'Device Name', "/alerts?sort=device_name&#{@request}", :title => "Sort by Device Name" -%></th>
     <th><%= link_to 'Device Model', "/alerts?sort=device_model&#{@request}", :title => "Sort by Model" -%></th>
-    <th><%= link_to 'Device Serial', "/alerts?sort=device_serial&#{@request}", :title => "Sort by Device Code" -%></th>
-    <th>Device Code</th>
+    <th><%= link_to 'Device Serial', "/alerts?sort=device_serial&#{@request}", :title => "Sort by Device Serial #" -%></th>
+    <th><%= link_to 'Device Code', "/alerts?sort=device_code&#{@request}", :title => "Sort by Device Code" -%></th>
     <th><%= link_to 'Alert Message', "/alerts?sort=alert_msg&#{@request}", :title => "Sort by message" -%></th>
   </tr>
   <% for alert in @alerts %>

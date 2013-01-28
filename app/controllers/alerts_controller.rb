@@ -42,6 +42,11 @@ class AlertsController < ApplicationController
         @serial_q = params[:serial_q]
         condition_array << @serial_q
       end
+      if(not params['code_q'].nil? and not params['code_q'].empty?)
+        where_array << 'device_code regexp ?'
+        @code_q = params[:code_q]
+        condition_array << @code_q
+      end
       if(not params['msg_q'].nil? and not params['msg_q'].empty?)
         where_array << 'alert_msg regexp ?'
         @msg_q = params[:msg_q]
