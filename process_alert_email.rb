@@ -58,12 +58,11 @@ if @n.nil?
     :waste_almost_full => ndef.waste_almost_full,
     :waste_full => ndef.waste_full,
     :job_log_full => ndef.job_log_full)
-  
   NotifyMailer.new_device('wuc@sharpsec.com,chapmanc@sharpsec.com',alert,@n).deliver
 else
   alert.notify_control_id = @n.id
-  alert.save
 end
+alert.save
 
 # figure out if we need to send notification
 if alert.alert_msg =~ /Misfeed/ and not @n.jam.nil?
