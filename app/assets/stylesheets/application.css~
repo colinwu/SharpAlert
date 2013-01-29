@@ -60,6 +60,22 @@ h1 {
   vertical-align: center;
 }
 
+.right-justify {
+  text-align: right;
+}
+
+.left-justify {
+  text-align: left;
+}
+
+.centre-justify {
+  text-align: center;
+}
+
+.alert_sent {
+  color: green;
+}
+
 #top-menu {
   text-align: right;
   margin: 0 auto;

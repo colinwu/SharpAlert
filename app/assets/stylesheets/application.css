@@ -72,6 +72,10 @@ h1 {
   text-align: center;
 }
 
+.alert_sent {
+  color: Lime;
+}
+
 #top-menu {
   text-align: right;
   margin: 0 auto;
