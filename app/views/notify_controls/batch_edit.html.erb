@@ -1,0 +1,10 @@
+<h1>Batch Edit Notify Controls</h1>
+<ul>
+  <li>Only fields where something is entered will be updated.</li>
+  <li>To tell the application to ignore an alert type enter '-1' in the field</li>
+</ul>
+<%= form_for @notify_control, :url => batch_update_notify_controls_url do |f| %>
+
+<%= render 'form' %>
+
+<% end %>

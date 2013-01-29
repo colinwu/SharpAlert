@@ -20,9 +20,36 @@ class NotifyControlsController < ApplicationController
     end
   end
 
+  def batch_edit
+    @notify_control = NotifyControl.new
+    # @selected contains ids to be used in hidden fields in the batch_edit form.
+    unless params[:commit].nil?
+      @selected = params[:sel].values
+    end
+  end
+
+  def batch_update
+    notice = "Successfully updated controls."
+    params[:sel].values.each do |s|
+      @notify_control = NotifyControl.find(s)
+      params['notify_control'].keys.each do |a|
+        unless params['notify_control'][a].nil? or params['notify_control'][a].empty?
+          if params['notify_control'][a] == '-1'
+            @notify_control[a] = nil
+          else
+            @notify_control[a] = params['notify_control'][a]
+          end
+        end
+      end
+      @notify_control.save
+    end
+    redirect_to notify_controls_url, :notice => notice
+  end
+  
   def edit
     @notify_control = NotifyControl.find(params[:id])
     @device_name = (@notify_control.device_serial == 'default') ? 'Default Settings' : @notify_control.alerts[-1].device_name
+    @selected = []
   end
 
   def update

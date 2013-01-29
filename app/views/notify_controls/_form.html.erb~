@@ -1,4 +1,7 @@
-<%= form_for @notify_control do |f| %>
+<!-- <%= form_for @notify_control do |f| %> -->
+  <% @selected.each do |s| %>
+    <%= f.hidden_field_tag "sel[#{s}]", s -%>
+  <% end %>
   <div id="form_box">
   <div id="form_header">
   <%= f.error_messages %>
@@ -17,7 +20,7 @@
   <div id="form_left">
   <p>
     <%= f.label 'Paper Jam/Misfeed' %><br />
-    <%= f.number_field :jam, :size => 10, :placeholder => 'Ignore' %>
+    <%= f.number_field :jam, :size => 10 %>
   </p>
   <p>
     <%= f.label :toner_low %><br />
@@ -58,4 +61,4 @@
     <%= f.submit %>
   </div>
   </div>
-<% end %>
+<!-- <% end %> -->

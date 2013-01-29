@@ -5,6 +5,7 @@
 
 <table class="list">
   <tr>
+    <th></th>
     <th>Device Name</th>
     <th>Who</th>
     <th>Jam</th>
@@ -17,8 +18,10 @@
     <th>Waste<br />Full</th>
     <th>Job Log<br />Full</th>
   </tr>
+  <%= form_tag batch_edit_notify_controls_url, :method => :get do %>
   <% for notify_control in @notify_controls %>
     <tr class="<%=cycle('dark','light')%>">
+      <td><%= check_box_tag "sel[#{notify_control.id}]", notify_control.id %>
       <td>
         <% if notify_control.alerts.empty? %>
           &lt;no device&gt;
@@ -38,6 +41,8 @@
       <td><%=h notify_control.job_log_full %></td>
       <td><%= link_to 'Edit', edit_notify_control_path(notify_control), :title => "Click to edit controls for this device" %></td>
     </tr>
+  <% end %>
+  <%= submit_tag "Batch Edit Selected" %>
   <% end %>
 </table>
 

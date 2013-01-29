@@ -1,4 +1,7 @@
-<%= form_for @notify_control do |f| %>
+<!-- <%= form_for @notify_control do |f| %> -->
+  <% @selected.each do |s| %>
+    <%= hidden_field_tag "sel[#{s}]", s -%>
+  <% end %>
   <div id="form_box">
   <div id="form_header">
   <%= f.error_messages %>
@@ -58,4 +61,4 @@
     <%= f.submit %>
   </div>
   </div>
-<% end %>
+<!-- <% end %> -->

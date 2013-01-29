@@ -1,4 +1,4 @@
-<h1>Edit Notify Control for Device <%=h @notify_control.alerts[-1].device_name -%></h1>
+<h1>Edit Notify Control for Device <%=h @device_name -%></h1>
 
 <%= render 'form' %>
 

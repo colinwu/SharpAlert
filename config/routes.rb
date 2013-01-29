@@ -1,8 +1,18 @@
 SharpApp::Application.routes.draw do
-  resources :notify_controls
+  resources :notify_controls do
+    collection do
+      get 'batch_edit'
+      post 'batch_update'
+    end
+  end
 
   resources :alerts
 
+#   resources :notify_controls do
+#     collection do
+#       get 'test'
+#     end
+#   end
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
