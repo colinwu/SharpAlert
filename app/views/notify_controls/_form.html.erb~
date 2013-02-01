@@ -1,6 +1,6 @@
 <!-- <%= form_for @notify_control do |f| %> -->
   <% @selected.each do |s| %>
-    <%= f.hidden_field_tag "sel[#{s}]", s -%>
+    <%= hidden_field_tag "sel[#{s}]", s -%>
   <% end %>
   <div id="form_box">
   <div id="form_header">
@@ -58,7 +58,7 @@
   </p>
   </div>
   <div id="form_footer">
-    <%= f.submit %>
+    <%= f.submit "Save" %>
   </div>
   </div>
 <!-- <% end %> -->

@@ -12,8 +12,8 @@
   <tr class="right-justify">
     <td><%= number_with_delimiter(@num_alerts) -%></td>
     <td><%= number_with_delimiter(@num_devices) -%></td>
-    <td><%= number_with_delimiter(@num_service) -%></td>
-    <td><%= number_with_delimiter(@num_pm) -%></td>
+    <td><%= number_with_delimiter(@num_service) -%> (<%=h @last_service.device_name -%> on <%=h @last_service.alert_date.to_formatted_s(:db) -%>)</td>
+    <td><%= number_with_delimiter(@num_pm) -%> (<%=h @last_pm.device_name -%> on <%=h @last_pm.alert_date.to_formatted_s(:db) -%>)</td>
   </tr>
 </table>
 <p>Please note that the <em>Alert Date</em> shown is in the device's local time zone rather than your time zone. Unfortunately, the email alerts to not include time zone information in the date/time string.</p>
@@ -25,7 +25,7 @@
       <td><%= text_field_tag 'model_q', @model_q, :size => 10, :placeholder => "Search Model" -%></td>
       <td><%= text_field_tag 'serial_q', @serial_q, :size => 10, :placeholder => "Search Serial #" -%></td>
       <td><%= text_field_tag 'code_q', @code_q, :size => 10, :placeholder => "Search Device Code" -%></td>
-      <td><%= text_field_tag 'msg_q', @msg_q, :placeholder => "Search message" -%>&nbsp;<%= submit_tag 'Export' -%> <%= submit_tag 'Find' -%></td>
+      <td><%= text_field_tag 'msg_q', @msg_q, :placeholder => "Search message" -%>&nbsp;<%= submit_tag 'Find' -%> <%= submit_tag 'Export' -%></td>
     <%end%>  
   </tr>
   <tr>

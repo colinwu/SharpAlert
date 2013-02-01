@@ -15,8 +15,12 @@ class AlertsController < ApplicationController
   def index
     @num_alerts = Alert.all.count
     @num_devices = Alert.all(:group => 'device_serial').count
-    @num_service = Alert.all(:conditions => "alert_msg regexp 'Call for service'").count
-    @num_pm = Alert.all(:conditions => "alert_msg regexp 'Maintenance'").count
+    service_alerts = Alert.all(:conditions => "alert_msg regexp 'Call for service'")
+    @num_service = service_alerts.count
+    @last_service = service_alerts[-1]
+    pm_alerts = Alert.all(:conditions => "alert_msg regexp 'Maintenance'")
+    @num_pm = pm_alerts.count
+    @last_pm = pm_alerts[-1]
     
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
     if params[:sort].nil?
