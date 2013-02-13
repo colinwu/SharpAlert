@@ -90,7 +90,7 @@
         <% unless notify_control.job_log_full_sent.nil? %>
           <span title="Last notice sent: <%=h notify_control.job_log_full_sent.to_formatted_s(:db) -%>" class="alert_sent"><%=h notify_control.job_log_full %></span>
         <% else %>
-          <span><%=h notify_control.job_log_full_full %></span>
+          <span><%=h notify_control.job_log_full %></span>
         <% end %>
       </td>
       <td><%= link_to 'Edit', edit_notify_control_path(notify_control), :title => "Click to edit controls for this device" %></td>

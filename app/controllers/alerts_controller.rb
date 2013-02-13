@@ -32,29 +32,29 @@ class AlertsController < ApplicationController
       where_array = Array.new
       condition_array = ['place holder']
       if (not params['name_q'].nil? and not params['name_q'].empty?)
-        where_array << 'device_name regexp ?'
         @name_q = params[:name_q]
-        condition_array << @name_q
+        condition_array << @name_q.condition
+        where_array << @name_q.where('device_name')
      end
       if(not params['model_q'].nil? and not params['model_q'].empty?)
-        where_array << 'device_model regexp ?'
         @model_q = params[:model_q]
-        condition_array << @model_q
+        condition_array << @model_q.condition
+        where_array << @model_q.where('device_model')
       end
       if(not params['serial_q'].nil? and not params['serial_q'].empty?)
-        where_array << 'device_serial regexp ?'
         @serial_q = params[:serial_q]
-        condition_array << @serial_q
+        condition_array << @serial_q.condition
+        where_array << @serial_q.where('device_serial')
       end
       if(not params['code_q'].nil? and not params['code_q'].empty?)
-        where_array << 'device_code regexp ?'
         @code_q = params[:code_q]
-        condition_array << @code_q
+        where_array << @code_q.where('device_code')
+        condition_array << @code_q.condition
       end
       if(not params['msg_q'].nil? and not params['msg_q'].empty?)
-        where_array << 'alert_msg regexp ?'
         @msg_q = params[:msg_q]
-        condition_array << @msg_q
+        where_array << @msg_q.where('alert_msg')
+        condition_array << @msg_q.condition
       end
       unless where_array.empty?
         condition_array[0] = where_array.join(' and ')

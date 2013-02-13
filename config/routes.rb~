@@ -2,11 +2,15 @@ SharpApp::Application.routes.draw do
   resources :notify_controls do
     collection do
       get 'batch_edit'
-      put 'batch_update'
+      post 'batch_update'
     end
   end
 
-  resources :alerts
+  resources :alerts do
+    collection do
+      get '24hrs'
+    end
+  end
 
 #   resources :notify_controls do
 #     collection do
