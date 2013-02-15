@@ -31,6 +31,11 @@ class AlertsController < ApplicationController
     unless (params[:commit].nil?)
       where_array = Array.new
       condition_array = ['place holder']
+      if (not params['date_q'].nil? and not params['date_q'].empty?)
+        @date_q = params[:date_q]
+        condition_array << @date_q.condition
+        where_array << @date_q.where('alert_date')
+      end
       if (not params['name_q'].nil? and not params['name_q'].empty?)
         @name_q = params[:name_q]
         condition_array << @name_q.condition

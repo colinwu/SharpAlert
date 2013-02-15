@@ -1,0 +1,20 @@
+<h1>Search Help</h1>
+<div id="help-content">
+<p>Some screens in the application allow you to perform basic searches. For example, on the Alerts page you can search for any combination of date, name, model, serial number, code, and message content. This page will show you how to make the most of the search capability.</p>
+
+<p>First thing to remember is that if you enter text in more than one search field they are ANDed. For example, if you enter "4101" in the Model field and "service" in the Message field and click the Find button you will only see results where the model field contained the string "4101" AND the message field contained the word "service".</p>
+
+<p>Second thing to remember is that the text you enter in the search field does not have to an exact match. For example, if you want to see all alerts for MX-C401 devices you can just enter "c401". You do not have to enter the whole "MX-C401" - though you could.</p>
+
+<p>Third thing is that searches are case-insensitive. "AB" is the same as "ab" or "aB" or "Ab".</p>
+
+<p>There are some special characters you can use in the search box:</p>
+<ul>
+  <li>'<strong>^</strong>' (hat or carrat): When this characters appears at the beginning of the search string it means that what follows must appear at the beginning of the result. For example entering "<strong>^YR</strong>" in the device name field will find all alerts for devices whose name start "YR". It will not find devices named "3rd-yr-students".</li>
+  
+  <li>'<strong>$</strong>' (dollar sign): This does the exact opposite of the ^. When $ appears at the <strong>end</strong> of the search text it means whatever came before it must be at the end of result. For example, the search string "234$" in the device name field will find all alerts for devices whose name end in "234". So it will find "YR-MF-234" or "MFP-1234".</li>
+
+  <li>'<strong>|</strong>' (vertical bar): When it appears between two words (like "this|that") it means "this" OR "that". So entering "YR|RH" in device name field will find all alerts where the device name contains either "YR" or "RH".</li>
+
+  <li>'<strong>!</strong>' (exclamation): Finds everything EXCEPT what follows. "!load" in the message search field finds all alerts where message field does not contain the word "load".</li>
+</ul>

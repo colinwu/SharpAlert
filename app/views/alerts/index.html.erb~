@@ -21,7 +21,7 @@
   <tr class='searchform'>
     <%= form_tag '/alerts', :method => 'get' do -%>
     <th class="right-justify"><%= link_to "Search:", "http://dev.mysql.com/doc/refman/5.5/en/regexp.html", {:title => "Click here for documentation on regular exressions you can use in these search fields"} -%></td>
-      <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Search Name", :title => "Special characters: '^' at beginning means what follow must be at start; '!' at beginning means 'everything except what follows'; '|' between two 'this' and 'that' means 'this or that'" -%></td>
+      <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Search Name" -%></td>
       <td><%= text_field_tag 'model_q', @model_q, :size => 10, :placeholder => "Search Model" -%></td>
       <td><%= text_field_tag 'serial_q', @serial_q, :size => 10, :placeholder => "Search Serial #" -%></td>
       <td><%= text_field_tag 'code_q', @code_q, :size => 10, :placeholder => "Search Device Code" -%></td>

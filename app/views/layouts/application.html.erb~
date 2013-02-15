@@ -5,10 +5,13 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
-  <meta http-equiv="refresh" content='3600'>
+  <meta http-equiv="refresh" content='600'>
+  <meta name="author" content="Colin Wu">
+  <meta name="generator" content="Ruby on Rails v3">
 </head>
 <body>
 <div id="top-menu">
+<%= link_to "Search Help", about_search_path -%>
 <%= link_to "Alerts", alerts_path -%> |
 <%= link_to_unless_current "Controls", notify_controls_path -%>
 </div>

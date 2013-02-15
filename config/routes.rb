@@ -1,4 +1,8 @@
 SharpApp::Application.routes.draw do
+  get "about/me"
+
+  get "about/search"
+
   resources :notify_controls do
     collection do
       get 'batch_edit'

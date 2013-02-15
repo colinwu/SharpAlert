@@ -76,6 +76,10 @@ h1 {
   color: Maroon;
 }
 
+#help-content {
+  font-size: 12pt;
+}
+
 #top-menu {
   text-align: right;
   margin: 0 auto;
