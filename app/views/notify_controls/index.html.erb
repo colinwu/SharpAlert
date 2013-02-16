@@ -61,7 +61,7 @@
       </td>
       <td>
         <% unless n.service_sent.nil? %>
-          <%= link_to n.service.to_s, alerts_path + device_query_string + "&date_q=#{n.service_sent}", :title => "Last notice sent: #{n.service_sent.to_formatted_s(:db)}" -%>
+          <%= link_to n.service.to_s, alerts_path + device_query_string + "&date_q=#{n.service_sent.to_formatted_s(:db)}", :title => "Last notice sent: #{n.service_sent.to_formatted_s(:db)}" -%>
         <% else %>
           <span><%=h n.service %></span>
         <% end %>
