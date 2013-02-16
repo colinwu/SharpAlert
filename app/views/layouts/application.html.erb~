@@ -11,13 +11,16 @@
 </head>
 <body>
 <div id="top-menu">
-<%= link_to "Search Help", about_search_path -%>
+<%= link_to "Search Help", about_search_path -%> |
 <%= link_to "Alerts", alerts_path -%> |
 <%= link_to_unless_current "Controls", notify_controls_path -%>
 </div>
 <div id="container">
 <%= yield %>
+<div class="right-justify">
+<%= link_to "<em>Colin Wu</em>", "mailto://colin@colinwu.ca" -%>
 </div>
 
+</div>
 </body>
 </html>

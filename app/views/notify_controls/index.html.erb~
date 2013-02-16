@@ -19,81 +19,82 @@
     <th>Job Log<br />Full</th>
   </tr>
   <%= form_tag batch_edit_notify_controls_url, :method => :get do %>
-  <% for notify_control in @notify_controls %>
+  <% for n in @notify_controls %>
     <tr class="<%=cycle('dark','light')%>">
-      <td><%= check_box_tag "sel[#{notify_control.id}]", notify_control.id %>
+      <% device_query_string = "?model_q=#{n.device_model}&serial_q=#{n.device_serial}&commit=Find" %>
+      <td><%= check_box_tag "sel[#{n.id}]", n.id %>
       <td>
-        <% if notify_control.alerts.empty? %>
+        <% if n.alerts.empty? %>
           &lt;no device&gt;
         <% else %>
-          <%= link_to h(notify_control.alerts[-1].device_name), alerts_path + "?name_q=#{notify_control.alerts[-1].device_name}&commit=Find", :title => "Click to view all alerts for this device" %>
+          <%= link_to h(n.alerts[-1].device_name), alerts_path + "?name_q=#{n.alerts[-1].device_name}&commit=Find", :title => "Click to view all alerts for this device" %>
         <% end %>
       </td>
-      <td><%=h notify_control.who %></td>
+      <td><%=h n.who %></td>
       <td>
-        <% unless notify_control.jam_sent.nil? %>
-          <span title="Last notice sent: <%=h notify_control.jam_sent.to_formatted_s(:db) -%>", class="alert_sent"><%=h notify_control.jam %></span>
+        <% unless n.jam_sent.nil? %>
+        <%= link_to n.jam.to_s, alerts_path + device_query_string +  "&date_q=#{n.jam_sent.to_formatted_s(:db)}", :title => "Last notice sent: #{n.jam_sent.to_formatted_s(:db)}" %>
         <% else %>
-          <span><%=h notify_control.jam %></span>
-        <% end %>
-      </td>
-      <td>
-        <% unless notify_control.toner_low_sent.nil? %>
-          <span title="Last notice sent: <%=h notify_control.toner_low_sent.to_formatted_s(:db) -%>" class="alert_sent"><%=h notify_control.toner_low %></span>
-        <% else %>
-          <span><%=h notify_control.toner_low %></span>
+          <span><%=h n.jam %></span>
         <% end %>
       </td>
       <td>
-        <% unless notify_control.toner_empty_sent.nil? %>
-          <span title="Last notice sent: <%=h notify_control.toner_empty_sent.to_formatted_s(:db) -%>" class="alert_sent"><%=h notify_control.toner_empty %></span>
+        <% unless n.toner_low_sent.nil? %>
+          <%= link_to n.toner_low.to_s, alerts_path + device_query_string + "&date_q=#{n.toner_low_sent.to_formatted_s(:db)}", :title => "Last notice sent: #{n.toner_low_sent.to_formatted_s(:db)}" -%>
         <% else %>
-          <span><%=h notify_control.toner_empty %></span>
+          <span><%=h n.toner_low %></span>
         <% end %>
       </td>
       <td>
-        <% unless notify_control.paper_sent.nil? %>
-          <span title="Last notice sent: <%=h notify_control.paper_sent.to_formatted_s(:db) -%>" class="alert_sent"><%=h notify_control.paper %></span>
+        <% unless n.toner_empty_sent.nil? %>
+          <%= link_to n.toner_empty.to_s, alerts_path + device_query_string + "&date_q=#{n.toner_empty_sent.to_formatted_s(:db)}", :title => "Last notice sent: #{n.toner_empty_sent.to_formatted_s(:db)}" -%>
         <% else %>
-          <span><%=h notify_control.paper %></span>
+          <span><%=h n.toner_empty %></span>
         <% end %>
       </td>
       <td>
-        <% unless notify_control.service_sent.nil? %>
-          <span title="Last notice sent: <%=h notify_control.service_sent.to_formatted_s(:db) -%>" class="alert_sent"><%=h notify_control.service %></span>
+        <% unless n.paper_sent.nil? %>
+          <%= link_to n.paper.to_s, alerts_path + device_query_string + "&date_q=#{n.paper_sent.to_formatted_s(:db)}", :title => "Last notice sent: #{n.paper_sent.to_formatted_s(:db)}" -%>
         <% else %>
-          <span><%=h notify_control.service %></span>
+          <span><%=h n.paper %></span>
         <% end %>
       </td>
       <td>
-        <% unless notify_control.pm_sent.nil? %>
-          <span title="Last notice sent: <%=h notify_control.pm_sent.to_formatted_s(:db) -%>" class="alert_sent"><%=h notify_control.pm %></span>
+        <% unless n.service_sent.nil? %>
+          <%= link_to n.service.to_s, alerts_path + device_query_string + "&date_q=#{n.service_sent}", :title => "Last notice sent: #{n.service_sent.to_formatted_s(:db)}" -%>
         <% else %>
-          <span><%=h notify_control.pm %></span>
+          <span><%=h n.service %></span>
         <% end %>
       </td>
       <td>
-        <% unless notify_control.waste_almost_full_sent.nil? %>
-          <span title="Last notice sent: <%=h notify_control.waste_almost_full_sent.to_formatted_s(:db) -%>" class="alert_sent"><%=h notify_control.waste_almost_full %></span>
+        <% unless n.pm_sent.nil? %>
+          <%= link_to n.pm.to_s, alerts_path + device_query_string + "&date_q=#{n.pm_sent.to_formatted_s(:db)}", :title => "Last notice sent: #{n.pm_sent.to_formatted_s(:db)}" -%>
         <% else %>
-          <span><%=h notify_control.waste_almost_full %></span>
+          <span><%=h n.pm %></span>
         <% end %>
       </td>
       <td>
-        <% unless notify_control.waste_full_sent.nil? %>
-          <span title="Last notice sent: <%=h notify_control.waste_full_sent.to_formatted_s(:db) -%>" class="alert_sent"><%=h notify_control.waste_full %></span>
+        <% unless n.waste_almost_full_sent.nil? %>
+          <%= link_to n.waste_almost_full.to_s, alerts_path + device_query_string + "&date_q=#{n.waste_almost_full_sent.to_formatted_s(:db)}", :title => "Last notice sent: #{n.waste_almost_full_sent.to_formatted_s(:db)}" -%>
         <% else %>
-          <span><%=h notify_control.waste_full %></span>
+          <span><%=h n.waste_almost_full %></span>
         <% end %>
       </td>
       <td>
-        <% unless notify_control.job_log_full_sent.nil? %>
-          <span title="Last notice sent: <%=h notify_control.job_log_full_sent.to_formatted_s(:db) -%>" class="alert_sent"><%=h notify_control.job_log_full %></span>
+        <% unless n.waste_full_sent.nil? %>
+          <%= link_to n.waste_full.to_s, alerts_path + device_query_string + "&date_q=#{n.waste_full_sent.to_formatted_s(:db)}", :title => "Last notice sent: #{n.waste_full_sent.to_formatted_s(:db)}" -%>
         <% else %>
-          <span><%=h notify_control.job_log_full %></span>
+          <span><%=h n.waste_full %></span>
         <% end %>
       </td>
-      <td><%= link_to 'Edit', edit_notify_control_path(notify_control), :title => "Click to edit controls for this device" %></td>
+      <td>
+        <% unless n.job_log_full_sent.nil? %>
+        <%= link_to n.job_log_full.to_s, alerts_path + device_query_string + "&date_q=#{n.job_log_full_sent.to_formatted_s(:db)}", :title="Last notice sent: <%=h n.job_log_full_sent.to_formatted_s(:db) -%>" class="alert_sent"><%=h n.job_log_full %></span>
+        <% else %>
+          <span><%=h n.job_log_full %></span>
+        <% end %>
+      </td>
+      <td><%= link_to 'Edit', edit_notify_control_path(n), :title => "Click to edit controls for this device" %></td>
     </tr>
   <% end %>
   <%= submit_tag "Batch Edit Selected" %>
