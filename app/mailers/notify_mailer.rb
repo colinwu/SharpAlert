@@ -49,4 +49,9 @@ class NotifyMailer < ActionMailer::Base
     @control = n
     mail(:to => who, :subject => "New device detected")
   end
+
+  def email_response(who,csv_file)
+    attachments['alerts.csv'] = File.read(csv_file)
+    mail(:to => who, :subject => "Device alerts you requested")
+  end
 end

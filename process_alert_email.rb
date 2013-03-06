@@ -1,4 +1,5 @@
-# Parses a Sharp MFP alert email and records it as an Alert object
+# Parses a Sharp MFP alert email and records it as an Alert object. This program should be
+# invoked by one of Procmail's filter rules.
 #
 # The email has the form
 #    2013/01/20 14:50:56

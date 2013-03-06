@@ -12,6 +12,9 @@ class AlertsController < ApplicationController
     end
   end
 
+  def show
+  end
+  
   def index
     @num_alerts = Alert.all.count
     @num_devices = Alert.all(:group => 'device_serial').count
