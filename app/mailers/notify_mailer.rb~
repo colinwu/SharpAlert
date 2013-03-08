@@ -51,8 +51,6 @@ class NotifyMailer < ActionMailer::Base
   end
 
   def email_response(who,csv_file)
-    @who = who
-    @subject = subject
     attachments['alerts.csv'] = File.read(csv_file)
     mail(:to => who, :subject => "Device alerts you requested")
   end

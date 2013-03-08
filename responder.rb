@@ -62,20 +62,22 @@ else
   condition_array = []
 end
 
-puts condition_array.inspect
+if @name_q.nil? or @name_q.empty?
+  NotifyMailer.email_response_error(sender,"name_q parameter is required").deliver
+else
+  csv_file = '/tmp/alerts_list-' + Time.now.to_f.to_s.sub!('.','') + '.csv'
+  csv = File.new(csv_file,"w")
+  csv.puts'"alert date","device name","device_model","serial number","machine code","message"'
+  Alert.all(:conditions => condition_array).each do |a|
+    puts "#{a.device_name},#{a.alert_date},#{a.alert_msg}"
+    puts '==> ' + a.to_csv
+    csv.puts a.to_csv
+  end
 
-csv_file = '/tmp/alerts_list-' + Time.now.to_f.to_s.sub!('.','') + '.csv'
-csv = File.new(csv_file,"w")
-csv.puts'"alert date","device name","device_model","serial number","machine code","message"'
-Alert.all(:conditions => condition_array).each do |a|
-  puts "#{a.device_name},#{a.alert_date},#{a.alert_msg}"
-  puts '==> ' + a.to_csv
-  csv.puts a.to_csv
+  # Write the csv data to a temporary file ...
+  csv.close
+
+  # ... then send it as an attachment
+  NotifyMailer.email_response(sender,csv_file).deliver
+  File.unlink(csv_file)
 end
-
-# Write the csv data to a temporary file ...
-csv.close
-
-# ... then send it as an attachment
-NotifyMailer.email_response(sender,csv_file).deliver
-File.unlink(csv_file)

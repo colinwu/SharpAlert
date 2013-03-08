@@ -18,7 +18,7 @@
 <div id="container">
 <%= yield %>
 <div class="right-justify">
-<%= link_to "<em>Colin Wu</em>", "mailto://colin@colinwu.ca" -%>
+<em><%= link_to "Colin Wu", "mailto://colin@colinwu.ca" -%></em>
 </div>
 
 </div>

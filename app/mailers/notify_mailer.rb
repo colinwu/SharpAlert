@@ -54,4 +54,9 @@ class NotifyMailer < ActionMailer::Base
     attachments['alerts.csv'] = File.read(csv_file)
     mail(:to => who, :subject => "Device alerts you requested")
   end
+
+  def email_response_error(who,error)
+    @error = error
+    mail(:to => who, :subject => "Could not process your request")
+  end
 end

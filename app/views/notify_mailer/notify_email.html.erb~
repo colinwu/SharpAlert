@@ -26,5 +26,6 @@
     <% if not @last_sent.nil? and @num_past_alerts > 0 %>
     <p>NOTE: Since the last notice (<%= @last_sent.to_formatted_s(:db) -%>) there have been <%= @num_past_alerts -%> alerts for this condition.</p>
     <% end %>
+    <p>NOTE: You can click <a href="mailto:dha@sharpsec.com?subject=Request:name_q=<%= @alert.device_name -%>">here</a> to have past alerts for this device emailed to you as a .csv file.</p>
   </body>
 </html>
