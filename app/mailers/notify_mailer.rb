@@ -4,7 +4,7 @@ class NotifyMailer < ActionMailer::Base
   def notify_email(who, alert)
     @who = who
     @alert = alert
-    @n = NotifyControl.find_by_device_serial alert.device_serial
+    @n = NotifyControl.first(:conditions => "device_serial = '#{alert.device_serial}' and device_model = '#{alert.device_model}' and device_name = '#{alert.device_name}'")
     # figure out which alert this is so we know which control to use
     if alert.alert_msg =~ /Misfeed/ and not @n.jam.nil?
       @last_sent = @n.jam_sent

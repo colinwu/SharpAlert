@@ -27,7 +27,7 @@
         <% if n.alerts.empty? %>
           &lt;no device&gt;
         <% else %>
-          <%= link_to h(n.alerts[-1].device_name), alerts_path + "?name_q=#{n.alerts[-1].device_name}&commit=Find", :title => "Click to view all alerts for this device" %>
+          <%= link_to h(n.device_name), alerts_path + "?name_q=#{n.device_name}&commit=Find", :title => "Click to view all alerts for this device" %>
         <% end %>
       </td>
       <td><%=h n.who %></td>

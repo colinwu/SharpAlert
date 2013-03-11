@@ -1,6 +1,6 @@
 class NotifyControlsController < ApplicationController
   def index
-    @notify_controls = NotifyControl.paginate(:page => params[:page], :per_page => 30, :order => :device_serial)
+    @notify_controls = Alert.paginate(:page => params[:page], :per_page => 30, :order => :device_name)
   end
 
   def show
@@ -34,7 +34,7 @@ class NotifyControlsController < ApplicationController
       @notify_control = NotifyControl.find(s)
       params['notify_control'].keys.each do |a|
         unless params['notify_control'][a].nil? or params['notify_control'][a].empty?
-          if params['notify_control'][a] == -1
+          if params['notify_control'][a] == '-1'
             @notify_control[a] = nil
           else
             @notify_control[a] = params['notify_control'][a]

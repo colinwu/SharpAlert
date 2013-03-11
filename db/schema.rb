@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130126010633) do
+ActiveRecord::Schema.define(:version => 20130311141156) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20130126010633) do
     t.datetime "waste_full_sent"
     t.datetime "job_log_full_sent"
     t.string   "device_model"
+    t.string   "device_name"
   end
 
 end

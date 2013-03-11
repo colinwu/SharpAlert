@@ -43,12 +43,13 @@ end
 alert.save
 
 # retrieve (or create using defaults) the notification profile for this device.
-@n = NotifyControl.find_by_device_serial_and_device_model(alert.device_serial,alert.device_model)
+@n = NotifyControl.find_by_device_serial_and_device_model(alert.device_serial,alert.device_model,alert.device_name)
 if @n.nil?
   ndef = NotifyControl.find_by_device_serial 'default'
   @n = alert.create_notify_control(
     :device_serial => alert.device_serial,
     :device_model => alert.device_model,
+    :device_name => alert.device_name,
     :who => ndef.who,
     :jam => ndef.jam,
     :toner_low => ndef.toner_low,

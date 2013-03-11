@@ -1,6 +1,6 @@
 class NotifyControlsController < ApplicationController
   def index
-    @notify_controls = NotifyControl.paginate(:page => params[:page], :per_page => 30, :order => :device_serial)
+    @notify_controls = NotifyControl.paginate(:page => params[:page], :per_page => 30, :order => :device_name)
   end
 
   def show
