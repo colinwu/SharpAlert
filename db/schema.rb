@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130311141156) do
+ActiveRecord::Schema.define(:version => 20130327133354) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(:version => 20130311141156) do
 
   create_table "notify_controls", :force => true do |t|
     t.string   "device_serial"
-    t.string   "who"
+    t.string   "tech"
     t.integer  "jam"
     t.integer  "toner_low"
     t.integer  "toner_empty"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(:version => 20130311141156) do
     t.datetime "job_log_full_sent"
     t.string   "device_model"
     t.string   "device_name"
+    t.string   "local_admin"
   end
 
 end

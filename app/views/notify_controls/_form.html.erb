@@ -6,8 +6,12 @@
   <div id="form_header">
   <%= f.error_messages %>
   <p>
-    <%= f.label 'Who to notify (comma-separated list of email addresses)' %><br />
-    <%= f.text_field :who, :size => 60 %>
+    <%= f.label 'Technicians (notified of Maintenance and Service alerts)' %><br />
+    <%= f.text_field :tech, :size => 60 %>
+  </p>
+  <p>
+    <%= f.label 'Local Admin (notified of paper and toner related alerts)' %><br />
+    <%= f.text_field :local_admin, :size => 60 %>
   </p>
   <hr>
   For each of the following fields:

@@ -17,7 +17,7 @@ alert = Alert.new
 
 # Parse the email
 while (line = gets)
-  if line =~ /^Device Name: (\S+)/
+  if line =~ /^Device Name: (.+)/
     alert.device_name = $1
   elsif line =~ /^Device Model: (\S+)/
     alert.device_model = $1
@@ -50,7 +50,8 @@ if @n.nil?
     :device_serial => alert.device_serial,
     :device_model => alert.device_model,
     :device_name => alert.device_name,
-    :who => ndef.who,
+    :tech => ndef.tech,
+    :local_admin => ndef.local_admin,
     :jam => ndef.jam,
     :toner_low => ndef.toner_low,
     :toner_empty => ndef.toner_empty,
@@ -60,7 +61,7 @@ if @n.nil?
     :waste_almost_full => ndef.waste_almost_full,
     :waste_full => ndef.waste_full,
     :job_log_full => ndef.job_log_full)
-  NotifyMailer.new_device('wuc@sharpsec.com,chapmanc@sharpsec.com',alert,@n).deliver
+  NotifyMailer.new_device('wuc@sharpsec.com',alert,@n).deliver
 else
   alert.notify_control_id = @n.id
 end
@@ -70,37 +71,47 @@ alert.save
 if alert.alert_msg =~ /Misfeed/ and not @n.jam.nil?
   period = @n.jam * 3600
   last_time = @n.jam_sent
+  send_to = @n.local_admin
 elsif alert.alert_msg =~ /Add toner/ and not @n.toner_empty.nil?
   period = @n.toner_empty * 3600
   last_time = @n.toner_empty_sent
+  send_to = @n.local_admin
 elsif alert.alert_msg =~ /Toner supply/i and not @n.toner_low.nil?
   period = @n.toner_low * 3600
   last_time = @n.toner_low_sent
+  send_to = @n.local_admin
 elsif alert.alert_msg =~ /Load paper/ and not @n.paper.nil?
   period = @n.paper * 3600
   last_time = @n.paper_sent
+  send_to = @n.local_admin
 elsif alert.alert_msg =~ /Call for service/ and not @n.service.nil?
   period = @n.service * 3600
   last_time = @n.service_sent
+  send_to = @n.tech
 elsif alert.alert_msg =~ /Maintenance required/ and not @n.pm.nil?
   period = @n.pm * 3600
   last_time = @n.pm_sent
+  send_to = @n.tech
 elsif alert.alert_msg =~ /Replace used toner/ and not @n.waste_full.nil?
   period = @n.waste_full * 3600
   last_time = @n.waste_full_sent
+  send_to = @n.local_admin
 elsif alert.alert_msg =~ /Replacement the toner/ and not @n.waste_almost_full.nil?
   period = @n.waste_almost_full * 3600
   last_time = @n.waste_almost_full_sent
+  send_to = @n.local_admin
 elsif alert.alert_msg =~ /Job/ and not @n.job_log_full.nil?
   period = @n.job_log_full * 3600
   last_time = @n.job_log_full_sent
+  send_to = nil
 else
   period = nil
+  send_to = nil
 end
 
-if not period.nil? and (last_time.nil? or (alert.alert_date <=> last_time + period) > 0)
+if not send_to.nil? and not period.nil? and (last_time.nil? or (alert.alert_date <=> last_time + period) > 0)
   # Send alert
-  NotifyMailer.notify_email(@n.who, alert).deliver
+  NotifyMailer.notify_email(send_to, alert).deliver
   # but do not let Procmail forward a copy
   exit 1
 else
