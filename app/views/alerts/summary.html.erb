@@ -1,44 +1,91 @@
 <h1>Alert Summary</h1>
 
-<table class='list' style="width:50%;">
+<table class='list'>
+  <tr>
+    <th>Alert Type</th>
+    <th>Count</th>
+    <th>Latest</th>
+  </tr>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><strong>Total Alerts</strong></td>
+    <td><strong>Total</strong></td>
     <td class='right-justify'><%= number_with_delimiter(@num_alerts) -%></td>
+    <td>&nbsp;</td>
   </tr>
   <tr class="<%= cycle('light','dark') -%>">
     <td><strong>Total Devices</strong></td>
     <td class='right-justify'><%= number_with_delimiter(@num_devices) -%></td>
+    <td>&nbsp;</td>
   </tr>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><strong>Service Alerts</strong></td>
+    <td><strong>Call for Service</strong></td>
     <td class='right-justify'><%= link_to number_with_delimiter(@num_service), "/alerts?msg_q=service&commit=Find" -%></td>
+    <td>
+      <% unless @last_service.nil? %>
+      <%= link_to @last_service.device_name, "/alerts?name_q=#{@last_service.device_name}&msg_q=call for service&commit=Find" -%> on <%= @last_service.alert_date.to_formatted_s(:db) -%>
+      <% end %>
+    </td>
   </tr>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><strong>Maintenance Alerts</strong></td>
+    <td><strong>Maintenance Required</strong></td>
     <td class='right-justify'><%= link_to number_with_delimiter(@num_pm), "/alerts?msg_q=maintenance&commit=Find" -%></td>
-  </tr>
+    <td>
+      <% unless @last_pm.nil? %>
+      <%= link_to @last_pm.device_name, "/alerts?name_q=#{@last_pm.device_name}&msg_q=Maintenance&commit=Find" -%> on <%= @last_pm.alert_date.to_formatted_s(:db) -%>
+      <% end %>
+    </td>
+    </tr>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><strong>Misfeed Alerts</strong></td>
+    <td><strong>Misfeed</strong></td>
     <td class='right-justify'><%= link_to number_with_delimiter(@num_misfeed), "/alerts?msg_q=misfeed&commit=Find" -%></td>
-  </tr>
+    <td>
+      <% unless @last_misfeed.nil? %>
+      <%= link_to @last_misfeed.device_name, "/alerts?name_q=#{@last_misfeed.device_name}&msg_q=Misfeed&commit=Find" -%> on <%= @last_misfeed.alert_date.to_formatted_s(:db) -%>
+      <% end %>
+    </td>
+    </tr>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><strong>Paper Out Alerts</strong></td>
+    <td><strong>Out of Paper</strong></td>
     <td class='right-justify'><%= link_to number_with_delimiter(@num_paper), "/alerts?msg_q=Load paper&commit=Find" -%></td>
-  </tr>
+    <td>
+      <% unless @last_paper.nil? %>
+      <%= link_to @last_paper.device_name, "/alerts?name_q=#{@last_paper.device_name}&msg_q=Load paper&commit=Find" -%> on <%= @last_paper.alert_date.to_formatted_s(:db) -%>
+      <% end %>
+    </td>
+    </tr>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><strong>Toner Low Alerts</strong></td>
+    <td><strong>Toner Low</strong></td>
     <td class='right-justify'><%= link_to number_with_delimiter(@num_toner_low), "/alerts?msg_q=Toner supply&commit=Find" -%></td>
-  </tr>
+    <td>
+      <% unless @last_toner_low.nil? %>
+      <%= link_to @last_toner_low.device_name, "/alerts?name_q=#{@last_toner_low.device_name}&msg_q=Toner supply&commit=Find" -%> on <%= @last_toner_low.alert_date.to_formatted_s(:db) -%>
+      <% end %>
+    </td>
+    </tr>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><strong>Add Toner Alerts</strong></td>
+    <td><strong>Out of Toner</strong></td>
     <td class='right-justify'><%= link_to number_with_delimiter(@num_toner_out), "/alerts?msg_q=Add toner&commit=Find" -%></td>
-  </tr>
+    <td>
+      <% unless @last_toner_out.nil? %>
+        <%= link_to @last_toner_out.device_name, "/alerts?name_q=#{@last_toner_out.device_name}&commit=Find" -%> on <%= @last_toner_out.alert_date.to_formatted_s(:db) -%>
+      <% end %>
+    </td>
+    </tr>
   <tr class="<%= cycle('light','dark') -%>">
     <td><strong>Waste Toner Container Warnings</strong></td>
     <td class='right-justify'><%= link_to number_with_delimiter(@num_waste_warn), "/alerts?msg_q=Replacement&commit=Find" -%></td>
-  </tr>
+    <td>
+      <% unless @last_waste_warn.nil? %>
+      <%= link_to @last_waste_warn.device_name, "/alerts?name_q=#{@last_waste_warn.device_name}&msg_q=Replacement&commit=Find" -%> on <%= @last_waste_warn.alert_date.to_formatted_s(:db) -%>
+      <% end %>
+    </td>
+    </tr>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><strong>Waste Toner Container Full Alerts</strong></td>
+    <td><strong>Waste Toner Container Full</strong></td>
     <td class='right-justify'><%= link_to number_with_delimiter(@num_waste_full), "/alerts?msg_q=Replace Used Toner&commit=Find" -%></td>
-  </tr>
+    <td>
+      <% unless @last_waste_full.nil? %>
+      <%= link_to @last_waste_full.device_name, "/alerts?name_q=#{@last_waste_full.device_name}&msg_q=Replace used toner&commit=Find" -%> on <%= @last_waste_full.alert_date.to_formatted_s(:db) -%>
+      <% end %>
+    </td>
+    </tr>
 </table>

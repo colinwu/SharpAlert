@@ -75,13 +75,29 @@ class AlertsController < ApplicationController
   def summary
     @num_alerts = Alert.all.count
     @num_devices = Alert.all(:group => 'device_serial').count
-    @num_service = Alert.all(:conditions => "alert_msg regexp 'Call for service'", :select => 'id').count
-    @num_pm = Alert.all(:conditions => "alert_msg regexp 'Maintenance'", :select => 'id').count
-    @num_misfeed = Alert.all(:conditions => "alert_msg regexp 'Misfeed'", :select => 'id').count
-    @num_paper = Alert.all(:conditions => "alert_msg regexp 'load paper'", :select => 'id').count
-    @num_waste_full = Alert.all(:conditions => "alert_msg regexp 'replace used toner'", :select => 'id').count
-    @num_waste_warn = Alert.all(:conditions => "alert_msg regexp 'Replacement the toner'", :select => 'id').count
-    @num_toner_out = Alert.all(:conditions => "alert_msg regexp 'Add toner'", :select => 'id').count
-    @num_toner_low = Alert.all(:conditions => "alert_msg regexp 'Toner supply is low'", :select => 'id').count
+    service = Alert.all(:conditions => "alert_msg regexp 'Call for service'")
+    @num_service = service.count
+    @last_service = service[-1]
+    pm = Alert.all(:conditions => "alert_msg regexp 'Maintenance'")
+    @num_pm = pm.count
+    @last_pm = pm[-1]
+    misfeed = Alert.all(:conditions => "alert_msg regexp 'Misfeed'")
+    @num_misfeed = misfeed.count
+    @last_misfeed = misfeed[-1]
+    paper = Alert.all(:conditions => "alert_msg regexp 'load paper'")
+    @num_paper = paper.count
+    @last_paper = paper[-1]
+    waste_full = Alert.all(:conditions => "alert_msg regexp 'replace used toner'")
+    @num_waste_full = waste_full.count
+    @last_waste_full = waste_full[-1]
+    waste_warn = Alert.all(:conditions => "alert_msg regexp 'Replacement the toner'")
+    @num_waste_warn = waste_warn.count
+    @last_waste_warn = waste_warn[-1]
+    toner_out = Alert.all(:conditions => "alert_msg regexp 'Add toner'")
+    @num_toner_out = toner_out.count
+    @last_toner_out = toner_out[-1]
+    toner_low = Alert.all(:conditions => "alert_msg regexp 'Toner supply is low'")
+    @num_toner_low = toner_low.count
+    @last_toner_low = toner_low[-1]
   end
 end
