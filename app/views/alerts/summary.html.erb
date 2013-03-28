@@ -1,0 +1,44 @@
+<h1>Alert Summary</h1>
+
+<table class='list' style="width:50%;">
+  <tr class="<%= cycle('light','dark') -%>">
+    <td><strong>Total Alerts</strong></td>
+    <td class='right-justify'><%= number_with_delimiter(@num_alerts) -%></td>
+  </tr>
+  <tr class="<%= cycle('light','dark') -%>">
+    <td><strong>Total Devices</strong></td>
+    <td class='right-justify'><%= number_with_delimiter(@num_devices) -%></td>
+  </tr>
+  <tr class="<%= cycle('light','dark') -%>">
+    <td><strong>Service Alerts</strong></td>
+    <td class='right-justify'><%= link_to number_with_delimiter(@num_service), "/alerts?msg_q=service&commit=Find" -%></td>
+  </tr>
+  <tr class="<%= cycle('light','dark') -%>">
+    <td><strong>Maintenance Alerts</strong></td>
+    <td class='right-justify'><%= link_to number_with_delimiter(@num_pm), "/alerts?msg_q=maintenance&commit=Find" -%></td>
+  </tr>
+  <tr class="<%= cycle('light','dark') -%>">
+    <td><strong>Misfeed Alerts</strong></td>
+    <td class='right-justify'><%= link_to number_with_delimiter(@num_misfeed), "/alerts?msg_q=misfeed&commit=Find" -%></td>
+  </tr>
+  <tr class="<%= cycle('light','dark') -%>">
+    <td><strong>Paper Out Alerts</strong></td>
+    <td class='right-justify'><%= link_to number_with_delimiter(@num_paper), "/alerts?msg_q=Load paper&commit=Find" -%></td>
+  </tr>
+  <tr class="<%= cycle('light','dark') -%>">
+    <td><strong>Toner Low Alerts</strong></td>
+    <td class='right-justify'><%= link_to number_with_delimiter(@num_toner_low), "/alerts?msg_q=Toner supply&commit=Find" -%></td>
+  </tr>
+  <tr class="<%= cycle('light','dark') -%>">
+    <td><strong>Add Toner Alerts</strong></td>
+    <td class='right-justify'><%= link_to number_with_delimiter(@num_toner_out), "/alerts?msg_q=Add toner&commit=Find" -%></td>
+  </tr>
+  <tr class="<%= cycle('light','dark') -%>">
+    <td><strong>Waste Toner Container Warnings</strong></td>
+    <td class='right-justify'><%= link_to number_with_delimiter(@num_waste_warn), "/alerts?msg_q=Replacement&commit=Find" -%></td>
+  </tr>
+  <tr class="<%= cycle('light','dark') -%>">
+    <td><strong>Waste Toner Container Full Alerts</strong></td>
+    <td class='right-justify'><%= link_to number_with_delimiter(@num_waste_full), "/alerts?msg_q=Replace Used Toner&commit=Find" -%></td>
+  </tr>
+</table>
