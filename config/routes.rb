@@ -10,7 +10,11 @@ SharpApp::Application.routes.draw do
     end
   end
 
-  resources :alerts
+  resources :alerts do
+    collection do
+      get 'summary'
+    end
+  end
 
 #   resources :notify_controls do
 #     collection do

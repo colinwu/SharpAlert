@@ -1,22 +1,5 @@
 <h1>Alerts</h1>
-<table class="list">
-  <tr>
-    <th colspan=4>Statistics (Totals)</th>
-  </tr>
-  <tr>
-    <th>Alerts</th>
-    <th>Devices</th>
-    <th>Service</th>
-    <th>Maintenance</th>
-  </tr>
-  <tr class="right-justify">
-    <td><%= number_with_delimiter(@num_alerts) -%></td>
-    <td><%= number_with_delimiter(@num_devices) -%></td>
-    <td><%= number_with_delimiter(@num_service) -%></td>
-    <td><%= number_with_delimiter(@num_pm) -%></td>
-  </tr>
-</table>
-<p>Please note that the <em>Alert Date</em> shown is in the device's local time zone rather than your time zone. Unfortunately, the email alerts to not include time zone information in the date/time string.</p>
+<p>Please note that the <em>Alert Date</em> shown is in the device's local time zone rather than your time zone.</p>
 <table class="list">
   <tr class='searchform'>
     <%= form_tag '/alerts', :method => 'get' do -%>

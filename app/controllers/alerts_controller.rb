@@ -16,15 +16,6 @@ class AlertsController < ApplicationController
   end
   
   def index
-    @num_alerts = Alert.all.count
-    @num_devices = Alert.all(:group => 'device_serial').count
-    service_alerts = Alert.all(:conditions => "alert_msg regexp 'Call for service'")
-    @num_service = service_alerts.count
-    @last_service = service_alerts[-1]
-    pm_alerts = Alert.all(:conditions => "alert_msg regexp 'Maintenance'")
-    @num_pm = pm_alerts.count
-    @last_pm = pm_alerts[-1]
-    
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
     if params[:sort].nil?
       sort = 'alert_date'
@@ -79,5 +70,18 @@ class AlertsController < ApplicationController
       end
       send_data(csv_data, :type => "text/csv", :filename => 'alerts.csv', :disposition => "attachment")
     end
+  end
+  
+  def summary
+    @num_alerts = Alert.all.count
+    @num_devices = Alert.all(:group => 'device_serial').count
+    @num_service = Alert.all(:conditions => "alert_msg regexp 'Call for service'", :select => 'id').count
+    @num_pm = Alert.all(:conditions => "alert_msg regexp 'Maintenance'", :select => 'id').count
+    @num_misfeed = Alert.all(:conditions => "alert_msg regexp 'Misfeed'", :select => 'id').count
+    @num_paper = Alert.all(:conditions => "alert_msg regexp 'load paper'", :select => 'id').count
+    @num_waste_full = Alert.all(:conditions => "alert_msg regexp 'replace used toner'", :select => 'id').count
+    @num_waste_warn = Alert.all(:conditions => "alert_msg regexp 'Replacement the toner'", :select => 'id').count
+    @num_toner_out = Alert.all(:conditions => "alert_msg regexp 'Add toner'", :select => 'id').count
+    @num_toner_low = Alert.all(:conditions => "alert_msg regexp 'Toner supply is low'", :select => 'id').count
   end
 end

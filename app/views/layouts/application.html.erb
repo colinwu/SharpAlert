@@ -13,7 +13,8 @@
 <div id="top-menu">
 <%= link_to "Search Help", about_search_path -%> |
 <%= link_to "Alerts", alerts_path -%> |
-<%= link_to_unless_current "Controls", notify_controls_path -%>
+<%= link_to_unless_current "Controls", notify_controls_path -%> |
+<%= link_to_unless_current "Summary", summary_alerts_path -%>
 </div>
 <div id="container">
 <%= yield %>
