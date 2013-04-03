@@ -78,26 +78,34 @@ class AlertsController < ApplicationController
     service = Alert.all(:conditions => "alert_msg regexp 'Call for service'")
     @num_service = service.count
     @last_service = service[-1]
+    @service_sent = NotifyControl.last :order => :service_sent
     pm = Alert.all(:conditions => "alert_msg regexp 'Maintenance'")
     @num_pm = pm.count
     @last_pm = pm[-1]
+    @pm_sent = NotifyControl.last :order => :pm_sent
     misfeed = Alert.all(:conditions => "alert_msg regexp 'Misfeed'")
     @num_misfeed = misfeed.count
     @last_misfeed = misfeed[-1]
+    @misfeed_sent = NotifyControl.last :order => :jam_sent
     paper = Alert.all(:conditions => "alert_msg regexp 'load paper'")
     @num_paper = paper.count
     @last_paper = paper[-1]
+    @paper_sent = NotifyControl.last :order => :paper_sent
     waste_full = Alert.all(:conditions => "alert_msg regexp 'replace used toner'")
     @num_waste_full = waste_full.count
     @last_waste_full = waste_full[-1]
+    @waste_full_sent = NotifyControl.last :order => :waste_full_sent
     waste_warn = Alert.all(:conditions => "alert_msg regexp 'Replacement the toner'")
     @num_waste_warn = waste_warn.count
     @last_waste_warn = waste_warn[-1]
+    @waste_warn_sent = NotifyControl.last :order => :waste_almost_full_sent
     toner_out = Alert.all(:conditions => "alert_msg regexp 'Add toner'")
     @num_toner_out = toner_out.count
     @last_toner_out = toner_out[-1]
+    @toner_out_sent = NotifyControl.last :order => :toner_empty_sent
     toner_low = Alert.all(:conditions => "alert_msg regexp 'Toner supply is low'")
     @num_toner_low = toner_low.count
     @last_toner_low = toner_low[-1]
+    @toner_low_sent = NotifyControl.last :order => :toner_low_sent
   end
 end
