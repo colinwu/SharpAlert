@@ -99,7 +99,7 @@
     </td>
     <td>
       <% unless @toner_out_sent.nil? or @toner_out_sent.toner_empty_sent.nil? %>
-      <%= @toner_out_sent.toner_empty_sent.to_formatted_s(:db) -%> from <%= link_to @toner_out_sent.device_name, "/alerts?name_q=#{@toner_out_sent.device_name}&msg_q=Add toner&commit=Find" -%>
+      <%= @toner_out_sent.toner_empty_sent.to_formatted_s(:db) -%> for <%= link_to @toner_out_sent.device_name, "/alerts?name_q=#{@toner_out_sent.device_name}&msg_q=Add toner&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -127,7 +127,7 @@
     </td>
     <td>
       <% unless @waste_full_sent.nil? or @waste_full_sent.waste_full_sent.nil? %>
-      <%= @waste_full_sent.waste_full_sent.to_formatted_s(:db) -%> from <%= link_to @waste_full_sent.device_name, "/alerts?name_q=#{@waste_full_sent.device_name}&msg_q=Replace used toner&commit=Find" -%>
+      <%= @waste_full_sent.waste_full_sent.to_formatted_s(:db) -%> for <%= link_to @waste_full_sent.device_name, "/alerts?name_q=#{@waste_full_sent.device_name}&msg_q=Replace used toner&commit=Find" -%>
       <% end %>
     </td>
   </tr>
