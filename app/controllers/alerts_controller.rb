@@ -18,7 +18,7 @@ class AlertsController < ApplicationController
   def index
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
     if params[:sort].nil?
-      sort = 'alert_date'
+      sort = 'id'
     else
       sort = "#{params[:sort]},alert_date"
     end
