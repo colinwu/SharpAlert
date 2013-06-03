@@ -13,6 +13,10 @@
     <%= f.label 'Local Admin (notified of paper and toner related alerts)' %><br />
     <%= f.text_field :local_admin, :size => 60 %>
   </p>
+  <p>
+    <%= f.label "Client" %><br />
+    <%= f.collection_select(:client_id, Client.all, :id, :name) %>
+  </p>
   <hr>
   For each of the following fields:
   <ul>

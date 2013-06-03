@@ -1,4 +1,6 @@
 SharpApp::Application.routes.draw do
+  resources :clients
+
   get "about/me"
 
   get "about/search"

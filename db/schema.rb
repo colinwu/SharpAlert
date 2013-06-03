@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130327133354) do
+ActiveRecord::Schema.define(:version => 20130517143339) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -23,6 +23,12 @@ ActiveRecord::Schema.define(:version => 20130327133354) do
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
     t.integer  "notify_control_id"
+  end
+
+  create_table "clients", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "notify_controls", :force => true do |t|
@@ -51,6 +57,7 @@ ActiveRecord::Schema.define(:version => 20130327133354) do
     t.string   "device_model"
     t.string   "device_name"
     t.string   "local_admin"
+    t.integer  "client_id"
   end
 
 end
