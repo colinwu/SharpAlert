@@ -126,25 +126,25 @@ class AlertsController < ApplicationController
     @devices_by_model = NotifyControl.group(:device_model).order(:device_model)
     
     @devices_by_name.each do |d|
-      @paper[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "load paper"', d.id]).count
-      @misfeed[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "misfeed"', d.id]).count
-      @toner_low[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "toner low"', d.id]).count
-      @toner_out[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "out of toner"', d.id]).count
-      @service[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "service"', d.id]).count
-      @maint[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "maintenance"', d.id]).count
-      @waste_warn[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "toner collection container"', d.id]).count
-      @waste_full[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "replace used toner container"', d.id]).count
+      @paper[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "load paper"', d.id]).select(:alert_date)
+      @misfeed[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "misfeed"', d.id]).select(:alert_date)
+      @toner_low[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "toner supply is low"', d.id]).select(:alert_date)
+      @toner_out[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "Add toner"', d.id]).select(:alert_date)
+      @service[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "service"', d.id]).select(:alert_date)
+      @maint[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "maintenance"', d.id]).select(:alert_date)
+      @waste_warn[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "toner collection container"', d.id]).select(:alert_date)
+      @waste_full[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "replace used toner container"', d.id]).select(:alert_date)
     end
     
     @devices_by_model.each do |d|
-      @paper[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "load paper"', d.device_model]).count
-      @misfeed[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "misfeed"', d.device_model]).count
-      @toner_low[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "toner low"', d.device_model]).count
-      @toner_out[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "out of toner"', d.device_model]).count
-      @service[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "service"', d.device_model]).count
-      @maint[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "maintenance"', d.device_model]).count
-      @waste_warn[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "toner collection container"', d.device_model]).count
-      @waste_full[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "replace used toner container"', d.device_model]).count
+      @paper[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "load paper"', d.device_model]).select('alert_date,notify_controls.device_name')
+      @misfeed[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "misfeed"', d.device_model]).select('alert_date,notify_controls.device_name')
+      @toner_low[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "toner low"', d.device_model]).select('alert_date,notify_controls.device_name')
+      @toner_out[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "out of toner"', d.device_model]).select('alert_date,notify_controls.device_name')
+      @service[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "service"', d.device_model]).select('alert_date,notify_controls.device_name')
+      @maint[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "maintenance"', d.device_model]).select('alert_date,notify_controls.device_name')
+      @waste_warn[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "toner collection container"', d.device_model]).select('alert_date,notify_controls.device_name')
+      @waste_full[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "replace used toner container"', d.device_model]).select('alert_date,notify_controls.device_name')
     end
   end
 end
