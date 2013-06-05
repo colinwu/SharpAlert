@@ -12,13 +12,16 @@
       <td>Date:</td><td><strong><%=h @alert.alert_date.to_formatted_s(:db) -%></strong></td>
     </tr>
     <tr>
-      <td>Device:</td><td><strong><%=h @alert.device_name -%></strong></td>
+      <td>Device:</td><td><strong><%=h @alert.notify_control.device_name -%></strong></td>
     </tr>
     <tr>
-      <td>Model:</td><td><strong><%=h @alert.device_model -%></strong></td>
+      <td>Model:</td><td><strong><%=h @alert.notify_control.device_model -%></strong></td>
     </tr>
     <tr>
-      <td>Serial #:</td><td><strong><%=h @alert.device_serial -%></strong></td>
+      <td>Serial #:</td><td><strong><%=h @alert.notify_control.device_serial -%></strong></td>
+    </tr>
+    <tr>
+      <td>Machine Code:</td><td><strong><%=h @alert.notify_control.device_code -%></strong></td>
     </tr>
     <tr>
       <td>Message:</td><td><strong><%=h @alert.alert_msg -%></strong></td>

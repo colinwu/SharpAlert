@@ -18,7 +18,7 @@ class AlertsController < ApplicationController
   def index
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
     if params[:sort].nil?
-      sort = 'id'
+      sort = 'alerts.id'
     else
       sort = "#{params[:sort]},alert_date"
     end
@@ -33,39 +33,45 @@ class AlertsController < ApplicationController
       if (not params['name_q'].nil? and not params['name_q'].empty?)
         @name_q = params[:name_q]
         condition_array << @name_q.condition
-        where_array << @name_q.where('device_name')
+        where_array << @name_q.where('notify_controls.device_name')
      end
       if(not params['model_q'].nil? and not params['model_q'].empty?)
         @model_q = params[:model_q]
         condition_array << @model_q.condition
-        where_array << @model_q.where('device_model')
+        where_array << @model_q.where('notify_controls.device_model')
       end
       if(not params['serial_q'].nil? and not params['serial_q'].empty?)
         @serial_q = params[:serial_q]
         condition_array << @serial_q.condition
-        where_array << @serial_q.where('device_serial')
+        where_array << @serial_q.where('notify_controls.device_serial')
       end
       if(not params['code_q'].nil? and not params['code_q'].empty?)
         @code_q = params[:code_q]
-        where_array << @code_q.where('device_code')
+        where_array << @code_q.where('notify_controls.device_code')
         condition_array << @code_q.condition
+      end
+      if (not params['client_q'].nil? and not params['client_q'].empty?)
+        @client_q = params[:client_q]
+        where_array << @client_q.where('clients.name')
+        condition_array << @client_q.condition
       end
       if(not params['msg_q'].nil? and not params['msg_q'].empty?)
         @msg_q = params[:msg_q]
         where_array << @msg_q.where('alert_msg')
         condition_array << @msg_q.condition
       end
+          
       unless where_array.empty?
         condition_array[0] = where_array.join(' and ')
       else
         condition_array = []
       end
     end
-    @alerts = Alert.paginate(:page => params[:page], :order => sort, :conditions => condition_array, :per_page => 30)
+    @alerts = Alert.paginate(:page => params[:page], :include => {:notify_control => :client}, :order => sort, :conditions => condition_array, :per_page => 30)
     if (params[:commit] == 'Export')
       @request.sub!(/commit=Export/,'commit=Find')
       csv_data = '"alert data","device name","device_model","serial number","machine code","message"' + "\n"
-      Alert.all(:order => sort, :conditions => condition_array).each do |a|
+      Alert.all(:order => sort, :conditions => condition_array, :include => 'notify_control').each do |a|
         csv_data += a.to_csv + "\n"
       end
       send_data(csv_data, :type => "text/csv", :filename => 'alerts.csv', :disposition => "attachment")
@@ -107,5 +113,38 @@ class AlertsController < ApplicationController
     @num_toner_low = toner_low.count
     @last_toner_low = toner_low[-1]
     @toner_low_sent = NotifyControl.last :order => :toner_low_sent
+    
+    @paper = Hash.new
+    @misfeed = Hash.new
+    @toner_low = Hash.new
+    @toner_out = Hash.new
+    @service = Hash.new
+    @maint = Hash.new
+    @waste_warn = Hash.new
+    @waste_full = Hash.new
+    @devices_by_name = NotifyControl.order(:device_name)
+    @devices_by_model = NotifyControl.group(:device_model).order(:device_model)
+    
+    @devices_by_name.each do |d|
+      @paper[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "load paper"', d.id]).count
+      @misfeed[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "misfeed"', d.id]).count
+      @toner_low[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "toner low"', d.id]).count
+      @toner_out[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "out of toner"', d.id]).count
+      @service[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "service"', d.id]).count
+      @maint[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "maintenance"', d.id]).count
+      @waste_warn[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "toner collection container"', d.id]).count
+      @waste_full[d.device_name] = Alert.where(['notify_control_id = ? and alert_msg regexp "replace used toner container"', d.id]).count
+    end
+    
+    @devices_by_model.each do |d|
+      @paper[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "load paper"', d.device_model]).count
+      @misfeed[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "misfeed"', d.device_model]).count
+      @toner_low[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "toner low"', d.device_model]).count
+      @toner_out[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "out of toner"', d.device_model]).count
+      @service[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "service"', d.device_model]).count
+      @maint[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "maintenance"', d.device_model]).count
+      @waste_warn[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "toner collection container"', d.device_model]).count
+      @waste_full[d.device_model] = Alert.joins(:notify_control).where(['notify_controls.device_model = ? and alert_msg regexp "replace used toner container"', d.device_model]).count
+    end
   end
 end

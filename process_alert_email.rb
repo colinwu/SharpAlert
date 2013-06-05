@@ -18,13 +18,13 @@ alert = Alert.new
 # Parse the email
 while (line = gets)
   if line =~ /^Device Name: (.+)/
-    alert.device_name = $1
+    device_name = $1
   elsif line =~ /^Device Model: (\S+)/
-    alert.device_model = $1
+    device_model = $1
   elsif line =~ /^Serial Number: (\S+)/
-    alert.device_serial = $1
+    device_serial = $1
   elsif line =~ /^Machine Code: (\S+)/
-    alert.device_code = $1
+    device_code = $1
   elsif line =~ /^!!!!! (.+) !!!!!/
     msg = $1
     if msg =~ /Call for service/
@@ -43,13 +43,14 @@ end
 alert.save
 
 # retrieve (or create using defaults) the notification profile for this device.
-@n = NotifyControl.find_by_device_serial_and_device_model(alert.device_serial,alert.device_model)
+@n = NotifyControl.find_by_device_serial_and_device_model(device_serial,device_model)
 if @n.nil?
   ndef = NotifyControl.find_by_device_serial 'default'
   @n = alert.create_notify_control(
-    :device_serial => alert.device_serial,
-    :device_model => alert.device_model,
-    :device_name => alert.device_name,
+    :device_serial => device_serial,
+    :device_model => device_model,
+    :device_name => device_name,
+    :device_code => device_code,
     :tech => ndef.tech,
     :local_admin => ndef.local_admin,
     :jam => ndef.jam,

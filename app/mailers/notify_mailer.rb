@@ -4,7 +4,7 @@ class NotifyMailer < ActionMailer::Base
   def notify_email(who, alert)
     @who = who
     @alert = alert
-    @n = NotifyControl.first(:conditions => "device_serial = '#{alert.device_serial}' and device_model = '#{alert.device_model}' and device_name = '#{alert.device_name}'")
+    @n = NotifyControl.first(:conditions => "device_serial = '#{alert.notify_control.device_serial}' and device_model = '#{alert.notify_control.device_model}' and device_name = '#{alert.notify_control.device_name}'")
     # figure out which alert this is so we know which control to use
     if alert.alert_msg =~ /Misfeed/ and not @n.jam.nil?
       @last_sent = @n.jam_sent
@@ -37,9 +37,9 @@ class NotifyMailer < ActionMailer::Base
       @last_sent = nil
     end
     unless @last_sent.nil?
-      @num_past_alerts = Alert.find( :all, :conditions => ['alert_msg = ? and device_name = ? and alert_date > ? and alert_date < ?', alert.alert_msg, alert.device_name, @last_sent, alert.alert_date]).count
+      @num_past_alerts = Alert.find( :all, :conditions => ['alert_msg = ? and device_name = ? and alert_date > ? and alert_date < ?', alert.alert_msg, alert.notify_control.device_name, @last_sent, alert.alert_date]).count
     end
-    mail(:to => who, :subject => "#{alert.device_name} - Alert Message - #{alert.alert_msg}")
+    mail(:to => who, :subject => "#{alert.notify_control.device_name} - Alert Message - #{alert.alert_msg}")
     @n.save
   end
 
