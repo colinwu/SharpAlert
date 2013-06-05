@@ -153,7 +153,7 @@
   </tr>
   <% @devices_by_name.each do |d| %>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><%= link_to h(d.device_name), alerts_path + "?name_q=#{d.device_name}&commit=Find", :title => "Click to view all alerts for this device" -%> (<%=h d.client.name %>)</td>
+    <td><%= link_to h(d.device_name), alerts_path + "?name_q=#{d.device_name}&commit=Find", :title => "#{d.device_model}, #{d.device_serial}, #{d.device_code}" -%> (<%=h d.client.name %>)</td>
     <td class='right-justify'><%= link_to_unless @misfeed[d.device_name].empty?, @misfeed[d.device_name].count, alerts_path + "?name_q=#{d.device_name}&msg_q=misfeed&commit=Find", :title => @misfeed[d.device_name].empty? ? '' : @misfeed[d.device_name].last.alert_date.to_formatted_s(:db) -%></td>
     <td class='right-justify'><%= link_to_unless @paper[d.device_name].empty?, @paper[d.device_name].count, alerts_path + "?name_q=#{d.device_name}&msg_q=paper&commit=Find", :title => @paper[d.device_name].empty? ? '' : @paper[d.device_name].last.alert_date.to_formatted_s(:db) -%></td>
     <td class='right-justify'><%= link_to_unless @toner_low[d.device_name].empty?, @toner_low[d.device_name].count, alerts_path + "?name_q=#{d.device_name}&msg_q=toner supply&commit=Find", :title => @toner_low[d.device_name].empty? ? '' : @toner_low[d.device_name].last.alert_date.to_formatted_s(:db) -%></td>
