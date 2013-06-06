@@ -80,7 +80,7 @@ class AlertsController < ApplicationController
   
   def summary
     @num_alerts = Alert.all.count
-    @num_devices = Alert.all(:group => 'device_serial').count
+    @num_devices = Alert.all(:include => :notify_control, :group => 'notify_controls.device_serial').count
     service = Alert.all(:conditions => "alert_msg regexp 'Call for service'")
     @num_service = service.count
     @last_service = service[-1]

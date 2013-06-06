@@ -4,6 +4,16 @@
 <p>Click on the Device Name to see all alerts for that device.</p>
 
 <table class="list">
+  <tr class='searchform'>
+  <%= form_tag '/notify_controls', :method => 'get' do -%>
+      <td>&nbsp;</td>
+      <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Device Name" -%></td>
+      <td><%= text_field_tag 'tech_q', @tech_q, :size => 10, :placeholder => "Tech email" -%></td>
+      <td><%= text_field_tag 'local_q', @local_q, :size => 10, :placeholder => "Local admin email" -%></td>
+      <td><%= text_field_tag 'client_q', @client_q, :size => 10, :placeholder => "Search Client" -%></td>
+      <td colspan=9><%= submit_tag 'Filter' -%></td>
+    <%end%>  
+  </tr>
   <tr>
     <th></th>
     <th>Device Name</th>

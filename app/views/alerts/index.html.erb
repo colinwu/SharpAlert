@@ -22,7 +22,7 @@
     <th><%= link_to 'Alert Message', "/alerts?sort=alert_msg&#{@request}", :title => "Sort by message" -%></th>
   </tr>
   <% for alert in @alerts %>
-    <% nc = NotifyControl.find_by_device_serial(alert.device_serial) %>
+    <% nc = NotifyControl.find_by_device_serial(alert.notify_control.device_serial) %>
     <tr class="<%=cycle('dark','light')%>">
       <td><%= alert.alert_date.to_formatted_s(:db) %></td>
       <td><%= link_to alert.notify_control.device_name, edit_notify_control_path(alert.notify_control_id), :title => "Click to edit controls" %></td>

@@ -11,14 +11,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130604171941) do
+ActiveRecord::Schema.define(:version => 20130606151802) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
-    t.string   "device_name"
-    t.string   "device_model"
-    t.string   "device_serial"
-    t.string   "device_code"
     t.string   "alert_msg"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false

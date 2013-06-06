@@ -1,6 +1,37 @@
 class NotifyControlsController < ApplicationController
   def index
-    @notify_controls = NotifyControl.paginate(:page => params[:page], :per_page => 30, :order => :device_name)
+    @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
+    unless (params[:commit].nil?)
+      where_array = Array.new
+      condition_array = ['place holder']
+      if (not params['name_q'].nil? and not params['name_q'].empty?)
+        @name_q = params[:name_q]
+        condition_array << @name_q.condition
+        where_array << @name_q.where('device_name')
+      end
+      if(not params['tech_q'].nil? and not params['tech_q'].empty?)
+        @tech_q = params[:tech_q]
+        condition_array << @tech_q.condition
+        where_array << @tech_q.where('tech')
+      end
+      if(not params['local_q'].nil? and not params['local_q'].empty?)
+        @local_q = params[:local_q]
+        condition_array << @local_q.condition
+        where_array << @local_q.where('local_admin')
+      end
+      if (not params['client_q'].nil? and not params['client_q'].empty?)
+        @client_q = params[:client_q]
+        where_array << @client_q.where('clients.name')
+        condition_array << @client_q.condition
+      end
+    
+      unless where_array.empty?
+        condition_array[0] = where_array.join(' and ')
+      else
+        condition_array = []
+      end
+    end
+    @notify_controls = NotifyControl.paginate(:page => params[:page], :include => :client, :order => :device_name, :conditions => condition_array, :per_page => 30)
   end
 
   def show
