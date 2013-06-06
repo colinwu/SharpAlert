@@ -152,16 +152,25 @@
     <th>Maintenance</th>
   </tr>
   <% @devices_by_name.each do |d| %>
+  <%   key = "#{d.device_name}|#{d.device_model}|#{d.device_serial}" %>
   <tr class="<%= cycle('light','dark') -%>">
     <td><%= link_to h(d.device_name), alerts_path + "?name_q=#{d.device_name}&commit=Find", :title => "#{d.device_model}, #{d.device_serial}, #{d.device_code}" -%> (<%=h d.client.name %>)</td>
-    <td class='right-justify'><%= link_to_unless @misfeed[d.device_name].empty?, @misfeed[d.device_name].count, alerts_path + "?name_q=#{d.device_name}&msg_q=misfeed&commit=Find", :title => @misfeed[d.device_name].empty? ? '' : @misfeed[d.device_name].last.alert_date.to_formatted_s(:db) -%></td>
-    <td class='right-justify'><%= link_to_unless @paper[d.device_name].empty?, @paper[d.device_name].count, alerts_path + "?name_q=#{d.device_name}&msg_q=paper&commit=Find", :title => @paper[d.device_name].empty? ? '' : @paper[d.device_name].last.alert_date.to_formatted_s(:db) -%></td>
-    <td class='right-justify'><%= link_to_unless @toner_low[d.device_name].empty?, @toner_low[d.device_name].count, alerts_path + "?name_q=#{d.device_name}&msg_q=toner supply&commit=Find", :title => @toner_low[d.device_name].empty? ? '' : @toner_low[d.device_name].last.alert_date.to_formatted_s(:db) -%></td>
-    <td class='right-justify'><%= link_to_unless @toner_out[d.device_name].empty?, @toner_out[d.device_name].count, alerts_path + "?name_q=#{d.device_name}&msg_q=add toner&commit=Find", :title => @toner_out[d.device_name].empty? ? '' : @toner_out[d.device_name].last.alert_date.to_formatted_s(:db) -%></td>
-    <td class='right-justify'><%= link_to_unless @waste_warn[d.device_name].empty?, @waste_warn[d.device_name].count, alerts_path + "?name_q=#{d.device_name}&msg_q=replacement&commit=Find", :title => @waste_warn[d.device_name].empty? ? '' : @waste_warn[d.device_name].last.alert_date.to_formatted_s(:db) -%></td>
-    <td class='right-justify'><%= link_to_unless @waste_full[d.device_name].empty?, @waste_full[d.device_name].count, alerts_path + "?name_q=#{d.device_name}&msg_q=replace used toner&commit=Find", :title => @waste_full[d.device_name].empty? ? '' : @waste_full[d.device_name].last.alert_date.to_formatted_s(:db) -%></td>
-    <td class='right-justify'><%= link_to_unless @service[d.device_name].empty?, @service[d.device_name].count, alerts_path + "?name_q=#{d.device_name}&msg_q=service&commit=Find", :title => @service[d.device_name].empty? ? '' : @service[d.device_name].last.alert_date.to_formatted_s(:db) -%></td>
-    <td class='right-justify'><%= link_to_unless @maint[d.device_name].empty?, @maint[d.device_name].count, alerts_path + "?name_q=#{d.device_name}&msg_q=maintenance&commit=Find", :title => @maint[d.device_name].empty? ? '' : @maint[d.device_name].last.alert_date.to_formatted_s(:db) -%></td>
+    <td class='right-justify'>
+      <%= link_to_unless @misfeed[key].empty?, @misfeed[key].count, alerts_path + "?name_q=#{d.device_name}&msg_q=misfeed&commit=Find", :title => @misfeed[key].empty? ? '' : @misfeed[key].last.alert_date.to_formatted_s(:db) -%></td>
+    <td class='right-justify'>
+      <%= link_to_unless @paper[key].empty?, @paper[key].count, alerts_path + "?name_q=#{d.device_name}&msg_q=paper&commit=Find", :title => @paper[key].empty? ? '' : @paper[key].last.alert_date.to_formatted_s(:db) -%></td>
+    <td class='right-justify'>
+      <%= link_to_unless @toner_low[key].empty?, @toner_low[key].count, alerts_path + "?name_q=#{d.device_name}&msg_q=toner supply&commit=Find", :title => @toner_low[key].empty? ? '' : @toner_low[key].last.alert_date.to_formatted_s(:db) -%></td>
+    <td class='right-justify'>
+      <%= link_to_unless @toner_out[key].empty?, @toner_out[key].count, alerts_path + "?name_q=#{d.device_name}&msg_q=add toner&commit=Find", :title => @toner_out[key].empty? ? '' : @toner_out[key].last.alert_date.to_formatted_s(:db) -%></td>
+    <td class='right-justify'>
+      <%= link_to_unless @waste_warn[key].empty?, @waste_warn[key].count, alerts_path + "?name_q=#{d.device_name}&msg_q=replacement&commit=Find", :title => @waste_warn[key].empty? ? '' : @waste_warn[key].last.alert_date.to_formatted_s(:db) -%></td>
+    <td class='right-justify'>
+      <%= link_to_unless @waste_full[key].empty?, @waste_full[key].count, alerts_path + "?name_q=#{d.device_name}&msg_q=replace used toner&commit=Find", :title => @waste_full[key].empty? ? '' : @waste_full[key].last.alert_date.to_formatted_s(:db) -%></td>
+    <td class='right-justify'>
+      <%= link_to_unless @service[key].empty?, @service[key].count, alerts_path + "?name_q=#{d.device_name}&msg_q=service&commit=Find", :title => @service[key].empty? ? '' : @service[key].last.alert_date.to_formatted_s(:db) -%></td>
+    <td class='right-justify'>
+      <%= link_to_unless @maint[key].empty?, @maint[key].count, alerts_path + "?name_q=#{d.device_name}&msg_q=maintenance&commit=Find", :title => @maint[key].empty? ? '' : @maint[key].last.alert_date.to_formatted_s(:db) -%></td>
   </tr>
   <% end %>
 </table>
@@ -183,16 +192,26 @@
     <th>Maintenance</th>
   </tr>
   <% @devices_by_model.each do |d| %>
+  <%   dev_count = @count_by_model[d.device_model] %>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><%= link_to h(d.device_model), alerts_path + "?model_q=#{d.device_model}&commit=Find", :title => "Click to view all alerts for this device" -%></td>
-    <td class='right-justify'><%= link_to_unless @paper[d.device_model].empty?, @paper[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=paper&commit=Find", :title => @paper[d.device_model].empty? ? '' : "#{@paper[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@paper[d.device_model].last.device_name}" -%></td>
-    <td class='right-justify'><%= link_to_unless @misfeed[d.device_model].empty?, @misfeed[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=misfeed&commit=Find", :title => @misfeed[d.device_model].empty? ? '' : "#{@misfeed[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@misfeed[d.device_model].last.device_name}" -%></td>
-    <td class='right-justify'><%= link_to_unless @toner_low[d.device_model].empty?, @toner_low[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=toner supply&commit=Find", :title => @toner_low[d.device_model].empty? ? '' : "#{@toner_low[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@toner_low[d.device_model].last.device_name}" -%></td>
-    <td class='right-justify'><%= link_to_unless @toner_out[d.device_model].empty?, @toner_out[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=add toner&commit=Find", :title => @toner_out[d.device_model].empty? ? '' : "#{@toner_out[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@toner_out[d.device_model].last.device_name}" -%></td>
-    <td class='right-justify'><%= link_to_unless @waste_warn[d.device_model].empty?, @waste_warn[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=replacement&commit=Find", :title => @waste_warn[d.device_model].empty? ? '' : "#{@waste_warn[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@waste_warn[d.device_model].last.device_name}" -%></td>
-    <td class='right-justify'><%= link_to_unless @waste_full[d.device_model].empty?, @waste_full[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=replace used toner&commit=Find", :title => @waste_full[d.device_model].empty? ? '' : "#{@waste_full[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@waste_full[d.device_model].last.device_name}" -%></td>
-    <td class='right-justify'><%= link_to_unless @service[d.device_model].empty?, @service[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=service&commit=Find", :title => @service[d.device_model].empty? ? '' : "#{@service[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@service[d.device_model].last.device_name}" -%></td>
-    <td class='right-justify'><%= link_to_unless @maint[d.device_model].empty?, @maint[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=maintenance&commit=Find", :title => @maint[d.device_model].empty? ? '' : "#{@maint[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@maint[d.device_model].last.device_name}" -%></td>
+    <td>
+      <%= link_to h(d.device_model), alerts_path + "?model_q=#{d.device_model}&commit=Find", :title => "Click to view all alerts for this model" -%> (<%= dev_count -%>)</td>
+    <td class='right-justify'>
+      <%= link_to_unless @paper[d.device_model].empty?, @paper[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=paper&commit=Find", :title => @paper[d.device_model].empty? ? '' : "#{@paper[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@paper[d.device_model].last.device_name}" -%> (<%= (@paper[d.device_model].count.to_f / dev_count).round(1) -%>)</td>
+    <td class='right-justify'>
+      <%= link_to_unless @misfeed[d.device_model].empty?, @misfeed[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=misfeed&commit=Find", :title => @misfeed[d.device_model].empty? ? '' : "#{@misfeed[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@misfeed[d.device_model].last.device_name}" -%> (<%= (@misfeed[d.device_model].count.to_f / dev_count).round(1) -%>)</td>
+    <td class='right-justify'>
+      <%= link_to_unless @toner_low[d.device_model].empty?, @toner_low[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=toner supply&commit=Find", :title => @toner_low[d.device_model].empty? ? '' : "#{@toner_low[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@toner_low[d.device_model].last.device_name}" -%> (<%= (@toner_low[d.device_model].count.to_f / dev_count).round(1) -%>)</td>
+    <td class='right-justify'>
+      <%= link_to_unless @toner_out[d.device_model].empty?, @toner_out[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=add toner&commit=Find", :title => @toner_out[d.device_model].empty? ? '' : "#{@toner_out[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@toner_out[d.device_model].last.device_name}" -%> (<%= (@toner_out[d.device_model].count.to_f / dev_count).round(1) -%>)</td>
+    <td class='right-justify'>
+      <%= link_to_unless @waste_warn[d.device_model].empty?, @waste_warn[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=replacement&commit=Find", :title => @waste_warn[d.device_model].empty? ? '' : "#{@waste_warn[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@waste_warn[d.device_model].last.device_name}" -%> (<%= (@waste_warn[d.device_model].count.to_f / dev_count).round(1) -%>)</td>
+    <td class='right-justify'>
+      <%= link_to_unless @waste_full[d.device_model].empty?, @waste_full[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=replace used toner&commit=Find", :title => @waste_full[d.device_model].empty? ? '' : "#{@waste_full[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@waste_full[d.device_model].last.device_name}" -%> (<%= (@waste_full[d.device_model].count.to_f / dev_count).round(1) -%>)</td>
+    <td class='right-justify'>
+      <%= link_to_unless @service[d.device_model].empty?, @service[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=service&commit=Find", :title => @service[d.device_model].empty? ? '' : "#{@service[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@service[d.device_model].last.device_name}" -%> (<%= (@service[d.device_model].count.to_f / dev_count).round(1) -%>)</td>
+    <td class='right-justify'>
+      <%= link_to_unless @maint[d.device_model].empty?, @maint[d.device_model].count, alerts_path + "?model_q=#{d.device_model}&msg_q=maintenance&commit=Find", :title => @maint[d.device_model].empty? ? '' : "#{@maint[d.device_model].last.alert_date.to_formatted_s(:db)} from #{@maint[d.device_model].last.device_name}" -%> (<%= (@maint[d.device_model].count.to_f / dev_count).round(1) -%>)</td>
     </tr>
 <% end %>
 </table>
