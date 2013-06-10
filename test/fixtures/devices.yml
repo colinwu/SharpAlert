@@ -1,0 +1,11 @@
+one:
+  name: MyString
+  model: MyString
+  serial: MyString
+  code: MyString
+
+two:
+  name: MyString
+  model: MyString
+  serial: MyString
+  code: MyString

@@ -6,23 +6,19 @@
   <div id="form_header">
   <%= f.error_messages %>
   <p>
-    <%= f.label 'Technicians (notified of Maintenance and Service alerts)' %><br />
+    <%= f.label 'Technicians (for Maintenance and Service alerts)' %><br />
     <%= f.text_field :tech, :size => 60 %>
   </p>
   <p>
-    <%= f.label 'Local Admin (notified of paper and toner related alerts)' %><br />
+    <%= f.label 'Local Admin (for paper and toner related alerts)' %><br />
     <%= f.text_field :local_admin, :size => 60 %>
-  </p>
-  <p>
-    <%= f.label "Client" %><br />
-    <%= f.collection_select(:client_id, Client.all, :id, :name) %>
   </p>
   <hr>
   For each of the following fields:
   <ul>
   <li>A number specifies the number of <strong>hours</strong> before a duplicate alert will be sent to the email address(es) specified in the <strong>Who</strong> field.</li>
   <li>An empty field causes those messages to be <strong>ignored.</strong></li>
-  <li>A value of 0 (zero) causes <strong>every</strong> alert (duplicate or not) to be sent.</li>
+  <li>A value of 0 (zero) causes <strong>every</strong> alert to be sent.</li>
   </ul>
   </div>
   <div id="form_left">

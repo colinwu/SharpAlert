@@ -33,18 +33,18 @@
   <%= form_tag batch_edit_notify_controls_url, :method => :get do %>
   <% for n in @notify_controls %>
     <tr class="<%=cycle('dark','light')%>">
-      <% device_query_string = "?model_q=#{n.device_model}&serial_q=#{n.device_serial}&commit=Find" %>
-      <td><%= check_box_tag "sel[#{n.id}]", n.id %>
+      <% device_query_string = "?model_q=#{n.device.model}&serial_q=#{n.device.serial}&commit=Find" %>
+      <td><%= check_box_tag "sel[#{n.id}]", n.id %></td>
       <td>
-        <% if n.alerts.empty? %>
+        <% if n.device.alerts.empty? %>
           &lt;no device&gt;
         <% else %>
-          <%= link_to h(n.device_name), alerts_path + "?name_q=#{n.device_name}&commit=Find", :title => "Click to view all alerts for this device" %>
+          <%= link_to h(n.device.name), alerts_path + "?name_q=#{n.device.name}&commit=Find", :title => "Click to view all alerts for this device" %>
         <% end %>
       </td>
       <td><span title="<%=h n.tech -%>"><%=h truncate(n.tech, :length => 20) -%></span></td>
       <td><span title="<%=h n.local_admin -%>"><%=h truncate(n.local_admin, :length => 20) -%></span></td>
-      <td><%= n.client.nil? ? link_to('Please edit controls', edit_notify_control_path(n)) : n.client.name -%></td>
+      <td><%= n.device.client.nil? ? link_to('Please edit controls', edit_notify_control_path(n)) : n.device.client.name -%></td>
       <td>
         <% unless n.jam_sent.nil? %>
           <%= link_to n.jam.to_s, alerts_path + device_query_string +  "&date_q=#{n.jam_sent.to_formatted_s(:db)}", :title => "Last notice sent: #{n.jam_sent.to_formatted_s(:db)}" %>

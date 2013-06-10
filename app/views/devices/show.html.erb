@@ -1,0 +1,24 @@
+<% title "Device" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @device.name %>
+</p>
+<p>
+  <strong>Model:</strong>
+  <%= @device.model %>
+</p>
+<p>
+  <strong>Serial:</strong>
+  <%= @device.serial %>
+</p>
+<p>
+  <strong>Code:</strong>
+  <%= @device.code %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_device_path(@device) %> |
+  <%= link_to "Destroy", @device, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", devices_path %>
+</p>

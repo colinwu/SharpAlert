@@ -7,7 +7,7 @@ class NotifyControlsController < ApplicationController
       if (not params['name_q'].nil? and not params['name_q'].empty?)
         @name_q = params[:name_q]
         condition_array << @name_q.condition
-        where_array << @name_q.where('device_name')
+        where_array << @name_q.where('devices.name')
       end
       if(not params['tech_q'].nil? and not params['tech_q'].empty?)
         @tech_q = params[:tech_q]
@@ -31,7 +31,7 @@ class NotifyControlsController < ApplicationController
         condition_array = []
       end
     end
-    @notify_controls = NotifyControl.paginate(:page => params[:page], :include => :client, :order => :device_name, :conditions => condition_array, :per_page => 30)
+    @notify_controls = NotifyControl.joins(:device => :client).order('devices.name').where(condition_array).paginate(:page => params[:page], :per_page => 30)
   end
 
   def show
@@ -79,7 +79,7 @@ class NotifyControlsController < ApplicationController
   
   def edit
     @notify_control = NotifyControl.find(params[:id])
-    @device_name = (@notify_control.device_serial == 'default') ? 'Default Settings' : @notify_control.alerts[-1].device_name
+    @name = (@notify_control.device.serial == 'default') ? 'Default Settings' : @notify_control.device.name
     @selected = []
   end
 

@@ -1,0 +1,42 @@
+<% title "Devices" %>
+
+<table class="list">
+  <tr class='searchform'>
+  <%= form_tag '/devices', :method => 'get' do -%>
+<!--    <td>&nbsp;</td> -->
+    <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Device Name" -%></td>
+    <td><%= text_field_tag 'model_q', @model_q, :size => 10, :placeholder => "Model" -%></td>
+    <td><%= text_field_tag 'serial_q', @serial_q, :size => 10, :placeholder => "Serial #" -%></td>
+    <td><%= text_field_tag 'code_q', @code_q, :size => 10, :placeholder => "Machine Code" -%></td>
+    <td><%= text_field_tag "client_q", @client_q, :size => 10, :placeholder => "Client Name" -%></td>
+    <td colspan=9><%= submit_tag 'Filter' -%></td>
+  <%end%>  
+  </tr>
+  <tr>
+<!--     <th></th> -->
+    <th>Name</th>
+    <th>Model</th>
+    <th>Serial</th>
+    <th>Code</th>
+    <th>Client</th>
+  </tr>
+  <%= form_tag batch_edit_devices_url, :method => :get do %>
+  <% for device in @devices %>
+    <tr class="<%= cycle('light','dark') %>">
+<!--      <td><% unless device.serial == 'default' %>
+          <%= check_box_tag "sel[#{device.id}]", device.id %>
+        <% end %>
+      </td>-->
+      <td><%= device.name %></td>
+      <td><%= device.model %></td>
+      <td><%= device.serial %></td>
+      <td><%= device.code %></td>
+      <td><%= device.client.name %></td>
+      <td><%= link_to "Edit", edit_device_path(device) %></td>
+    </tr>
+  <% end %>
+<!--   <%= submit_tag "Batch Edit Selected" %> -->
+  <% end %>
+</table>
+<p><%= will_paginate @devices %></p>
+<p><%= link_to "New Device", new_device_path %></p>

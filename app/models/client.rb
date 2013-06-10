@@ -1,5 +1,5 @@
 class Client < ActiveRecord::Base
   attr_accessible :name
   
-  has_many :notify_controls
+  has_many :devices
 end

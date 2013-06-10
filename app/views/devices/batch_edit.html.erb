@@ -1,0 +1,9 @@
+<h1>Batch Edit Devices</h1>
+<ul>
+  <li>Only fields where something is entered will be updated.</li>
+</ul>
+<%= form_for @device, :url => batch_update_devices_url do |f| %>
+
+<%= render 'form' %>
+
+<% end %>

@@ -1,0 +1,2 @@
+- fix process_alert_email.rb
+- create migration to remove device columns from notify_controls table

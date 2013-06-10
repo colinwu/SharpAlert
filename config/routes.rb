@@ -1,4 +1,11 @@
 SharpApp::Application.routes.draw do
+  resources :devices do
+    collection do
+      get 'batch_edit'
+      post 'batch_update'
+    end
+  end
+
   resources :clients
 
   get "about/me"

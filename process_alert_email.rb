@@ -18,13 +18,13 @@ alert = Alert.new
 # Parse the email
 while (line = gets)
   if line =~ /^Device Name: (.+)/
-    device_name = $1
+    name = $1
   elsif line =~ /^Device Model: (\S+)/
-    device_model = $1
+    model = $1
   elsif line =~ /^Serial Number: (\S+)/
-    device_serial = $1
+    serial = $1
   elsif line =~ /^Machine Code: (\S+)/
-    device_code = $1
+    code = $1
   elsif line =~ /^!!!!! (.+) !!!!!/
     msg = $1
     if msg =~ /Call for service/
@@ -42,15 +42,16 @@ end
 # retrieve details of the last alert for this device before committing this alert
 alert.save
 
+# TODO figure out how to do create_notify_control after removing "belongs_to notify_control" from Alerts.rb
 # retrieve (or create using defaults) the notification profile for this device.
-@n = NotifyControl.find_by_device_serial_and_device_model(device_serial,device_model)
+@n = NotifyControl.find_by_serial_and_model(serial,model)
 if @n.nil?
-  ndef = NotifyControl.find_by_device_serial 'default'
+  ndef = NotifyControl.find_by_serial 'default'
   @n = alert.create_notify_control(
-    :device_serial => device_serial,
-    :device_model => device_model,
-    :device_name => device_name,
-    :device_code => device_code,
+    :serial => serial,
+    :model => model,
+    :name => name,
+    :code => code,
     :tech => ndef.tech,
     :local_admin => ndef.local_admin,
     :jam => ndef.jam,

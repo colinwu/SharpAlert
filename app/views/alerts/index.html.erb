@@ -14,22 +14,22 @@
   </tr>
   <tr>
     <th><%= link_to 'Alert Date', "/alerts?sort=alert_date&#{@request}", :title => "Sort by Date" -%></th>
-    <th><%= link_to 'Device Name', "/alerts?sort=notify_controls.device_name&#{@request}", :title => "Sort by Device Name" -%></th>
-    <th><%= link_to 'Device Model', "/alerts?sort=notify_controls.device_model&#{@request}", :title => "Sort by Model" -%></th>
-    <th><%= link_to 'Device Serial', "/alerts?sort=notify_controls.device_serial&#{@request}", :title => "Sort by Device Serial #" -%></th>
-    <th><%= link_to 'Device Code', "/alerts?sort=notify_controls.device_code&#{@request}", :title => "Sort by Device Code" -%></th>
+    <th><%= link_to 'Device Name', "/alerts?sort=devices.name&#{@request}", :title => "Sort by Device Name" -%></th>
+    <th><%= link_to 'Device Model', "/alerts?sort=devices.model&#{@request}", :title => "Sort by Model" -%></th>
+    <th><%= link_to 'Device Serial', "/alerts?sort=devices.serial&#{@request}", :title => "Sort by Device Serial #" -%></th>
+    <th><%= link_to 'Device Code', "/alerts?sort=devices.code&#{@request}", :title => "Sort by Device Code" -%></th>
     <th><%= link_to 'Client', "/alerts?sort=clients.name&#{@request}", :title => "Sort by Client Name" -%></th>
     <th><%= link_to 'Alert Message', "/alerts?sort=alert_msg&#{@request}", :title => "Sort by message" -%></th>
   </tr>
   <% for alert in @alerts %>
-    <% nc = NotifyControl.find_by_device_serial(alert.notify_control.device_serial) %>
+    <% nc = Device.find_by_serial(alert.device.serial) %>
     <tr class="<%=cycle('dark','light')%>">
       <td><%= alert.alert_date.to_formatted_s(:db) %></td>
-      <td><%= link_to alert.notify_control.device_name, edit_notify_control_path(alert.notify_control_id), :title => "Click to edit controls" %></td>
-      <td><%= alert.notify_control.device_model %></td>
-      <td><%= alert.notify_control.device_serial %></td>
-      <td><%= alert.notify_control.device_code %></td>
-      <td><%= alert.notify_control.client.name %></td>
+      <td><%= link_to alert.device.name, edit_notify_control_path(alert.device.notify_control), :title => "Click to edit controls" %></td>
+      <td><%= alert.device.model %></td>
+      <td><%= alert.device.serial %></td>
+      <td><%= alert.device.code %></td>
+      <td><%= alert.device.client.name %></td>
       <td><%= alert.alert_msg %></td>
     </tr>
   <% end %>

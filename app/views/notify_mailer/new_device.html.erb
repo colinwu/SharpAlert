@@ -4,7 +4,7 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h2>New Device Detected: <%=h @alert.device_name -%></h2>
+    <h2>New Device Detected: <%=h @alert.notify_control.name -%></h2>
     <p>
     I just saw an alert from a new device. Please go to the device's <%= link_to "control page", "http://seclcsglab.sharpamericas.com" + edit_notify_control_path(@control) -%> to customize its notification settings.</p>
     <table style="border: 0; padding: .1em .5em; width:80%">
@@ -12,16 +12,16 @@
       <td>Date:</td><td><strong><%=h @alert.alert_date.to_formatted_s(:db) -%></strong></td>
     </tr>
     <tr>
-      <td>Device:</td><td><strong><%=h @alert.notify_control.device_name -%></strong></td>
+      <td>Device:</td><td><strong><%=h @alert.notify_control.name -%></strong></td>
     </tr>
     <tr>
-      <td>Model:</td><td><strong><%=h @alert.notify_control.device_model -%></strong></td>
+      <td>Model:</td><td><strong><%=h @alert.notify_control.model -%></strong></td>
     </tr>
     <tr>
-      <td>Serial #:</td><td><strong><%=h @alert.notify_control.device_serial -%></strong></td>
+      <td>Serial #:</td><td><strong><%=h @alert.notify_control.serial -%></strong></td>
     </tr>
     <tr>
-      <td>Machine Code:</td><td><strong><%=h @alert.notify_control.device_code -%></strong></td>
+      <td>Machine Code:</td><td><strong><%=h @alert.notify_control.code -%></strong></td>
     </tr>
     <tr>
       <td>Message:</td><td><strong><%=h @alert.alert_msg -%></strong></td>

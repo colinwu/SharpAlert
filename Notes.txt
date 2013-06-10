@@ -1,0 +1,14 @@
+- Can use .where, .joins, .group, .order etc methods with .paginate. Just make sure .paginate is last in the chain.
+
+New model:
+Device
+ ... has_many Alerts
+ ... has_one NotifyControl
+ ... belongs_to Client
+ 
+Client
+ ... has_many Devices
+ 
+Alerts
+ ... belongs_to Device
+ ... belongs_to NotifyControl (only until after 'populate_device_table.rb' has executed)

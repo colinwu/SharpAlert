@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130606151802) do
+ActiveRecord::Schema.define(:version => 20130607134755) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20130606151802) do
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
     t.integer  "notify_control_id"
+    t.integer  "device_id"
   end
 
   create_table "clients", :force => true do |t|
@@ -27,8 +28,18 @@ ActiveRecord::Schema.define(:version => 20130606151802) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "devices", :force => true do |t|
+    t.string   "name"
+    t.string   "model"
+    t.string   "serial"
+    t.string   "code"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "client_id"
+  end
+
   create_table "notify_controls", :force => true do |t|
-    t.string   "device_serial"
+    t.string   "serial"
     t.string   "tech"
     t.integer  "jam"
     t.integer  "toner_low"
@@ -50,11 +61,12 @@ ActiveRecord::Schema.define(:version => 20130606151802) do
     t.datetime "waste_almost_full_sent"
     t.datetime "waste_full_sent"
     t.datetime "job_log_full_sent"
-    t.string   "device_model"
-    t.string   "device_name"
+    t.string   "model"
+    t.string   "name"
     t.string   "local_admin"
     t.integer  "client_id"
-    t.string   "device_code"
+    t.string   "code"
+    t.integer  "device_id"
   end
 
 end
