@@ -52,7 +52,7 @@ if @d.nil?
     :model => model,
     :name => name,
     :code => code)
-  @n = @d.create_notify_control
+  @n = @d.create_notify_control(
     :tech => ndef.tech,
     :local_admin => ndef.local_admin,
     :jam => ndef.jam,
@@ -67,6 +67,7 @@ if @d.nil?
   NotifyMailer.new_device('wuc@sharpsec.com',alert,@n).deliver
 else
   alert.device_id = @d.id
+  @n = @d.notify_control
 end
 alert.save
 
