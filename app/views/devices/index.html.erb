@@ -1,4 +1,4 @@
-<% title "Devices" %>
+<h1>Devices</h1>
 
 <table class="list">
   <tr class='searchform'>
@@ -31,7 +31,7 @@
       <td><%= device.model %></td>
       <td><%= device.serial %></td>
       <td><%= device.code %></td>
-      <td><%= device.client.name %></td>
+      <td><%= device.client.nil? ? link_to('<Edit device details>', edit_device_path(device)) : device.client.name %></td>
       <td><%= link_to "Edit", edit_device_path(device) %></td>
     </tr>
   <% end %>

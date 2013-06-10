@@ -44,14 +44,15 @@ alert.save
 
 # TODO figure out how to do create_notify_control after removing "belongs_to notify_control" from Alerts.rb
 # retrieve (or create using defaults) the notification profile for this device.
-@n = NotifyControl.find_by_serial_and_model(serial,model)
-if @n.nil?
-  ndef = NotifyControl.find_by_serial 'default'
-  @n = alert.create_notify_control(
+@d = Device.find_by_serial_and_model(serial,model)
+if @d.nil?
+  ndef = Device.find_by_serial('default').notify_control
+  @d = alert.create_device(
     :serial => serial,
     :model => model,
     :name => name,
-    :code => code,
+    :code => code)
+  @n = @d.create_notify_control
     :tech => ndef.tech,
     :local_admin => ndef.local_admin,
     :jam => ndef.jam,
@@ -65,7 +66,7 @@ if @n.nil?
     :job_log_full => ndef.job_log_full)
   NotifyMailer.new_device('wuc@sharpsec.com',alert,@n).deliver
 else
-  alert.notify_control_id = @n.id
+  alert.device_id = @d.id
 end
 alert.save
 
