@@ -4,22 +4,22 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h2>Alert message from <%=h @alert.notify_control.name -%></h2>
+    <h2>Alert message from <%=h @alert.device.name -%></h2>
     <table style="border: 0; padding: .1em .5em; width: 80%">
     <tr>
       <td>Date:</td><td><strong><%=h @alert.alert_date.to_formatted_s(:db) -%></strong></td>
     </tr>
     <tr>
-    <td>Device:</td><td><strong><%=h link_to @alert.notify_control.name, "http://seclcsglab.sharpamericas.com" + edit_notify_control_path(@n) -%></strong></td>
+    <td>Device:</td><td><strong><%=h link_to @alert.device.name, "http://seclcsglab.sharpamericas.com" + edit_notify_control_path(@n) -%></strong></td>
     </tr>
     <tr>
-      <td>Model:</td><td><strong><%=h @alert.notify_control.model -%></strong></td>
+      <td>Model:</td><td><strong><%=h @alert.device.model -%></strong></td>
     </tr>
     <tr>
-      <td>Serial #:</td><td><strong><%=h @alert.notify_control.serial -%></strong></td>
+      <td>Serial #:</td><td><strong><%=h @alert.device.serial -%></strong></td>
     </tr>
     <tr>
-      <td>Machine Code:</td><td><strong><%=h @alert.notify_control.code -%></strong></td>
+      <td>Machine Code:</td><td><strong><%=h @alert.device.code -%></strong></td>
     </tr>
     <tr>
       <td>Message:</td><td><strong><%=h @alert.alert_msg -%></strong></td>
@@ -29,6 +29,6 @@
     <% if not @last_sent.nil? and @num_past_alerts > 0 %>
     <p>NOTE: Since the last notice (<%= @last_sent.to_formatted_s(:db) -%>) there have been <strong><%= @num_past_alerts -%></strong> alerts for this condition.</p><br />
     <% end %>
-    <p>NOTE: You can click <a href="mailto:dha@sharpsec.com?subject=Request:name_q=<%=h @alert.notify_control.name -%>&model_q=<%=h @alert.notify_control.model -%>&serial_q=<%=h @alert.notify_control.serial -%>">here</a> to have past alerts for this device emailed to you as a .csv file.</p>
+    <p>NOTE: You can click <a href="mailto:dha@sharpsec.com?subject=Request:name_q=<%=h @alert.device.name -%>&model_q=<%=h @alert.device.model -%>&serial_q=<%=h @alert.device.serial -%>">here</a> to have past alerts for this device emailed to you as a .csv file.</p>
   </body>
 </html>

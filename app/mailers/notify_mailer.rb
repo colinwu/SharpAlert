@@ -37,7 +37,7 @@ class NotifyMailer < ActionMailer::Base
       @last_sent = nil
     end
     unless @last_sent.nil?
-      @num_past_alerts = Alert.find( :all, :conditions => ['alert_msg = ? and deivces.name = ? and alert_date > ? and alert_date < ?', alert.alert_msg, alert.device.name, @last_sent, alert.alert_date]).count
+      @num_past_alerts = Alert.joins(:device).where(['alert_msg = ? and devices.name = ? and alert_date > ? and alert_date < ?', alert.alert_msg, alert.device.name, @last_sent, alert.alert_date]).count
     end
     mail(:to => who, :subject => "#{alert.device.name} - Alert Message - #{alert.alert_msg}")
     @n.save

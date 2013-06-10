@@ -32,7 +32,7 @@
     </td>
     <td>
       <% unless @service_sent.nil? or @service_sent.service_sent.nil? %>
-      <%= @service_sent.service_sent.to_formatted_s(:db) -%> for <%= link_to @service_sent.name, "/alerts?name_q=#{@service_sent.name}&msg_q=call for service&commit=Find" -%>
+      <%= @service_sent.service_sent.to_formatted_s(:db) -%> for <%= link_to @service_sent.device.name, "/alerts?name_q=#{@service_sent.device.name}&msg_q=call for service&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -46,7 +46,7 @@
     </td>
     <td>
       <% unless @pm_sent.nil? or @pm_sent.pm_sent.nil? %>
-      <%= @pm_sent.pm_sent.to_formatted_s(:db) -%> for <%= link_to @pm_sent.name, "/alerts?name_q=#{@pm_sent.name}&msg_q=Maintenance&commit=Find" -%>
+      <%= @pm_sent.pm_sent.to_formatted_s(:db) -%> for <%= link_to @pm_sent.device.name, "/alerts?name_q=#{@pm_sent.device.name}&msg_q=Maintenance&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -60,7 +60,7 @@
     </td>
     <td>
       <% unless @misfeed_sent.nil? or @misfeed_sent.jam_sent.nil? %>
-      <%= @misfeed_sent.jam_sent.to_formatted_s(:db) -%> for <%= link_to @misfeed_sent.name, "/alerts?name_q=#{@misfeed_sent.name}&msg_q=Misfeed&commit=Find" -%>
+      <%= @misfeed_sent.jam_sent.to_formatted_s(:db) -%> for <%= link_to @misfeed_sent.device.name, "/alerts?name_q=#{@misfeed_sent.device.name}&msg_q=Misfeed&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -74,7 +74,7 @@
     </td>
     <td>
       <% unless @paper_sent.nil? or @paper_sent.paper_sent.nil? %>
-      <%= @paper_sent.paper_sent.to_formatted_s(:db) -%> for <%= link_to @paper_sent.name, "/alerts?name_q=#{@paper_sent.name}&msg_q=Load paper&commit=Find" -%>
+      <%= @paper_sent.paper_sent.to_formatted_s(:db) -%> for <%= link_to @paper_sent.device.name, "/alerts?name_q=#{@paper_sent.device.name}&msg_q=Load paper&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -88,7 +88,7 @@
     </td>
     <td>
       <% unless @toner_low_sent.nil? or @toner_low_sent.toner_low_sent.nil? %>
-      <%= @toner_low_sent.toner_low_sent.to_formatted_s(:db) -%> for <%= link_to @toner_low_sent.name, "/alerts?name_q=#{@toner_low_sent.name}&msg_q=Toner supply&commit=Find" -%>
+      <%= @toner_low_sent.toner_low_sent.to_formatted_s(:db) -%> for <%= link_to @toner_low_sent.device.name, "/alerts?name_q=#{@toner_low_sent.device.name}&msg_q=Toner supply&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -102,7 +102,7 @@
     </td>
     <td>
       <% unless @toner_out_sent.nil? or @toner_out_sent.toner_empty_sent.nil? %>
-      <%= @toner_out_sent.toner_empty_sent.to_formatted_s(:db) -%> for <%= link_to @toner_out_sent.name, "/alerts?name_q=#{@toner_out_sent.name}&msg_q=Add toner&commit=Find" -%>
+      <%= @toner_out_sent.toner_empty_sent.to_formatted_s(:db) -%> for <%= link_to @toner_out_sent.device.name, "/alerts?name_q=#{@toner_out_sent.device.name}&msg_q=Add toner&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -116,7 +116,7 @@
     </td>
     <td>
       <% unless @waste_warn_sent.nil? or @waste_warn_sent.waste_almost_full_sent.nil? %>
-      <%= @waste_warn_sent.waste_almost_full_sent.to_formatted_s(:db) -%> for <%= link_to @waste_warn_sent.name, "/alerts?name_q=#{@waste_warn_sent.name}&msg_q=Replacement&commit=Find" -%>
+      <%= @waste_warn_sent.waste_almost_full_sent.to_formatted_s(:db) -%> for <%= link_to @waste_warn_sent.device.name, "/alerts?name_q=#{@waste_warn_sent.device.name}&msg_q=Replacement&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -130,7 +130,7 @@
     </td>
     <td>
       <% unless @waste_full_sent.nil? or @waste_full_sent.waste_full_sent.nil? %>
-      <%= @waste_full_sent.waste_full_sent.to_formatted_s(:db) -%> for <%= link_to @waste_full_sent.name, "/alerts?name_q=#{@waste_full_sent.name}&msg_q=Replace used toner&commit=Find" -%>
+      <%= @waste_full_sent.waste_full_sent.to_formatted_s(:db) -%> for <%= link_to @waste_full_sent.device.name, "/alerts?name_q=#{@waste_full_sent.device.name}&msg_q=Replace used toner&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -154,7 +154,7 @@
   <% @devices_by_name.each do |d| %>
   <%   key = "#{d.name}|#{d.model}|#{d.serial}" %>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><%= link_to h(d.name), alerts_path + "?name_q=#{d.name}&commit=Find", :title => "#{d.model}, #{d.serial}, #{d.code}" -%> (<%=h d.client.name %>)</td>
+    <td><%= link_to h(d.name), alerts_path + "?name_q=#{d.name}&commit=Find", :title => "#{d.model}, #{d.serial}, #{d.code}" -%> (<%= d.client.nil? ? link_to("<Edit Device Info>", edit_device_path(d)) : d.client.name %>)</td>
     <td class='right-justify'>
       <%= link_to_unless @misfeed[key].empty?, @misfeed[key].length, alerts_path + "?name_q=#{d.name}&msg_q=misfeed&commit=Find", :title => @misfeed[key].empty? ? '' : "Last misfeed: #{@misfeed[key].last.alert_date.to_formatted_s(:db)}" -%></td>
     <td class='right-justify'>

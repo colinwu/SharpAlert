@@ -18,7 +18,7 @@
     <th><%= link_to 'Device Model', "/alerts?sort=devices.model&#{@request}", :title => "Sort by Model" -%></th>
     <th><%= link_to 'Device Serial', "/alerts?sort=devices.serial&#{@request}", :title => "Sort by Device Serial #" -%></th>
     <th><%= link_to 'Device Code', "/alerts?sort=devices.code&#{@request}", :title => "Sort by Device Code" -%></th>
-    <th><%= link_to 'Client', "/alerts?sort=clients.name&#{@request}", :title => "Sort by Client Name" -%></th>
+    <th>Client</th>
     <th><%= link_to 'Alert Message', "/alerts?sort=alert_msg&#{@request}", :title => "Sort by message" -%></th>
   </tr>
   <% for alert in @alerts %>
@@ -29,7 +29,9 @@
       <td><%= alert.device.model %></td>
       <td><%= alert.device.serial %></td>
       <td><%= alert.device.code %></td>
-      <td><%= alert.device.client.name %></td>
+      <td>
+      <%= alert.device.client.nil? ? link_to("<Edit Device Info>", edit_device_path(alert.device)) : alert.device.client.name %>
+      </td>
       <td><%= alert.alert_msg %></td>
     </tr>
   <% end %>

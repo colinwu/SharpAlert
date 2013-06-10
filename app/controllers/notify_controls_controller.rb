@@ -81,6 +81,13 @@ class NotifyControlsController < ApplicationController
     @notify_control = NotifyControl.find(params[:id])
     @name = (@notify_control.device.serial == 'default') ? 'Default Settings' : @notify_control.device.name
     @selected = []
+    @title = "Edit Notify Controls for Device #{@name}"
+    unless @notify_control.device.client.nil?
+      @title += " belonging to #{@notify_control.device.client.name}"
+      @no_owner = false
+    else
+      @no_owner = true
+    end
   end
 
   def update

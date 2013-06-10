@@ -67,7 +67,7 @@ class AlertsController < ApplicationController
         condition_array = []
       end
     end
-    @alerts = Alert.joins(:device => :client).where(condition_array).order(sort).paginate(:page => params[:page], :per_page => 30)
+    @alerts = Alert.where(condition_array).order(sort).paginate(:page => params[:page], :per_page => 30, :include => {:device => :client})
     if (params[:commit] == 'Export')
       @request.sub!(/commit=Export/,'commit=Find')
       csv_data = '"alert data","device name","model","serial number","machine code","message"' + "\n"
@@ -85,15 +85,15 @@ class AlertsController < ApplicationController
     service = Alert.where("alert_msg regexp 'Call for service'")
     @num_service = service.length
     @last_service = service[-1]
-    @service_sent = NotifyControl.last :order => :service_sent
+    @service_sent = NotifyControl.order(:service_sent).where("service_sent is not NULL").last
     pm = Alert.where("alert_msg regexp 'Maintenance'")
     @num_pm = pm.length
     @last_pm = pm[-1]
-    @pm_sent = NotifyControl.last :order => :pm_sent
+    @pm_sent = NotifyControl.order(:pm_sent).where("pm_sent is not NULL").last
     misfeed = Alert.where("alert_msg regexp 'Misfeed'")
     @num_misfeed = misfeed.length
     @last_misfeed = misfeed[-1]
-    @misfeed_sent = NotifyControl.last :order => :jam_sent
+    @misfeed_sent = NotifyControl.order(:jam_sent).where("jam_sent is not NULL").last
     paper = Alert.all(:conditions => "alert_msg regexp 'load paper'")
     @num_paper = paper.length
     @last_paper = paper[-1]
@@ -123,7 +123,7 @@ class AlertsController < ApplicationController
     @maint = Hash.new
     @waste_warn = Hash.new
     @waste_full = Hash.new
-    @devices_by_name = Device.joins(:client).order(:name).where('serial <> "default"')
+    @devices_by_name = Device.order(:name).where('serial <> "default"')
     @devices_by_model = Device.group(:model).order(:model).where('serial <> "default"')
     @count_by_model = Device.group(:model).where("serial <> 'default'").count
     
