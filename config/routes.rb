@@ -1,14 +1,9 @@
 SharpApp::Application.routes.draw do
+  resources :summaries
+
   resources :counters
 
-  resources :statuses
-
-  resources :devices do
-    collection do
-      get 'batch_edit'
-      post 'batch_update'
-    end
-  end
+  resources :devices
 
   resources :clients
 
@@ -23,11 +18,7 @@ SharpApp::Application.routes.draw do
     end
   end
 
-  resources :alerts do
-    collection do
-      get 'summary'
-    end
-  end
+  resources :alerts
 
 #   resources :notify_controls do
 #     collection do
