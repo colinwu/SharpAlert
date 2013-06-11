@@ -1,0 +1,196 @@
+<%= form_for @counter do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :status_date %><br />
+    <%= f.datetime_select :status_date %>
+  </p>
+  <p>
+    <%= f.label :copybw %><br />
+    <%= f.number_field :copybw %>
+  </p>
+  <p>
+    <%= f.label :copy2c %><br />
+    <%= f.number_field :copy2c %>
+  </p>
+  <p>
+    <%= f.label :copy1c %><br />
+    <%= f.number_field :copy1c %>
+  </p>
+  <p>
+    <%= f.label :copyfc %><br />
+    <%= f.number_field :copyfc %>
+  </p>
+  <p>
+    <%= f.label :printbw %><br />
+    <%= f.number_field :printbw %>
+  </p>
+  <p>
+    <%= f.label :printfc %><br />
+    <%= f.number_field :printfc %>
+  </p>
+  <p>
+    <%= f.label :totalprintbw %><br />
+    <%= f.number_field :totalprintbw %>
+  </p>
+  <p>
+    <%= f.label :totalprint2c %><br />
+    <%= f.number_field :totalprint2c %>
+  </p>
+  <p>
+    <%= f.label :totalprint1c %><br />
+    <%= f.number_field :totalprint1c %>
+  </p>
+  <p>
+    <%= f.label :totalprintc %><br />
+    <%= f.number_field :totalprintc %>
+  </p>
+  <p>
+    <%= f.label :scanbw %><br />
+    <%= f.number_field :scanbw %>
+  </p>
+  <p>
+    <%= f.label :scan2c %><br />
+    <%= f.number_field :scan2c %>
+  </p>
+  <p>
+    <%= f.label :scan1c %><br />
+    <%= f.number_field :scan1c %>
+  </p>
+  <p>
+    <%= f.label :scanfc %><br />
+    <%= f.number_field :scanfc %>
+  </p>
+  <p>
+    <%= f.label :fileprintbw %><br />
+    <%= f.number_field :fileprintbw %>
+  </p>
+  <p>
+    <%= f.label :fileprint2c %><br />
+    <%= f.number_field :fileprint2c %>
+  </p>
+  <p>
+    <%= f.label :fileprint1c %><br />
+    <%= f.number_field :fileprint1c %>
+  </p>
+  <p>
+    <%= f.label :fileprintfc %><br />
+    <%= f.number_field :fileprintfc %>
+  </p>
+  <p>
+    <%= f.label :faxin %><br />
+    <%= f.number_field :faxin %>
+  </p>
+  <p>
+    <%= f.label :faxinline1 %><br />
+    <%= f.text_field :faxinline1 %>
+  </p>
+  <p>
+    <%= f.label :faxinline3 %><br />
+    <%= f.number_field :faxinline3 %>
+  </p>
+  <p>
+    <%= f.label :otherprintbw %><br />
+    <%= f.number_field :otherprintbw %>
+  </p>
+  <p>
+    <%= f.label :otherprintc %><br />
+    <%= f.number_field :otherprintc %>
+  </p>
+  <p>
+    <%= f.label :faxout %><br />
+    <%= f.number_field :faxout %>
+  </p>
+  <p>
+    <%= f.label :faxoutline1 %><br />
+    <%= f.number_field :faxoutline1 %>
+  </p>
+  <p>
+    <%= f.label :faxoutline2 %><br />
+    <%= f.number_field :faxoutline2 %>
+  </p>
+  <p>
+    <%= f.label :faxoutline3 %><br />
+    <%= f.number_field :faxoutline3 %>
+  </p>
+  <p>
+    <%= f.label :hddscanbw %><br />
+    <%= f.number_field :hddscanbw %>
+  </p>
+  <p>
+    <%= f.label :hddscan2c %><br />
+    <%= f.number_field :hddscan2c %>
+  </p>
+  <p>
+    <%= f.label :hddscan1c %><br />
+    <%= f.number_field :hddscan1c %>
+  </p>
+  <p>
+    <%= f.label :hddscanfc %><br />
+    <%= f.number_field :hddscanfc %>
+  </p>
+  <p>
+    <%= f.label :tonerbkin %><br />
+    <%= f.number_field :tonerbkin %>
+  </p>
+  <p>
+    <%= f.label :tonercin %><br />
+    <%= f.number_field :tonercin %>
+  </p>
+  <p>
+    <%= f.label :tonermin %><br />
+    <%= f.number_field :tonermin %>
+  </p>
+  <p>
+    <%= f.label :toneryin %><br />
+    <%= f.number_field :toneryin %>
+  </p>
+  <p>
+    <%= f.label :tonernnendbk %><br />
+    <%= f.number_field :tonernnendbk %>
+  </p>
+  <p>
+    <%= f.label :tonernnendc %><br />
+    <%= f.number_field :tonernnendc %>
+  </p>
+  <p>
+    <%= f.label :tonernnendm %><br />
+    <%= f.number_field :tonernnendm %>
+  </p>
+  <p>
+    <%= f.label :tonernnendy %><br />
+    <%= f.number_field :tonernnendy %>
+  </p>
+  <p>
+    <%= f.label :tonerendbk %><br />
+    <%= f.number_field :tonerendbk %>
+  </p>
+  <p>
+    <%= f.label :tonerendc %><br />
+    <%= f.number_field :tonerendc %>
+  </p>
+  <p>
+    <%= f.label :tonerendm %><br />
+    <%= f.number_field :tonerendm %>
+  </p>
+  <p>
+    <%= f.label :tonerendy %><br />
+    <%= f.number_field :tonerendy %>
+  </p>
+  <p>
+    <%= f.label :tonerleftbk %><br />
+    <%= f.number_field :tonerleftbk %>
+  </p>
+  <p>
+    <%= f.label :tonerleftc %><br />
+    <%= f.number_field :tonerleftc %>
+  </p>
+  <p>
+    <%= f.label :tonerleftm %><br />
+    <%= f.number_field :tonerleftm %>
+  </p>
+  <p>
+    <%= f.label :tonerlefty %><br />
+    <%= f.number_field :tonerlefty %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

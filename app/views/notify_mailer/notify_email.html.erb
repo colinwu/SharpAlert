@@ -22,6 +22,9 @@
       <td>Machine Code:</td><td><strong><%=h @alert.device.code -%></strong></td>
     </tr>
     <tr>
+      <td>Client:</td><td><strong><%= @alert.device.client.nil? ? "<Unknown>" : @alert.device.client.name -%></strong></td>
+    </tr>
+    <tr>
       <td>Message:</td><td><strong><%=h @alert.alert_msg -%></strong></td>
     </tr>
     </table>
@@ -29,6 +32,6 @@
     <% if not @last_sent.nil? and @num_past_alerts > 0 %>
     <p>NOTE: Since the last notice (<%= @last_sent.to_formatted_s(:db) -%>) there have been <strong><%= @num_past_alerts -%></strong> alerts for this condition.</p><br />
     <% end %>
-    <p>NOTE: You can click <a href="mailto:dha@sharpsec.com?subject=Request:name_q=<%=h @alert.device.name -%>&model_q=<%=h @alert.device.model -%>&serial_q=<%=h @alert.device.serial -%>">here</a> to have past alerts for this device emailed to you as a .csv file.</p>
+    <p>NOTE: You can click <a href="mailto:dha@sharpsec.com?subject=Request:name_q=<%=h @alert.device.name -%>&amp;model_q=<%=h @alert.device.model -%>&amp;serial_q=<%=h @alert.device.serial -%>">here</a> to have past alerts for this device emailed to you as a .csv file.</p>
   </body>
 </html>

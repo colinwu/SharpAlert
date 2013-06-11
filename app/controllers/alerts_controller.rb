@@ -24,45 +24,54 @@ class AlertsController < ApplicationController
     end
     unless (params[:commit].nil?)
       where_array = Array.new
+      comment_array = Array.new
       condition_array = ['place holder']
       if (not params['date_q'].nil? and not params['date_q'].empty?)
         @date_q = params[:date_q]
         condition_array << @date_q.condition
         where_array << @date_q.where('alert_date')
+        comment_array << "Date = #{@date_q}"
       end
       if (not params['name_q'].nil? and not params['name_q'].empty?)
         @name_q = params[:name_q]
         condition_array << @name_q.condition
         where_array << @name_q.where('devices.name')
+        comment_array << "Name = #{@name_q}"
      end
       if(not params['model_q'].nil? and not params['model_q'].empty?)
         @model_q = params[:model_q]
         condition_array << @model_q.condition
-        where_array << @model_q.where('model')
+        where_array << @model_q.where('devices.model')
+        comment_array << "Model = #{@model_q}"
       end
       if(not params['serial_q'].nil? and not params['serial_q'].empty?)
         @serial_q = params[:serial_q]
         condition_array << @serial_q.condition
-        where_array << @serial_q.where('serial')
+        where_array << @serial_q.where('devices.serial')
+        comment_array << "Serial # = #{@serial_q}"
       end
       if(not params['code_q'].nil? and not params['code_q'].empty?)
         @code_q = params[:code_q]
-        where_array << @code_q.where('code')
+        where_array << @code_q.where('devices.code')
         condition_array << @code_q.condition
+        comment_array << "Machine Code = #{@code_q}"
       end
       if (not params['client_q'].nil? and not params['client_q'].empty?)
         @client_q = params[:client_q]
         where_array << @client_q.where('clients.name')
         condition_array << @client_q.condition
+        comment_array << "Client Name = #{@client_q}"
       end
       if(not params['msg_q'].nil? and not params['msg_q'].empty?)
         @msg_q = params[:msg_q]
         where_array << @msg_q.where('alert_msg')
         condition_array << @msg_q.condition
+        comment_array << "Message = #{@msg_q}"
       end
           
       unless where_array.empty?
         condition_array[0] = where_array.join(' and ')
+        comment = comment_array.join(' and ')
       else
         condition_array = []
       end
@@ -70,8 +79,11 @@ class AlertsController < ApplicationController
     @alerts = Alert.where(condition_array).order(sort).paginate(:page => params[:page], :per_page => 30, :include => {:device => :client})
     if (params[:commit] == 'Export')
       @request.sub!(/commit=Export/,'commit=Find')
-      csv_data = '"alert data","device name","model","serial number","machine code","message"' + "\n"
-      Alert.joins(:device => :client).order(sort).where(condition_array).each do |a|
+      csv_data = '"alert date","device name","model","serial number","machine code","client","message"' + "\n"
+      unless (condition_array.empty?)
+        csv_data += "### Filter condition: #{comment}\n\n"
+      end
+      Alert.order(sort).where(condition_array).all(:include => {:device => :client}).each do |a|
         csv_data += a.to_csv + "\n"
       end
       send_data(csv_data, :type => "text/csv", :filename => 'alerts.csv', :disposition => "attachment")

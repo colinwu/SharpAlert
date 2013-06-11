@@ -34,21 +34,21 @@ end
 if (not params['name_q'].nil? and not params['name_q'].empty?)
   @name_q = params['name_q']
   condition_array << @name_q.condition
-  where_array << @name_q.where('device_name')
+  where_array << @name_q.where('devices.name')
 end
 if(not params['model_q'].nil? and not params['model_q'].empty?)
   @model_q = params['model_q']
   condition_array << @model_q.condition
-  where_array << @model_q.where('device_model')
+  where_array << @model_q.where('devices.model')
 end
 if(not params['serial_q'].nil? and not params['serial_q'].empty?)
   @serial_q = params['serial_q']
   condition_array << @serial_q.condition
-  where_array << @serial_q.where('device_serial')
+  where_array << @serial_q.where('devices.serial')
 end
 if(not params['code_q'].nil? and not params['code_q'].empty?)
   @code_q = params['code_q']
-  where_array << @code_q.where('device_code')
+  where_array << @code_q.where('devices.code')
   condition_array << @code_q.condition
 end
 if(not params['msg_q'].nil? and not params['msg_q'].empty?)
@@ -67,9 +67,9 @@ if @name_q.nil? or @name_q.empty?
 else
   csv_file = '/tmp/alerts_list-' + Time.now.to_f.to_s.sub!('.','') + '.csv'
   csv = File.new(csv_file,"w")
-  csv.puts'"alert date","device name","device_model","serial number","machine code","message"'
-  Alert.all(:conditions => condition_array).each do |a|
-    puts "#{a.device_name},#{a.alert_date},#{a.alert_msg}"
+  csv.puts'"alert date","device name","device model","serial number","machine code","client name","message"'
+  Alert.all(:conditions => condition_array, :include => {:device => :client}).each do |a|
+    puts "#{a.device.name},#{a.alert_date},#{a.alert_msg}"
     puts '==> ' + a.to_csv
     csv.puts a.to_csv
   end

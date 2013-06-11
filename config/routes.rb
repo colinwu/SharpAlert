@@ -1,4 +1,8 @@
 SharpApp::Application.routes.draw do
+  resources :counters
+
+  resources :statuses
+
   resources :devices do
     collection do
       get 'batch_edit'

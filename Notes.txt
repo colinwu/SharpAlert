@@ -11,4 +11,5 @@ Client
  
 Alerts
  ... belongs_to Device
- ... belongs_to NotifyControl (only until after 'populate_device_table.rb' has executed)
+
+- using .joins method will result in missing records in views; e.g. When a new device is first detected it will not have a client associated with it (i.e. it's client_id field will be nil). Such device will not appear in the device list if the controller uses Device.join(:client) to generate the list. Instead use Deivce.find(:include => :client). It's the difference between inner and outer join. 

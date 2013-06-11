@@ -80,8 +80,6 @@
 # Toner Residual (M) = 75-100%
 # Toner Residual (Y) = 75-100%
 
-status = Status.new
-
 # Parse the email
 while (line = gets)
   if line =~ /^Device Name: (.+)/
@@ -93,7 +91,7 @@ while (line = gets)
   elsif line =~ /^Machine Code: (\S+)/
     code = $1
   elsif line =~ /^(\d{4,4}\/\d{2,2}\/\d{2,2}\s+\d{2,2}:\d{2,2}:\d{2,2})/
-    status.sent_date = $1
+    status_date = $1
   elsif line =~ /^Black & White Copy Count = (\d+)/
     copybw = $1
   elsif line =~ /^Two Color Copy Count = (\d+)/
@@ -158,37 +156,94 @@ while (line = gets)
     hddscan1c = $1
   elsif line =~ /^Full Color Scan to HDD Count = (\d+)/
     hddscanfc = $1
-  elsif line =~ /^Inserted Toner Number (Bk) = (\d+)/
+  elsif line =~ /^Inserted Toner Number \(Bk\) = (\d+)/
     tonerbkin = $1
-  elsif line =~ /^Inserted Toner Number (C) = (\d+)/
+  elsif line =~ /^Inserted Toner Number \(C\) = (\d+)/
     tonercin = $1
-  elsif line =~ /^Inserted Toner Number (M) = (\d+)/
+  elsif line =~ /^Inserted Toner Number \(M\) = (\d+)/
     tonermin = $1
-  elsif line =~ /^Inserted Toner Number (Y) = (\d+)/
+  elsif line =~ /^Inserted Toner Number \(Y\) = (\d+)/
     toneryin = $1
-  elsif line =~ /^Toner NN End (Bk) = (\d+)/
+  elsif line =~ /^Toner NN End \(Bk\) = (\d+)/
     tonernnendbk = $1
-  elsif line =~ /^Toner NN End (C) = (\d+)/
+  elsif line =~ /^Toner NN End \(C\) = (\d+)/
     tonernnendc = $1
-  elsif line =~ /^Toner NN End (M) = (\d+)/
+  elsif line =~ /^Toner NN End \(M\) = (\d+)/
     tonernnendm = $1
-  elsif line =~ /^Toner NN End (Y) = (\d+)/
+  elsif line =~ /^Toner NN End \(Y\) = (\d+)/
     tonernnendy = $1
-  elsif line =~ /^Toner End (Bk) = (\d+)/
+  elsif line =~ /^Toner End \(Bk\) = (\d+)/
     tonerendbk = $1
-  elsif line =~ /^Toner End (C) = (\d+)/
+  elsif line =~ /^Toner End \(C\) = (\d+)/
     tonerendc = $1
-  elsif line =~ /^Toner End (M) = (\d+)/
+  elsif line =~ /^Toner End \(M\) = (\d+)/
     tonerendm = $1
-  elsif line =~ /^Toner End (Y) = (\d+)/
+  elsif line =~ /^Toner End \(Y\) = (\d+)/
     tonerendy = $1
-  elsif line =~ /^Toner Residual (Bk) = (.+)/
+  elsif line =~ /^Toner Residual \(Bk\) = (.+)/
     tonerleftbk = $1
-  elsif line =~ /^Toner Residual (C) = (.+)/
+  elsif line =~ /^Toner Residual \(C\) = (.+)/
     tonerleftc = $1
-  elsif line =~ /^Toner Residual (M) = (.+)/
+  elsif line =~ /^Toner Residual \(M\) = (.+)/
     tonerleftm = $1
-  elsif line =~ /^Toner Residual (Y) = (.+)/
+  elsif line =~ /^Toner Residual \(Y\) = (.+)/
     tonerlefty = $1
+  elsif line =~ /^.+ = .+/
+    puts "Unrecognized line: [#{line}]"
   end
 end
+dev = Device.where(["model = ? and serial = ? and code = ?", model, serial, code]).first
+if dev.nil?
+  dev = Device.create(:name => name, :model => model, :serial => serial, :code => code)
+end
+
+dev.counters.create(
+  :status_date => status_date,
+  :copybw => copybw, 
+  :copy2c => copy2c,
+  :copy1c => copy1c,
+  :copyfc => copyfc,
+  :printbw => printbw,
+  :printfc => printfc,
+  :totalprintbw => totalprintbw,
+  :totalprint2c => totalprint2c,
+  :totalprint1c => totalprint1c,
+  :totalprintc => totalprintc,
+  :scanbw => scanbw,
+  :scan2c => scan2c, :scan1c => scan1c,
+  :scanfc => scanfc,
+  :fileprintbw => fileprintbw,
+  :fileprint2c => fileprint2c,
+  :fileprint1c => fileprint1c,
+  :fileprintfc => fileprintfc,
+  :faxin => faxin,
+  :faxinline1 => faxinline1,
+  :faxinline3 => faxinline3,
+  :otherprintbw => otherprintbw,
+  :otherprintc => otherprintc,
+  :faxout => faxout,
+  :faxoutline1 => faxoutline1,
+  :faxoutline2 => faxoutline2,
+  :faxoutline3 => faxoutline3,
+  :hddscanbw => hddscanbw,
+  :hddscan2c => hddscan2c,
+  :hddscan1c => hddscan1c,
+  :hddscanfc => hddscanfc,
+  :tonerbkin => tonerbkin,
+  :tonercin => tonercin,
+  :tonermin => tonermin,
+  :toneryin => toneryin,
+  :tonernnendbk => tonernnendbk,
+  :tonernnendc => tonernnendc,
+  :tonernnendm => tonernnendm,
+  :tonernnendy => tonernnendy,
+  :tonerendbk => tonerendbk,
+  :tonerendc => tonerendc,
+  :tonerendm => tonerendm,
+  :tonerendy => tonerendy,
+  :tonerleftbk => Counter.reslevel[tonerleftbk],
+  :tonerleftc => Counter.reslevel[tonerleftc],
+  :tonerleftm => Counter.reslevel[tonerleftm],
+  :tonerlefty => Counter.reslevel[tonerlefty]
+)
+
