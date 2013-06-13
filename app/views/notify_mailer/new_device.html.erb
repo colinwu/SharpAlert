@@ -6,7 +6,7 @@
   <body>
     <h2>New Device Detected: <%=h @alert.device.name -%></h2>
     <p>
-    I just saw an alert from a new device. Please go to the device's <%= link_to "control page", "http://seclcsglab.sharpamericas.com" + edit_notify_control_path(@control) -%> to customize its notification settings.</p>
+    I just saw an alert from a new device. Please go to the device's <%= link_to "info page", "http://seclcsglab.sharpamericas.com" + edit_device_path(@alert.device) -%> to customize its  settings.</p>
     <table style="border: 0; padding: .1em .5em; width:80%">
     <tr>
       <td>Date:</td><td><strong><%=h @alert.alert_date.to_formatted_s(:db) -%></strong></td>

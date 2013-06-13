@@ -1,0 +1,113 @@
+<% title "Counters" %>
+
+<table>
+  <tr>
+    <th>Status Date</th>
+    <th>Device</th>
+    <th>Copybw</th>
+    <th>Copy2c</th>
+    <th>Copy1c</th>
+    <th>Copyfc</th>
+    <th>Printbw</th>
+    <th>Printfc</th>
+    <th>Totalprintbw</th>
+    <th>Totalprint2c</th>
+    <th>Totalprint1c</th>
+    <th>Totalprintc</th>
+    <th>Scanbw</th>
+    <th>Scan2c</th>
+    <th>Scan1c</th>
+    <th>Scanfc</th>
+    <th>Fileprintbw</th>
+    <th>Fileprint2c</th>
+    <th>Fileprint1c</th>
+    <th>Fileprintfc</th>
+    <th>Faxin</th>
+    <th>Faxinline1</th>
+    <th>Faxinline3</th>
+    <th>Otherprintbw</th>
+    <th>Otherprintc</th>
+    <th>Faxout</th>
+    <th>Faxoutline1</th>
+    <th>Faxoutline2</th>
+    <th>Faxoutline3</th>
+    <th>Hddscanbw</th>
+    <th>Hddscan2c</th>
+    <th>Hddscan1c</th>
+    <th>Hddscanfc</th>
+    <th>Tonerbkin</th>
+    <th>Tonercin</th>
+    <th>Tonermin</th>
+    <th>Toneryin</th>
+    <th>Tonernnendbk</th>
+    <th>Tonernnendc</th>
+    <th>Tonernnendm</th>
+    <th>Tonernnendy</th>
+    <th>Tonerendbk</th>
+    <th>Tonerendc</th>
+    <th>Tonerendm</th>
+    <th>Tonerendy</th>
+    <th>Tonerleftbk</th>
+    <th>Tonerleftc</th>
+    <th>Tonerleftm</th>
+    <th>Tonerlefty</th>
+  </tr>
+  <% for counter in @counters %>
+    <tr class='<%= cycle "light", "dark" %>'>
+      <td><%= counter.status_date %></td>
+      <td><%= counter.device.name %></td>
+      <td><%= counter.copybw %></td>
+      <td><%= counter.copy2c %></td>
+      <td><%= counter.copy1c %></td>
+      <td><%= counter.copyfc %></td>
+      <td><%= counter.printbw %></td>
+      <td><%= counter.printfc %></td>
+      <td><%= counter.totalprintbw %></td>
+      <td><%= counter.totalprint2c %></td>
+      <td><%= counter.totalprint1c %></td>
+      <td><%= counter.totalprintc %></td>
+      <td><%= counter.scanbw %></td>
+      <td><%= counter.scan2c %></td>
+      <td><%= counter.scan1c %></td>
+      <td><%= counter.scanfc %></td>
+      <td><%= counter.fileprintbw %></td>
+      <td><%= counter.fileprint2c %></td>
+      <td><%= counter.fileprint1c %></td>
+      <td><%= counter.fileprintfc %></td>
+      <td><%= counter.faxin %></td>
+      <td><%= counter.faxinline1 %></td>
+      <td><%= counter.faxinline3 %></td>
+      <td><%= counter.otherprintbw %></td>
+      <td><%= counter.otherprintc %></td>
+      <td><%= counter.faxout %></td>
+      <td><%= counter.faxoutline1 %></td>
+      <td><%= counter.faxoutline2 %></td>
+      <td><%= counter.faxoutline3 %></td>
+      <td><%= counter.hddscanbw %></td>
+      <td><%= counter.hddscan2c %></td>
+      <td><%= counter.hddscan1c %></td>
+      <td><%= counter.hddscanfc %></td>
+      <td><%= counter.tonerbkin %></td>
+      <td><%= counter.tonercin %></td>
+      <td><%= counter.tonermin %></td>
+      <td><%= counter.toneryin %></td>
+      <td><%= counter.tonernnendbk %></td>
+      <td><%= counter.tonernnendc %></td>
+      <td><%= counter.tonernnendm %></td>
+      <td><%= counter.tonernnendy %></td>
+      <td><%= counter.tonerendbk %></td>
+      <td><%= counter.tonerendc %></td>
+      <td><%= counter.tonerendm %></td>
+      <td><%= counter.tonerendy %></td>
+      <td><%= counter.tonerleftbk %></td>
+      <td><%= counter.tonerleftc %></td>
+      <td><%= counter.tonerleftm %></td>
+      <td><%= counter.tonerlefty %></td>
+      <td><%= link_to "Show", counter %></td>
+      <td><%= link_to "Edit", edit_counter_path(counter) %></td>
+      <td><%= link_to "Destroy", counter, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= will_paginate @counters %></p>

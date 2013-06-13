@@ -20,7 +20,6 @@
     <th>Code</th>
     <th>Client</th>
   </tr>
-  <%= form_tag batch_edit_devices_url, :method => :get do %>
   <% for device in @devices %>
     <tr class="<%= cycle('light','dark') %>">
 <!--      <td><% unless device.serial == 'default' %>
@@ -36,7 +35,6 @@
     </tr>
   <% end %>
 <!--   <%= submit_tag "Batch Edit Selected" %> -->
-  <% end %>
 </table>
 <p><%= will_paginate @devices %></p>
 <p><%= link_to "New Device", new_device_path %></p>

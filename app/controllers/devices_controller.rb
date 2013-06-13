@@ -90,7 +90,7 @@ class DevicesController < ApplicationController
   def update
     @device = Device.find(params[:id])
     if @device.update_attributes(params[:device])
-      redirect_to devices_url, :notice  => "Successfully updated device."
+      redirect_to edit_notify_control_path(@device.notify_control), :notice  => "Successfully updated device."
     else
       render :action => 'edit'
     end

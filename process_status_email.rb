@@ -82,13 +82,13 @@
 
 # Parse the email
 while (line = gets)
-  if line =~ /^Device Name: (.+)/
+  if line =~ /^Device Name: (.+)/i
     name = $1
-  elsif line =~ /^Device Model: (\S+)/
+  elsif line =~ /^Device Model: (\S+)/i
     model = $1
-  elsif line =~ /^Serial Number: (\S+)/
+  elsif line =~ /^Serial Number: (\S+)/i
     serial = $1
-  elsif line =~ /^Machine Code: (\S+)/
+  elsif line =~ /^Machine Code: (\S+)/i
     code = $1
   elsif line =~ /^(\d{4,4}\/\d{2,2}\/\d{2,2}\s+\d{2,2}:\d{2,2}:\d{2,2})/
     status_date = $1
@@ -188,11 +188,17 @@ while (line = gets)
     tonerleftm = $1
   elsif line =~ /^Toner Residual \(Y\) = (.+)/
     tonerlefty = $1
+  elsif line =~ /^Copy Count = (\d+)/
+    copybw = $1
+  elsif line =~ /^Print Count = (\d+)/
+    printbw = $1
+  elsif line =~ /^Total Count = (\d+)/
+    totalprintbw = $1
   elsif line =~ /^.+ = .+/
     puts "Unrecognized line: [#{line}]"
   end
 end
-dev = Device.where(["model = ? and serial = ? and code = ?", model, serial, code]).first
+dev = Device.where(["model = ? and serial = ?", model, serial]).first
 if dev.nil?
   dev = Device.create(:name => name, :model => model, :serial => serial, :code => code)
 end

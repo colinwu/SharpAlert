@@ -1,7 +1,11 @@
 SharpApp::Application.routes.draw do
   resources :summaries
 
-  resources :counters
+  resources :counters do
+    collection do
+      get 'list'
+    end
+  end
 
   resources :devices
 
