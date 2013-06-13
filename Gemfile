@@ -24,6 +24,8 @@ gem 'nifty-generators'
 gem 'csv-mapper'
 gem 'jquery-rails'
 gem 'will_paginate'
+gem 'calendar_date_select', :git => 'git://github.com/paneq/calendar_date_select.git'
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

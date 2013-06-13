@@ -7,25 +7,25 @@ class CountersController < ApplicationController
       where = ["devices.name regexp ?", @name_q]
     end
     @devices = Counter.group(:device_id).joins(:device).order('devices.name').select(:device_id).where(where).paginate(:page => params[:page], :per_page => 15)
-    @last_two = Hash.new
+    @first = Hash.new
+    @last = Hash.new
     @oldbw = Hash.new
     @newbw = Hash.new
     @oldc = Hash.new
     @newc = Hash.new
     @devices.each do |d|
-      @last_two[d.device_id] = Counter.where("device_id = #{d.device_id}").order('status_date DESC').limit(2).reverse
-
-      if @last_two[d.device_id][1].nil?
-        @oldc[d.device_id] = 0
-        @newc[d.device_id] = @last_two[d.device_id][0].totalprint1c.to_i + @last_two[d.device_id][0].totalprint2c.to_i + @last_two[d.device_id][0].totalprintc.to_i
-        @oldbw[d.device_id] = 0
-        @newbw[d.device_id] = @last_two[d.device_id][0].totalprintbw
+      c = Counter.where("device_id = #{d.device_id}").order('status_date')
+      if c.length > 1
+        @first[d.device_id] = c[0]
+        @oldc[d.device_id] = @first[d.device_id].totalprint1c.to_i + @first[d.device_id].totalprint2c.to_i + @first[d.device_id].totalprintc.to_i
+        @oldbw[d.device_id] = @first[d.device_id].totalprintbw
       else
-        @oldc[d.device_id] = @last_two[d.device_id][0].totalprint1c.to_i + @last_two[d.device_id][0].totalprint2c.to_i + @last_two[d.device_id][0].totalprintc.to_i
-        @newc[d.device_id] = @last_two[d.device_id][1].totalprint1c.to_i + @last_two[d.device_id][1].totalprint2c.to_i + @last_two[d.device_id][1].totalprintc.to_i
-        @oldbw[d.device_id] = @last_two[d.device_id][0].totalprintbw
-        @newbw[d.device_id] = @last_two[d.device_id][1].totalprintbw
+        @oldc[d.device_id] = 0
+        @oldbw[d.device_id] = 0
       end
+      @last[d.device_id] = c[-1]
+      @newc[d.device_id] = @last[d.device_id].totalprint1c.to_i + @last[d.device_id].totalprint2c.to_i + @last[d.device_id].totalprintc.to_i
+      @newbw[d.device_id] = @last[d.device_id].totalprintbw
     end
   end
   

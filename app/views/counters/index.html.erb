@@ -3,13 +3,13 @@
 <ul>
   <li>This summary shows the totals for the last two meter reads as well as the difference between them.</li>
   <li>The timestamps are from the devices' internal clock settings and may not match reality.</li>
-  <li>If you specify a start and end date in the search the first record will be the earliest record <em>during or before</em> the start date while the second record will be the latest record <em>during or before</em> the end date.</li>
+  <li>[<strong>Coming soon...</strong>] If you specify a start and end date in the search the first record will be the earliest record <em>during</em> the start date (or the latest before) while the second record will be the latest record <em>during or before</em> the end date.</li>
 </ul>
 </p>
 <table class='list'>
   <tr class='searchform'>
     <%= form_tag '/counters', :method => 'get' do -%>
-      <td>&nbsp;</td>
+      <td> </td>
       <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Search Name" -%></td>
       <td colspan=4><%= submit_tag 'Find' -%></td>
     <%end%>  
@@ -25,7 +25,7 @@
   <% for d in @devices %>
   <% bkgnd = cycle('light', 'dark') %>
   <tr class='<%= bkgnd %>'>
-    <td><%=h @last_two[d.device_id][1].nil? ? '<no previous entry>' : @last_two[d.device_id][0].status_date %></td>
+    <td><%=h @first[d.device_id].nil? ? '<no previous entry>' : @first[d.device_id].status_date %></td>
     <td rowspan=2><%=h link_to d.device.name, "/counters/list?name_q=#{d.device.name}&commit=Find" %></td>
     <td class="right-justify"><%=h number_with_delimiter(@oldbw[d.device_id]) %></td>
     <td class="right-justify"><%=h number_with_delimiter(@oldc[d.device_id]) %></td>
@@ -33,7 +33,7 @@
     <td rowspan=2 class="right-justify"><%=h number_with_delimiter(@newc[d.device_id] - @oldc[d.device_id]) %></td>
   </tr>
   <tr class='<%= bkgnd %>'>
-    <td><%=h @last_two[d.device_id][1].nil? ? @last_two[d.device_id][0].status_date : @last_two[d.device_id][1].status_date %></td>
+    <td><%=h @last[d.device_id].status_date %></td>
     <td class="right-justify"><%=h number_with_delimiter(@newbw[d.device_id]) %></td>
     <td class="right-justify"><%=h number_with_delimiter(@newc[d.device_id]) %></td>
   </tr>
