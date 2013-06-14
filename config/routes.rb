@@ -3,7 +3,7 @@ SharpApp::Application.routes.draw do
 
   resources :counters do
     collection do
-      get 'list'
+      get 'detail'
     end
   end
 

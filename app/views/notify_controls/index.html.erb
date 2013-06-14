@@ -36,7 +36,7 @@
       <% device_query_string = "?model_q=#{n.device.model}&serial_q=#{n.device.serial}&commit=Find" %>
       <td><%= check_box_tag "sel[#{n.id}]", n.id %></td>
       <td>
-        <% if n.device.alerts.empty? %>
+        <% if n.device.name.nil? %>
           &lt;no device&gt;
         <% else %>
           <%= link_to h(n.device.name), alerts_path + "?name_q=#{n.device.name}&commit=Find", :title => "Click to view all alerts for this device" %>

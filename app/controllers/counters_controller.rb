@@ -29,7 +29,7 @@ class CountersController < ApplicationController
     end
   end
   
-  def list
+  def detail
     where = Array.new
     if (not params[:commit].nil?)
       if (not params[:name_q].nil?)

@@ -201,6 +201,8 @@ end
 dev = Device.where(["model = ? and serial = ?", model, serial]).first
 if dev.nil?
   dev = Device.create(:name => name, :model => model, :serial => serial, :code => code)
+  ndef = NotifyControl.joins(:device).where("devices.serial = 'default'").first
+  nc = dev.create_notify_control(:tech => ndef.tech, :local_admin => ndef.local_admin, :jam => ndef.jam, :toner_low => ndef.toner_low, :toner_empty => ndef.toner_empty, :paper => ndef.paper, :service => ndef.service, :pm => ndef.pm, :waste_almost_full => ndef.waste_almost_full, :waste_full => ndef.waste_full, :job_log_full => ndef.job_log_full)
 end
 
 dev.counters.create(

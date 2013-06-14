@@ -9,7 +9,7 @@
 <table class='list'>
   <tr class='searchform'>
     <%= form_tag '/counters', :method => 'get' do -%>
-      <td> </td>
+      <td></td>
       <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Search Name" -%></td>
       <td colspan=4><%= submit_tag 'Find' -%></td>
     <%end%>  
@@ -26,7 +26,7 @@
   <% bkgnd = cycle('light', 'dark') %>
   <tr class='<%= bkgnd %>'>
     <td><%=h @first[d.device_id].nil? ? '<no previous entry>' : @first[d.device_id].status_date %></td>
-    <td rowspan=2><%=h link_to d.device.name, "/counters/list?name_q=#{d.device.name}&commit=Find" %></td>
+    <td rowspan=2><%=h link_to d.device.name, "/counters/detail?name_q=#{d.device.name}&commit=Find" %></td>
     <td class="right-justify"><%=h number_with_delimiter(@oldbw[d.device_id]) %></td>
     <td class="right-justify"><%=h number_with_delimiter(@oldc[d.device_id]) %></td>
     <td rowspan=2 class="right-justify"><%=h number_with_delimiter(@newbw[d.device_id] - @oldbw[d.device_id]) %></td>
