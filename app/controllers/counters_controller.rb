@@ -13,8 +13,10 @@ class CountersController < ApplicationController
     @newbw = Hash.new
     @oldc = Hash.new
     @newc = Hash.new
+    @healthbw = Hash.new
+    @healthc = Hash.new
     @devices.each do |d|
-      c = Counter.where("device_id = #{d.device_id}").order('status_date')
+      c = Counter.where("device_id = #{d.device_id}").order("(totalprintbw + totalprintc + totalprint1c + totalprint2c),status_date desc").limit(2).reverse
       if c.length > 1
         @first[d.device_id] = c[0]
         @oldc[d.device_id] = @first[d.device_id].totalprint1c.to_i + @first[d.device_id].totalprint2c.to_i + @first[d.device_id].totalprintc.to_i
@@ -25,7 +27,31 @@ class CountersController < ApplicationController
       end
       @last[d.device_id] = c[-1]
       @newc[d.device_id] = @last[d.device_id].totalprint1c.to_i + @last[d.device_id].totalprint2c.to_i + @last[d.device_id].totalprintc.to_i
-      @newbw[d.device_id] = @last[d.device_id].totalprintbw
+      @newbw[d.device_id] = @last[d.device_id].totalprintbw.to_i
+      one_month_ago = @last[d.device_id].status_date.months_ago(1).to_date
+      old_status = Counter.earliest_or_before(one_month_ago, d.device_id)
+      unless old_status.nil?
+        totalbw = @newbw[d.device_id] - old_status.totalprintbw.to_i
+        totalc  = @newc[d.device_id]  - old_status.totalprint1c.to_i - old_status.totalprint2c.to_i - old_status.totalprintc.to_i
+        bw_ratio = totalbw.to_f / d.device.print_volume.ave_bw
+        if (bw_ratio > 1.5)
+          @healthbw[d.device_id] = 'red'
+        elsif (bw_ratio <= 1.5 and bw_ratio > 1)
+          @healthbw[d.device_id] = 'yellow'
+        elsif (bw_ratio < 0.5)
+          @healthbw[d.device_id] = 'cyan'
+        end
+        unless d.device.print_volume.ave_c.nil?
+          c_ratio = totalc.to_f / d.device.print_volume.ave_c
+          if (c_ratio > 1.5)
+            @healthc[d.device_id] = 'red'
+          elsif (c_ratio <= 1.5 and c_ratio > 1)
+            @healthc[d.device_id] = 'yellow'
+          elsif (c_ratio < 0.5)
+            @healthc[d.device_id] = 'cyan'
+          end
+        end
+      end
     end
   end
   

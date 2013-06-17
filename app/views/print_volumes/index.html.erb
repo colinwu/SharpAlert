@@ -1,0 +1,25 @@
+<% title "Print Volumes" %>
+
+<table class='list'>
+  <tr>
+    <th>Model</th>
+    <th>Ave BW</th>
+    <th>Max BW</th>
+    <th>Ave Colour</th>
+    <th>Max Colour</th>
+  </tr>
+  <% for print_volume in @print_volumes %>
+    <tr class="<%= cycle('light','dark')%>">
+      <td><%= print_volume.model %></td>
+      <td class='right-justify'><%= number_with_delimiter(print_volume.ave_bw) %></td>
+      <td class='right-justify'><%= number_with_delimiter(print_volume.max_bw) %></td>
+      <td class='right-justify'><%= number_with_delimiter(print_volume.ave_c) %></td>
+      <td class='right-justify'><%= number_with_delimiter(print_volume.max_c) %></td>
+      <td><%= link_to "Edit", edit_print_volume_path(print_volume) %></td>
+      <td><%= link_to "Destroy", print_volume, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%= will_paginate @print_volumns %>
+<p><%= link_to "New Print Volume", new_print_volume_path %></p>

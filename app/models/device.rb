@@ -4,4 +4,6 @@ class Device < ActiveRecord::Base
   has_one    :notify_control, :dependent => :destroy
   has_many   :counters, :dependent => :destroy
   belongs_to :client
+  belongs_to :print_volume, :foreign_key => 'model', :primary_key => 'model'
+  
 end

@@ -1,0 +1,13 @@
+one:
+  model: MyString
+  ave_bw: 1
+  max_bw: 1
+  ave_c: 1
+  max_c: 1
+
+two:
+  model: MyString
+  ave_bw: 1
+  max_bw: 1
+  ave_c: 1
+  max_c: 1

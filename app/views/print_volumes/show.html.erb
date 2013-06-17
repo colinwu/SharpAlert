@@ -1,0 +1,28 @@
+<% title "Print Volume" %>
+
+<p>
+  <strong>Model:</strong>
+  <%= @print_volume.model %>
+</p>
+<p>
+  <strong>Ave Bw:</strong>
+  <%= @print_volume.ave_bw %>
+</p>
+<p>
+  <strong>Max Bw:</strong>
+  <%= @print_volume.max_bw %>
+</p>
+<p>
+  <strong>Ave C:</strong>
+  <%= @print_volume.ave_c %>
+</p>
+<p>
+  <strong>Max C:</strong>
+  <%= @print_volume.max_c %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_print_volume_path(@print_volume) %> |
+  <%= link_to "Destroy", @print_volume, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", print_volumes_path %>
+</p>

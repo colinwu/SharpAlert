@@ -4,6 +4,12 @@
   <li>This summary shows the totals for the last two meter reads as well as the difference between them.</li>
   <li>The timestamps are from the devices' internal clock settings and may not match reality.</li>
   <li>[<strong>Coming soon...</strong>] If you specify a start and end date in the search the first record will be the earliest record <em>during</em> the start date (or the latest before) while the second record will be the latest record <em>during or before</em> the end date.</li>
+  <li>Colour patches after the device name indicates counter alarms for BW and Colour counters during the last 30 days from the date of the last record displayed (not the current date):
+  <ul>
+    <li><span style="background: cyan">&nbsp;</span> print volume was &lt; 50% of average recommended volume</li>
+    <li><span style="background: yellow">&nbsp;</span> print volume was between 100% and 150% of recommended volume</li>
+    <li><span style="background: red">&nbsp;</span> print volume was greater than 150% of recommended volume</li>
+  </ul>
 </ul>
 </p>
 <table class='list'>
@@ -26,7 +32,14 @@
   <% bkgnd = cycle('light', 'dark') %>
   <tr class='<%= bkgnd %>'>
     <td><%=h @first[d.device_id].nil? ? '<no previous entry>' : @first[d.device_id].status_date %></td>
-    <td rowspan=2><%=h link_to d.device.name, "/counters/detail?name_q=#{d.device.name}&commit=Find" %></td>
+    <td rowspan=2><%=h link_to d.device.name, "/counters/detail?name_q=#{d.device.name}&commit=Find" %> 
+    <% unless @healthbw[d.device_id].nil? %>
+      <span style='background: <%= @healthbw[d.device_id] %>'>BW</span>
+    <% end %> 
+    <% unless @healthc[d.device_id].nil? %>
+      <span style='background: <%= @healthc[d.device_id] %>'>Colour</span>
+    <% end %>
+    </td>
     <td class="right-justify"><%=h number_with_delimiter(@oldbw[d.device_id]) %></td>
     <td class="right-justify"><%=h number_with_delimiter(@oldc[d.device_id]) %></td>
     <td rowspan=2 class="right-justify"><%=h number_with_delimiter(@newbw[d.device_id] - @oldbw[d.device_id]) %></td>

@@ -76,6 +76,22 @@ h1 {
   color: Maroon;
 }
 
+.red {
+  background: red;
+}
+
+.yellow {
+  background: yellow;
+}
+
+.cyan {
+  background: cyan;
+}
+
+.black {
+  color: black;
+}
+
 #help-content {
   font-size: 12pt;
 }

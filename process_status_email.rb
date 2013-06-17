@@ -84,11 +84,11 @@
 while (line = gets)
   if line =~ /^Device Name: (.+)/i
     name = $1
-  elsif line =~ /^Device Model: (\S+)/i
+  elsif line =~ /^Device Model: (\S+)$/i
     model = $1
   elsif line =~ /^Serial Number: (\S+)/i
     serial = $1
-  elsif line =~ /^Machine Code: (\S+)/i
+  elsif line =~ /^Machine Code: (.+)/i
     code = $1
   elsif line =~ /^(\d{4,4}\/\d{2,2}\/\d{2,2}\s+\d{2,2}:\d{2,2}:\d{2,2})/
     status_date = $1

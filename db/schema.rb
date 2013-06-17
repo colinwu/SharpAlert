@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130610195400) do
+ActiveRecord::Schema.define(:version => 20130614143400) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -116,6 +116,16 @@ ActiveRecord::Schema.define(:version => 20130610195400) do
     t.datetime "job_log_full_sent"
     t.string   "local_admin"
     t.integer  "device_id"
+  end
+
+  create_table "print_volumes", :force => true do |t|
+    t.string   "model"
+    t.integer  "ave_bw"
+    t.integer  "max_bw"
+    t.integer  "ave_c"
+    t.integer  "max_c"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
 end

@@ -1,4 +1,6 @@
 SharpApp::Application.routes.draw do
+  resources :print_volumes
+
   resources :summaries
 
   resources :counters do

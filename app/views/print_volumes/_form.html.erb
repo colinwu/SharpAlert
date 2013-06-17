@@ -1,0 +1,24 @@
+<%= form_for @print_volume do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :model %><br />
+    <%= f.text_field :model %>
+  </p>
+  <p>
+    <%= f.label 'Average BW' %><br />
+    <%= f.number_field :ave_bw %>
+  </p>
+  <p>
+    <%= f.label 'Max BW' %><br />
+    <%= f.number_field :max_bw %>
+  </p>
+  <p>
+    <%= f.label 'Average Colour' %><br />
+    <%= f.number_field :ave_c %>
+  </p>
+  <p>
+    <%= f.label 'Max Colour' %><br />
+    <%= f.number_field :max_c %>
+  </p>
+  <p><%= f.submit 'Save' %></p>
+<% end %>
