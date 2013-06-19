@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h2>Utilization Alert for <em><%=h @dev.name %></em></h2>
+    <p>Between <%=h @first.status_date.to_formatted_s(:db) %> and <%=h @last.status_date.to_formatted_s(:db) %> (<%=h @days.round(2) %> days) <%=h @dev.name %>, a <%=h @dev.model %>, generated 
+    <ul>
+    <% unless @bw_bkgnd.empty? %>
+      <li> <%= @bw_diff %> black and white impressions representing <%= ((@bw_ratio*100).round(1)) %>% of monthly b&amp;w target impressions</li>
+    <% end %>
+    <% unless @c_bkgnd.empty? %>
+      <li> <%= @c_diff %> colour impressions representing <%= ((@c_ratio*100).round(1)) %>% of monthly colour target impressions</li>
+    <% end %>
+    </p>
+    <br />
+    <p>
+    <%=h @dev.name -%>'s utilization is outside of the recommended range; i.e. it is either not being used enough or being used too much. In general, if the number of impressions over the past 30 days is...</p>
+    <ul>
+      <li> less than 50% of monthly average it is considered to be under utilized,</li>
+      <li> more than 100% and less than 150%, it is considered to be over utilized,</li>
+      <li> more than 150% of monthly average it is severely over utilized.</li>
+    </ul>
+    <p>Further, for colour machines, there is a black and white usage target as well as a colour usage target.</p>
+
+  </body>
+</html>

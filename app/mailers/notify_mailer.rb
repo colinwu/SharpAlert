@@ -67,4 +67,42 @@ class NotifyMailer < ActionMailer::Base
     @error = error
     mail(:to => who, :subject => "Could not process your request")
   end
+  
+  def nopv_email(dev)
+    @dev = dev
+    mail(:to => 'colin@colinwu.ca', :subject => "No recommended print volume data")
+  end
+  
+  def counter_alert(first, last)
+    @first = first
+    @last = last
+    @dev = @first.device
+    @days = (@last.status_date - @first.status_date) / 86400.0
+    @bw_diff = @last.totalprintbw - @first.totalprintbw
+    @bw_ratio = (@bw_diff * 30 / @days) / @dev.print_volume.ave_bw
+    @bw_bkgnd = ''
+    if (@bw_ratio > 1.5)
+      @bw_bkgnd = 'red'
+    elsif (@bw_ratio < 1.5 and @bw_ratio >= 1)
+      @bw_bkgnd = 'yellow'
+    elsif (@bw_ratio < 0.5)
+      @bw_bkgnd = 'cyan'
+    end
+    unless (@dev.print_volume.ave_c.nil? or @dev.print_volume.ave_c == 0)
+      @c_diff = (@last.totalprintc.to_i + @last.totalprint1c.to_i + @last.totalprint2c.to_i) - (@first.totalprintc.to_i + @first.totalprint1c.to_i + @first.totalprint2c.to_i)
+      @c_ratio = (@c_diff * 30 / @days) / @dev.print_volume.ave_c
+      @c_bkgnd = ''
+      if (@c_ratio > 1.5)
+        @c_bkgnd = 'red'
+      elsif (@c_ratio < 1.5 and @c_ratio >= 1)
+        @c_bkgnd = 'yellow'
+      elsif (@c_ratio < 0.5)
+        @c_bkgnd = 'cyan'
+      end
+    end
+    unless (@c_bkgnd.empty? and @bw_bkgnd.empty? )
+      mail(:to => @dev.notify_control.tech, :subject => "MFP utilization alert for #{@dev.name}")
+    end
+  end
+  
 end

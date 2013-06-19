@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h2>No Recommended Print Volume Data Available</h2>
+    <p>
+    I just saw meter reads from <%=h @dev.name -%>, a <%=h @dev.model %>. Please go <%= link_to "here", "/print_volumes/new", :host =>  "http://seclcsglab.sharpamericas.com" -%> to add the recommended print volume data for it.</p>
+  </body>
+</html>

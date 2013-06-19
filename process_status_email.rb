@@ -205,7 +205,7 @@ if dev.nil?
   nc = dev.create_notify_control(:tech => ndef.tech, :local_admin => ndef.local_admin, :jam => ndef.jam, :toner_low => ndef.toner_low, :toner_empty => ndef.toner_empty, :paper => ndef.paper, :service => ndef.service, :pm => ndef.pm, :waste_almost_full => ndef.waste_almost_full, :waste_full => ndef.waste_full, :job_log_full => ndef.job_log_full)
 end
 
-dev.counters.create(
+@last = dev.counters.create(
   :status_date => status_date,
   :copybw => copybw, 
   :copy2c => copy2c,
@@ -255,3 +255,13 @@ dev.counters.create(
   :tonerlefty => Counter.reslevel[tonerlefty]
 )
 
+# Check if we have print volume data for this device
+if dev.print_volume.nil?
+  NotifyMailer.nopv_email(dev).deliver
+  exit 1
+end
+
+@first = Counter.earliest_or_before(@last.status_date.months_ago(1).to_date, dev.id)
+unless @first.nil?
+  NotifyMailer.counter_alert(@first, @last).deliver
+end
