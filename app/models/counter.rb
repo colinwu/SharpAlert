@@ -18,7 +18,7 @@ class Counter < ActiveRecord::Base
   def self.latest_or_after(date,dev_id)
     a = Counter.where("date(status_date) = '#{date}' and device_id = #{dev_id}").order('status_date').last
     if a.nil?
-      a = Counter.where("date(status_date > '#{date}' and device_id = #{dev_id}").order('status_date').first
+      a = Counter.where("date(status_date) > '#{date}' and device_id = #{dev_id}").order('status_date').first
     end
     return a
   end

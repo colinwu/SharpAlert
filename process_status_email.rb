@@ -84,7 +84,7 @@
 while (line = gets)
   if line =~ /^Device Name: (.+)/i
     name = $1
-  elsif line =~ /^Device Model: (\S+)$/i
+  elsif line =~ /^Device Model: (.+)$/i
     model = $1
   elsif line =~ /^Serial Number: (\S+)/i
     serial = $1

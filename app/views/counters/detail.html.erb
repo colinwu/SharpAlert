@@ -54,7 +54,7 @@
   </tr>
   <% for counter in @counters %>
     <tr class='<%= cycle "light", "dark" %>'>
-      <td><%= counter.status_date %></td>
+      <td><%= counter.status_date.to_formatted_s(:db) %></td>
       <td><%= counter.device.name %></td>
       <td><%= counter.copybw %></td>
       <td><%= counter.copy2c %></td>
