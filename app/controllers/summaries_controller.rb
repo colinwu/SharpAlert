@@ -38,7 +38,7 @@ class SummariesController < ApplicationController
     
     unless params[:client].nil?
       client_id = params[:client][:client_id]
-      if client_id.nil?
+      if client_id.nil? or client_id.empty?
         where_clause = "serial <> 'default'"
       else
         where_clause = "serial <> 'default' and client_id = #{client_id}"
@@ -68,14 +68,14 @@ class SummariesController < ApplicationController
       end
       
       @devices_by_model.each do |d|
-        @paper[d.model] = Alert.joins(:device).where(['model = ? and alert_msg regexp "load paper"', d.model]).select('alert_date,name')
-        @misfeed[d.model] = Alert.joins(:device).where(['model = ? and alert_msg regexp "misfeed"', d.model]).select('alert_date,name')
-        @toner_low[d.model] = Alert.joins(:device).where(['model = ? and alert_msg regexp "toner low"', d.model]).select('alert_date,name')
-        @toner_out[d.model] = Alert.joins(:device).where(['model = ? and alert_msg regexp "out of toner"', d.model]).select('alert_date,name')
-        @service[d.model] = Alert.joins(:device).where(['model = ? and alert_msg regexp "service"', d.model]).select('alert_date,name')
-        @maint[d.model] = Alert.joins(:device).where(['model = ? and alert_msg regexp "maintenance"', d.model]).select('alert_date,name')
-        @waste_warn[d.model] = Alert.joins(:device).where(['model = ? and alert_msg regexp "toner collection container"', d.model]).select('alert_date,name')
-        @waste_full[d.model] = Alert.joins(:device).where(['model = ? and alert_msg regexp "replace used toner container"', d.model]).select('alert_date,name')
+        @paper[d.model] = Alert.joins(:device).where(["model = ? and alert_msg regexp 'load paper' and #{where_clause}", d.model]).select('alert_date,name')
+        @misfeed[d.model] = Alert.joins(:device).where(["model = ? and alert_msg regexp 'misfeed' and #{where_clause}", d.model]).select('alert_date,name')
+        @toner_low[d.model] = Alert.joins(:device).where(["model = ? and alert_msg regexp 'toner supply' and #{where_clause}", d.model]).select('alert_date,name')
+        @toner_out[d.model] = Alert.joins(:device).where(["model = ? and alert_msg regexp 'Add toner' and #{where_clause}", d.model]).select('alert_date,name')
+        @service[d.model] = Alert.joins(:device).where(["model = ? and alert_msg regexp 'service' and #{where_clause}", d.model]).select('alert_date,name')
+        @maint[d.model] = Alert.joins(:device).where(["model = ? and alert_msg regexp 'maintenance' and #{where_clause}", d.model]).select('alert_date,name')
+        @waste_warn[d.model] = Alert.joins(:device).where(["model = ? and alert_msg regexp 'toner collection container' and #{where_clause}", d.model]).select('alert_date,name')
+        @waste_full[d.model] = Alert.joins(:device).where(["model = ? and alert_msg regexp 'replace used toner container' and #{where_clause}", d.model]).select('alert_date,name')
       end
     end
   end
