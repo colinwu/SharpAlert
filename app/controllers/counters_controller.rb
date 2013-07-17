@@ -1,12 +1,23 @@
 class CountersController < ApplicationController
   def index
-    if (params[:name_q].nil? or params[:name_q].empty?)
-      where = []
-    else
+    where_array = Array.new
+    conditions_array = ['place holder']
+    if (not params[:name_q].nil? and not params[:name_q].empty?)
       @name_q = params[:name_q]
-      where = ["devices.name regexp ?", @name_q]
+      where_array << @name_q.where('devices.name')
+      conditions_array << @name_q.condition
+    elsif (not params[:client_q].nil? and not params[:client_q].empty?)
+      @client_q = params[:client_q]
+      where_array << @client_q.where('clients.name')
+      conditions_array << @client_q.condition
     end
-    @devices = Counter.group(:device_id).joins(:device).order('devices.name').select(:device_id).where(where).paginate(:page => params[:page], :per_page => 15)
+    unless( where_array.empty? )
+      conditions_array[0] = where_array.join(' and ')
+    else
+      conditions_array = []
+    end
+                                          
+    @devices = Counter.group(:device_id).order('devices.name').select(:device_id).where(conditions_array).paginate(:page => params[:page], :per_page => 15, :include => {:device => :client})
     @first = Hash.new
     @last = Hash.new
     @oldbw = Hash.new

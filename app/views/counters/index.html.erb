@@ -4,12 +4,14 @@
     <%= form_tag '/counters', :method => 'get' do -%>
       <td>Start: <%= text_field_tag 'start_q', @start_q, :size => 10, :placeholder => 'YYYY-MM-DD' -%> End: <%= text_field_tag 'end_q', @end_q, :size => 10, :placeholder => 'YYYY-MM-DD' -%></td>
       <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Search Name" -%></td>
+      <td><%= text_field_tag 'client_q', @client_q, :size => 10, :placeholder => "Client name" -%></td>
       <td colspan=4><%= submit_tag 'Find' -%></td>
     <%end%>  
   </tr>
   <tr>
     <th>Status Date</th>
     <th>Device</th>
+    <th>Client</th>
     <th>B&amp;W Total</th>
     <th>Color Total</th>
     <th>B&amp;W Diff</th>
@@ -27,6 +29,7 @@
       <span style='background: <%= @healthc[d.device_id] %>'> Colour: <%= (@c_ratio[d.device_id]*100).round(1) %>% </span>
     <% end %>
     </td>
+    <td rowspan=2><%=h d.device.client.name %></td>
     <td class="right-justify"><%=h number_with_delimiter(@oldbw[d.device_id]) %></td>
     <td class="right-justify"><%=h number_with_delimiter(@oldc[d.device_id]) %></td>
     <td rowspan=2 class="right-justify"><%=h number_with_delimiter(@newbw[d.device_id] - @oldbw[d.device_id]) %></td>

@@ -191,8 +191,8 @@
   </tr>
   <tr>
     <th>Model</th>
-    <th>Paper Out</th>
     <th>Misfeed</th>
+    <th>Paper Out</th>
     <th>Toner Low</th>
     <th>Toner Out</th>
     <th>Waste Warn</th>
@@ -206,9 +206,9 @@
     <td>
       <%= link_to h(d.model), alerts_path + "?model_q=#{d.model}&commit=Find", :title => "Click to view all alerts for this model" -%> (<%= dev_count -%>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @paper[d.model].empty?, @paper[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=paper&commit=Find", :title => @paper[d.model].empty? ? '' : "#{@paper[d.model].last.alert_date.to_formatted_s(:db)} from #{@paper[d.model].last.name}" -%> (<%= (@paper[d.model].length.to_f / dev_count).round(1) -%>)</td>
-    <td class='right-justify'>
       <%= link_to_unless @misfeed[d.model].empty?, @misfeed[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=misfeed&commit=Find", :title => @misfeed[d.model].empty? ? '' : "#{@misfeed[d.model].last.alert_date.to_formatted_s(:db)} from #{@misfeed[d.model].last.name}" -%> (<%= (@misfeed[d.model].length.to_f / dev_count).round(1) -%>)</td>
+    <td class='right-justify'>
+      <%= link_to_unless @paper[d.model].empty?, @paper[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=paper&commit=Find", :title => @paper[d.model].empty? ? '' : "#{@paper[d.model].last.alert_date.to_formatted_s(:db)} from #{@paper[d.model].last.name}" -%> (<%= (@paper[d.model].length.to_f / dev_count).round(1) -%>)</td>
     <td class='right-justify'>
       <%= link_to_unless @toner_low[d.model].empty?, @toner_low[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=toner supply&commit=Find", :title => @toner_low[d.model].empty? ? '' : "#{@toner_low[d.model].last.alert_date.to_formatted_s(:db)} from #{@toner_low[d.model].last.name}" -%> (<%= (@toner_low[d.model].length.to_f / dev_count).round(1) -%>)</td>
     <td class='right-justify'>

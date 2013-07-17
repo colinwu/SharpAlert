@@ -36,7 +36,7 @@ class DevicesController < ApplicationController
         condition_array = []
       end
     end
-    @devices = Device.order('devices.name').where(condition_array).paginate(:page => params[:page], :per_page => 30)
+    @devices = Device.order('devices.name').where(condition_array).paginate(:page => params[:page], :per_page => 30, :include => :client)
   end
 
   def show
