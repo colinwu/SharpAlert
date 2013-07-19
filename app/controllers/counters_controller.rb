@@ -6,7 +6,8 @@ class CountersController < ApplicationController
       @name_q = params[:name_q]
       where_array << @name_q.where('devices.name')
       conditions_array << @name_q.condition
-    elsif (not params[:client_q].nil? and not params[:client_q].empty?)
+    end
+    if (not params[:client_q].nil? and not params[:client_q].empty?)
       @client_q = params[:client_q]
       where_array << @client_q.where('clients.name')
       conditions_array << @client_q.condition
@@ -79,14 +80,24 @@ class CountersController < ApplicationController
   end
   
   def detail
-    where = Array.new
-    if (not params[:commit].nil?)
-      if (not params[:name_q].nil?)
-        @name_q = params[:name_q]
-        where = ["devices.name = ?", @name_q]
-      end
+    where_array = Array.new
+    conditions_array = ['place holder']
+    if (not params[:model_q].nil?)
+      @model_q = params[:model_q]
+      where_array << @model_q.where('devices.model')
+      conditions_array << @model_q.condition
     end
-    @counters = Counter.joins(:device).where(where).order(:status_date).paginate(:page => params[:page])
+    if (not params[:serial_q].nil?)
+      @serial_q = params[:serial_q]
+      where_array << @serial_q.where('devices.serial')
+      conditions_array << @serial_q.condition
+    end
+    unless (where_array.empty?)
+      conditions_array[0] = where_array.join(' and ')
+    else
+      conditions_array = []
+    end
+    @counters = Counter.where(conditions_array).order(:status_date).paginate(:page => params[:page], :include => :device)
   end
 
   def show

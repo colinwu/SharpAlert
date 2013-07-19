@@ -1,6 +1,6 @@
 <% title "Alerts" %>
 
-<p>Please note that the <em>Alert Date</em> shown is in the device's local time zone rather than your time zone.</p>
+<p>Please note that the <em>Alert Date</em> shown is the device's local time setting and, in fact, may not reflect reality at all.</p>
 <table class="list">
   <tr class='searchform'>
     <%= form_tag '/alerts', :method => 'get' do -%>
@@ -26,10 +26,10 @@
     <% nc = Device.find_by_serial(alert.device.serial) %>
     <tr class="<%=cycle('dark','light')%>">
       <td><%= alert.alert_date.to_formatted_s(:db) %></td>
-      <td><%= link_to alert.device.name, edit_notify_control_path(alert.device.notify_control), :title => "Click to edit controls" %></td>
-      <td><%= alert.device.model %></td>
-      <td><%= alert.device.serial %></td>
-      <td><%= alert.device.code %></td>
+      <td><%= link_to alert.device.name, edit_device_path(alert.device), :title => "Click to edit device info" %></td>
+      <td><%= link_to alert.device.model, edit_device_path(alert.device), :title => "Click to edit device info" %></td>
+      <td><%= link_to alert.device.serial, edit_device_path(alert.device), :title => "Click to edit device info" %></td>
+      <td><%= link_to alert.device.code, edit_device_path(alert.device), :title => "Click to edit device info" %></td>
       <td>
       <%= alert.device.client.nil? ? link_to("<Edit Device Info>", edit_device_path(alert.device)) : alert.device.client.name %>
       </td>

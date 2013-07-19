@@ -27,12 +27,12 @@
     <td class='right-justify'><%= link_to number_with_delimiter(@num_service), "/alerts?msg_q=service&commit=Find" -%></td>
     <td>
       <% unless @last_service.nil? %>
-      <%= @last_service.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_service.device.name, "/alerts?name_q=#{@last_service.device.name}&msg_q=call for service&commit=Find" -%>
+      <%= @last_service.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_service.device.name, "/alerts?model_q=#{@last_service.device.model}&serial_q=#{@last_service.device.serial}&msg_q=call for service&commit=Find" -%>
       <% end %>
     </td>
     <td>
       <% unless @service_sent.nil? or @service_sent.service_sent.nil? %>
-      <%= @service_sent.service_sent.to_formatted_s(:db) -%> for <%= link_to @service_sent.device.name, "/alerts?name_q=#{@service_sent.device.name}&msg_q=call for service&commit=Find" -%>
+      <%= @service_sent.service_sent.to_formatted_s(:db) -%> for <%= link_to @service_sent.device.name, "/alerts?model_q=#{@service_sent.device.model}&serial_q=#{@service_sent.device.serial}&msg_q=call for service&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -41,12 +41,12 @@
     <td class='right-justify'><%= link_to number_with_delimiter(@num_pm), "/alerts?msg_q=maintenance&commit=Find" -%></td>
     <td>
       <% unless @last_pm.nil? %>
-      <%= @last_pm.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_pm.device.name, "/alerts?name_q=#{@last_pm.device.name}&msg_q=Maintenance&commit=Find" -%>
+      <%= @last_pm.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_pm.device.name, "/alerts?model_q=#{@last_pm.device.model}&serial_q=#{@last_pm.device.serial}&msg_q=Maintenance&commit=Find" -%>
       <% end %>
     </td>
     <td>
       <% unless @pm_sent.nil? or @pm_sent.pm_sent.nil? %>
-      <%= @pm_sent.pm_sent.to_formatted_s(:db) -%> for <%= link_to @pm_sent.device.name, "/alerts?name_q=#{@pm_sent.device.name}&msg_q=Maintenance&commit=Find" -%>
+      <%= @pm_sent.pm_sent.to_formatted_s(:db) -%> for <%= link_to @pm_sent.device.name, "/alerts?model_q=#{@pm_sent.device.model}&serial_q=#{@pm_sent.device.serial}&msg_q=Maintenance&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -55,12 +55,12 @@
     <td class='right-justify'><%= link_to number_with_delimiter(@num_misfeed), "/alerts?msg_q=misfeed&commit=Find" -%></td>
     <td>
       <% unless @last_misfeed.nil? %>
-      <%= @last_misfeed.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_misfeed.device.name, "/alerts?name_q=#{@last_misfeed.device.name}&msg_q=Misfeed&commit=Find" -%>
+      <%= @last_misfeed.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_misfeed.device.name, "/alerts?model_q=#{@last_misfeed.device.model}&serial_q=#{@last_misfeed.device.serial}&msg_q=Misfeed&commit=Find" -%>
       <% end %>
     </td>
     <td>
       <% unless @misfeed_sent.nil? or @misfeed_sent.jam_sent.nil? %>
-      <%= @misfeed_sent.jam_sent.to_formatted_s(:db) -%> for <%= link_to @misfeed_sent.device.name, "/alerts?name_q=#{@misfeed_sent.device.name}&msg_q=Misfeed&commit=Find" -%>
+      <%= @misfeed_sent.jam_sent.to_formatted_s(:db) -%> for <%= link_to @misfeed_sent.device.name, "/alerts?model_q=#{@misfeed_sent.device.model}&serial_q=#{@misfeed_sent.device.serial}&msg_q=Misfeed&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -69,12 +69,12 @@
     <td class='right-justify'><%= link_to number_with_delimiter(@num_paper), "/alerts?msg_q=Load paper&commit=Find" -%></td>
     <td>
       <% unless @last_paper.nil? %>
-      <%= @last_paper.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_paper.device.name, "/alerts?name_q=#{@last_paper.device.name}&msg_q=Load paper&commit=Find" -%>
+      <%= @last_paper.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_paper.device.name, "/alerts?model_q=#{@last_paper.device.model}&serial_q=#{@last_paper.device.serial}&msg_q=Load paper&commit=Find" -%>
       <% end %>
     </td>
     <td>
       <% unless @paper_sent.nil? or @paper_sent.paper_sent.nil? %>
-      <%= @paper_sent.paper_sent.to_formatted_s(:db) -%> for <%= link_to @paper_sent.device.name, "/alerts?name_q=#{@paper_sent.device.name}&msg_q=Load paper&commit=Find" -%>
+      <%= @paper_sent.paper_sent.to_formatted_s(:db) -%> for <%= link_to @paper_sent.device.name, "/alerts?model_q=#{@paper_sent.device.model}&serial_q=#{@paper_sent.device.serial}&msg_q=Load paper&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -83,12 +83,12 @@
     <td class='right-justify'><%= link_to number_with_delimiter(@num_toner_low), "/alerts?msg_q=Toner supply&commit=Find" -%></td>
     <td>
       <% unless @last_toner_low.nil? %>
-      <%= @last_toner_low.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_toner_low.device.name, "/alerts?name_q=#{@last_toner_low.device.name}&msg_q=Toner supply&commit=Find" -%>
+      <%= @last_toner_low.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_toner_low.device.name, "/alerts?model_q=#{@last_toner_low.device.model}&serial_q=#{@last_toner_low.device.serial}&msg_q=Toner supply&commit=Find" -%>
       <% end %>
     </td>
     <td>
       <% unless @toner_low_sent.nil? or @toner_low_sent.toner_low_sent.nil? %>
-      <%= @toner_low_sent.toner_low_sent.to_formatted_s(:db) -%> for <%= link_to @toner_low_sent.device.name, "/alerts?name_q=#{@toner_low_sent.device.name}&msg_q=Toner supply&commit=Find" -%>
+      <%= @toner_low_sent.toner_low_sent.to_formatted_s(:db) -%> for <%= link_to @toner_low_sent.device.name, "/alerts?model_q=#{@toner_low_sent.device.model}&serial_q=#{@toner_low_sent.device.serial}&msg_q=Toner supply&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -97,12 +97,12 @@
     <td class='right-justify'><%= link_to number_with_delimiter(@num_toner_out), "/alerts?msg_q=Add toner&commit=Find" -%></td>
     <td>
       <% unless @last_toner_out.nil? %>
-      <%= @last_toner_out.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_toner_out.device.name, "/alerts?name_q=#{@last_toner_out.device.name}&msg_q=Add toner&commit=Find" -%>
+      <%= @last_toner_out.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_toner_out.device.name, "/alerts?model_q=#{@last_toner_out.device.model}&serial_q=#{@last_toner_out.device.serial}&msg_q=Add toner&commit=Find" -%>
       <% end %>
     </td>
     <td>
       <% unless @toner_out_sent.nil? or @toner_out_sent.toner_empty_sent.nil? %>
-      <%= @toner_out_sent.toner_empty_sent.to_formatted_s(:db) -%> for <%= link_to @toner_out_sent.device.name, "/alerts?name_q=#{@toner_out_sent.device.name}&msg_q=Add toner&commit=Find" -%>
+      <%= @toner_out_sent.toner_empty_sent.to_formatted_s(:db) -%> for <%= link_to @toner_out_sent.device.name, "/alerts?model_q=#{@toner_out_sent.device.model}&serial_q=#{@toner_out_sent.device.serial}&msg_q=Add toner&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -111,12 +111,12 @@
     <td class='right-justify'><%= link_to number_with_delimiter(@num_waste_warn), "/alerts?msg_q=Replacement&commit=Find" -%></td>
     <td>
       <% unless @last_waste_warn.nil? %>
-      <%= @last_waste_warn.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_waste_warn.device.name, "/alerts?name_q=#{@last_waste_warn.device.name}&msg_q=Replacement&commit=Find" -%>
+      <%= @last_waste_warn.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_waste_warn.device.name, "/alerts?model_q=#{@last_waste_warn.device.model}&serial_q=#{@last_waste_warn.device.serial}&msg_q=Replacement&commit=Find" -%>
       <% end %>
     </td>
     <td>
       <% unless @waste_warn_sent.nil? or @waste_warn_sent.waste_almost_full_sent.nil? %>
-      <%= @waste_warn_sent.waste_almost_full_sent.to_formatted_s(:db) -%> for <%= link_to @waste_warn_sent.device.name, "/alerts?name_q=#{@waste_warn_sent.device.name}&msg_q=Replacement&commit=Find" -%>
+      <%= @waste_warn_sent.waste_almost_full_sent.to_formatted_s(:db) -%> for <%= link_to @waste_warn_sent.device.name, "/alerts?model_q=#{@waste_warn_sent.device.model}&serial_q=#{@waste_warn_sent.device.serial}&msg_q=Replacement&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -125,12 +125,12 @@
     <td class='right-justify'><%= link_to number_with_delimiter(@num_waste_full), "/alerts?msg_q=Replace Used Toner&commit=Find" -%></td>
     <td>
       <% unless @last_waste_full.nil? %>
-      <%= @last_waste_full.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_waste_full.device.name, "/alerts?name_q=#{@last_waste_full.device.name}&msg_q=Replace used toner&commit=Find" -%>
+      <%= @last_waste_full.alert_date.to_formatted_s(:db) -%> from <%= link_to @last_waste_full.device.name, "/alerts?model_q=#{@last_waste_full.device.model}&serial_q=#{@last_waste_full.device.serial}&msg_q=Replace used toner&commit=Find" -%>
       <% end %>
     </td>
     <td>
       <% unless @waste_full_sent.nil? or @waste_full_sent.waste_full_sent.nil? %>
-      <%= @waste_full_sent.waste_full_sent.to_formatted_s(:db) -%> for <%= link_to @waste_full_sent.device.name, "/alerts?name_q=#{@waste_full_sent.device.name}&msg_q=Replace used toner&commit=Find" -%>
+      <%= @waste_full_sent.waste_full_sent.to_formatted_s(:db) -%> for <%= link_to @waste_full_sent.device.name, "/alerts?model_q=#{@waste_full_sent.device.model}&serial_q=#{@waste_full_sent.device.serial}&msg_q=Replace used toner&commit=Find" -%>
       <% end %>
     </td>
   </tr>
@@ -163,23 +163,23 @@
   <% @devices_by_name.each do |d| %>
   <%   key = "#{d.name}|#{d.model}|#{d.serial}" %>
   <tr class="<%= cycle('light','dark') -%>">
-    <td><%= link_to h(d.name), alerts_path + "?name_q=#{d.name}&commit=Find", :title => "#{d.model}, #{d.serial}, #{d.code}" -%> (<%= d.client.nil? ? link_to("<Edit Device Info>", edit_device_path(d)) : d.client.name %>)</td>
+    <td><%= link_to h(d.name), alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&commit=Find", :title => "#{d.model}, #{d.serial}, #{d.code}" -%> (<%= d.client.nil? ? link_to("<Edit Device Info>", edit_device_path(d)) : d.client.name %>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @misfeed[key].empty?, @misfeed[key].length, alerts_path + "?name_q=#{d.name}&msg_q=misfeed&commit=Find", :title => @misfeed[key].empty? ? '' : "Last misfeed: #{@misfeed[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @misfeed[key].empty?, @misfeed[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=misfeed&commit=Find", :title => @misfeed[key].empty? ? '' : "Last misfeed: #{@misfeed[key].last.alert_date.to_formatted_s(:db)}" -%></td>
     <td class='right-justify'>
-      <%= link_to_unless @paper[key].empty?, @paper[key].length, alerts_path + "?name_q=#{d.name}&msg_q=paper&commit=Find", :title => @paper[key].empty? ? '' : "Last Paper Out: #{@paper[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @paper[key].empty?, @paper[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=paper&commit=Find", :title => @paper[key].empty? ? '' : "Last Paper Out: #{@paper[key].last.alert_date.to_formatted_s(:db)}" -%></td>
     <td class='right-justify'>
-      <%= link_to_unless @toner_low[key].empty?, @toner_low[key].length, alerts_path + "?name_q=#{d.name}&msg_q=toner supply&commit=Find", :title => @toner_low[key].empty? ? '' : "Last Low Toner: #{@toner_low[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @toner_low[key].empty?, @toner_low[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=toner supply&commit=Find", :title => @toner_low[key].empty? ? '' : "Last Low Toner: #{@toner_low[key].last.alert_date.to_formatted_s(:db)}" -%></td>
     <td class='right-justify'>
-      <%= link_to_unless @toner_out[key].empty?, @toner_out[key].length, alerts_path + "?name_q=#{d.name}&msg_q=add toner&commit=Find", :title => @toner_out[key].empty? ? '' : "Last Toner Empty: #{@toner_out[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @toner_out[key].empty?, @toner_out[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=add toner&commit=Find", :title => @toner_out[key].empty? ? '' : "Last Toner Empty: #{@toner_out[key].last.alert_date.to_formatted_s(:db)}" -%></td>
     <td class='right-justify'>
-      <%= link_to_unless @waste_warn[key].empty?, @waste_warn[key].length, alerts_path + "?name_q=#{d.name}&msg_q=replacement&commit=Find", :title => @waste_warn[key].empty? ? '' : "Last Waste Container Warning: #{@waste_warn[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @waste_warn[key].empty?, @waste_warn[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=replacement&commit=Find", :title => @waste_warn[key].empty? ? '' : "Last Waste Container Warning: #{@waste_warn[key].last.alert_date.to_formatted_s(:db)}" -%></td>
     <td class='right-justify'>
-      <%= link_to_unless @waste_full[key].empty?, @waste_full[key].length, alerts_path + "?name_q=#{d.name}&msg_q=replace used toner&commit=Find", :title => @waste_full[key].empty? ? '' : "Last Waste Container Full: #{@waste_full[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @waste_full[key].empty?, @waste_full[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=replace used toner&commit=Find", :title => @waste_full[key].empty? ? '' : "Last Waste Container Full: #{@waste_full[key].last.alert_date.to_formatted_s(:db)}" -%></td>
     <td class='right-justify'>
-      <%= link_to_unless @service[key].empty?, @service[key].length, alerts_path + "?name_q=#{d.name}&msg_q=service&commit=Find", :title => @service[key].empty? ? '' : "Last Call for Service: #{@service[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @service[key].empty?, @service[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=service&commit=Find", :title => @service[key].empty? ? '' : "Last Call for Service: #{@service[key].last.alert_date.to_formatted_s(:db)}" -%></td>
     <td class='right-justify'>
-      <%= link_to_unless @maint[key].empty?, @maint[key].length, alerts_path + "?name_q=#{d.name}&msg_q=maintenance&commit=Find", :title => @maint[key].empty? ? '' : "Last Maint. Req.: #{@maint[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @maint[key].empty?, @maint[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=maintenance&commit=Find", :title => @maint[key].empty? ? '' : "Last Maint. Req.: #{@maint[key].last.alert_date.to_formatted_s(:db)}" -%></td>
   </tr>
   <% end %>
 </table>

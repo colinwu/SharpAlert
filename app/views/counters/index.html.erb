@@ -21,7 +21,10 @@
   <% bkgnd = cycle('light', 'dark') %>
   <tr class='<%= bkgnd %>'>
     <td><%=h @first[d.device_id].nil? ? '<no previous entry>' : @first[d.device_id].status_date.to_formatted_s(:db) %></td>
-    <td rowspan=2><%=h link_to d.device.name, "/counters/detail?name_q=#{d.device.name}&commit=Find", :title => "Click to show all meter reads for device" %> 
+    <td rowspan=2>
+      <% unless d.device.name.nil? %>
+        <%=h link_to d.device.name, "/counters/detail?model_q=#{d.device.model}&serial_q=#{d.device.serial}&commit=Find", :title => "Click to show all meter reads for this device" %> 
+      <% end %>
     <% unless @healthbw[d.device_id].nil? %>
       <span style='background: <%= @healthbw[d.device_id] %>'> BW: <%= (@bw_ratio[d.device_id]*100).round(1) %>% </span>
     <% end %> 
@@ -29,7 +32,13 @@
       <span style='background: <%= @healthc[d.device_id] %>'> Colour: <%= (@c_ratio[d.device_id]*100).round(1) %>% </span>
     <% end %>
     </td>
-    <td rowspan=2><%=h d.device.client.name %></td>
+    <td rowspan=2>
+      <% unless d.device.client.name.nil? %>
+        <%=h d.device.client.name %>
+      <% else %>
+        <em>Client Not Configured</em>
+      <% end %>
+    </td>
     <td class="right-justify"><%=h number_with_delimiter(@oldbw[d.device_id]) %></td>
     <td class="right-justify"><%=h number_with_delimiter(@oldc[d.device_id]) %></td>
     <td rowspan=2 class="right-justify"><%=h number_with_delimiter(@newbw[d.device_id] - @oldbw[d.device_id]) %></td>
