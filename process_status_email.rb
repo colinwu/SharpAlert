@@ -92,107 +92,107 @@ while (line = gets)
     code = $1
   elsif line =~ /^(\d{4,4}\/\d{2,2}\/\d{2,2}\s+\d{2,2}:\d{2,2}:\d{2,2})/
     status_date = $1
-  elsif line =~ /^Black & White Copy Count = (\d+)/
+  elsif line =~ /^Black & White Copy Count.*\s(\d+)/
     copybw = $1
-  elsif line =~ /^Two Color Copy Count = (\d+)/
+  elsif line =~ /^Two Color Copy Count.*\s(\d+)/
     copy2c = $1
-  elsif line =~ /^Single Color Copy Count = (\d+)/
+  elsif line =~ /^Single Color Copy Count.*\s(\d+)/
     copy1c = $1
-  elsif line =~ /^Full Color Copy Count = (\d+)/
+  elsif line =~ /^Full Color Copy Count.*\s(\d+)/
     copyfc = $1
-  elsif line =~ /^Black & White Print Count = (\d+)/
+  elsif line =~ /^Black & White Print Count.*\s(\d+)/
     printbw = $1
-  elsif line =~ /^Full Color Print Count = (\d+)/
+  elsif line =~ /^Full Color Print Count.*\s(\d+)/
     printfc = $1
-  elsif line =~ /^Black & White Total Print Count = (\d+)/
+  elsif line =~ /^Black & White Total Print Count.*\s(\d+)/
     totalprintbw = $1
-  elsif line =~ /^Two Color Total Print Count = (\d+)/
+  elsif line =~ /^Two Color Total Print Count.*\s(\d+)/
     totalprint2c = $1
-  elsif line =~ /^Single Color Total Print Count = (\d+)/
+  elsif line =~ /^Single Color Total Print Count.*\s(\d+)/
     totalprint1c = $1
-  elsif line =~ /^Color Total Print Count = (\d+)/
+  elsif line =~ /^Color Total Print Count.*\s(\d+)/
     totalprintc = $1
-  elsif line =~ /^Black & White Scanner Count = (\d+)/
+  elsif line =~ /^Black & White Scanner Count.*\s(\d+)/
     scanbw = $1
-  elsif line =~ /^Two Color Scanner Count = (\d+)/
+  elsif line =~ /^Two Color Scanner Count.*\s(\d+)/
     scan2c = $1
-  elsif line =~ /^Single Color Scanner Count = (\d+)/
+  elsif line =~ /^Single Color Scanner Count.*\s(\d+)/
     scan1c = $1
-  elsif line =~ /^Full Color Scanner Count = (\d+)/
+  elsif line =~ /^Full Color Scanner Count.*\s(\d+)/
     scanfc = $1
-  elsif line =~ /^Black & White Document Filing Print Count = (\d+)/
+  elsif line =~ /^Black & White Document Filing Print Count.*\s(\d+)/
     fileprintbw = $1
-  elsif line =~ /^Two Color Document Filing Print Count = (\d+)/
+  elsif line =~ /^Two Color Document Filing Print Count.*\s(\d+)/
     fileprint2c = $1
-  elsif line =~ /^Single Color Document Filing Count = (\d+)/
+  elsif line =~ /^Single Color Document Filing Count.*\s(\d+)/
     fileprint1c = $1
-  elsif line =~ /^Full Color Document Filing Print Count = (\d+)/
+  elsif line =~ /^Full Color Document Filing Print Count.*\s(\d+)/
     fileprintfc = $1
-  elsif line =~ /^I-Fax Receive Count = (\d+)/
+  elsif line =~ /^I-Fax Receive Count.*\s(\d+)/
     faxin = $1
-  elsif line =~ /^Fax Receive Line1  = (\d+)/
+  elsif line =~ /^Fax Receive Line1 .*\s(\d+)/
     faxinline1 = $1
-  elsif line =~ /^Fax Receive Line2 = (\d+)/
+  elsif line =~ /^Fax Receive Line2.*\s(\d+)/
     faxinline2 = $1
-  elsif line =~ /^Fax Receive Line3 = (\d+)/
+  elsif line =~ /^Fax Receive Line3.*\s(\d+)/
     faxinline3 = $1
-  elsif line =~ /^Black & White Other Print Count = (\d+)/
+  elsif line =~ /^Black & White Other Print Count.*\s(\d+)/
     otherprintbw = $1
-  elsif line =~ /^Color Other Print Count = (\d+)/
+  elsif line =~ /^Color Other Print Count.*\s(\d+)/
     otherprintc = $1
-  elsif line =~ /^I-Fax Send Count = (\d+)/
+  elsif line =~ /^I-Fax Send Count.*\s(\d+)/
     faxout = $1
-  elsif line =~ /^Fax Send Line1 = (\d+)/
+  elsif line =~ /^Fax Send Line1.*\s(\d+)/
     faxoutline1 = $1
-  elsif line =~ /^Fax Send Line2 = (\d+)/
+  elsif line =~ /^Fax Send Line2.*\s(\d+)/
     faxoutline2 = $1
-  elsif line =~ /^Fax Send Line3 = (\d+)/
+  elsif line =~ /^Fax Send Line3.*\s(\d+)/
     faxoutline3 = $1
-  elsif line =~ /^Black & White Scan to HDD Count = (\d+)/
+  elsif line =~ /^Black & White Scan to HDD Count.*\s(\d+)/
     hddscanbw = $1
-  elsif line =~ /^Two Color Scan to HDD Count = (\d+)/
+  elsif line =~ /^Two Color Scan to HDD Count.*\s(\d+)/
     hddscan2c = $1
-  elsif line =~ /^Single Color Scan to HDD Count = (\d+)/
+  elsif line =~ /^Single Color Scan to HDD Count.*\s(\d+)/
     hddscan1c = $1
-  elsif line =~ /^Full Color Scan to HDD Count = (\d+)/
+  elsif line =~ /^Full Color Scan to HDD Count.*\s(\d+)/
     hddscanfc = $1
-  elsif line =~ /^Inserted Toner Number \(Bk\) = (\d+)/
+  elsif line =~ /^Inserted Toner Number \(Bk\).*\s(\d+)/
     tonerbkin = $1
-  elsif line =~ /^Inserted Toner Number \(C\) = (\d+)/
+  elsif line =~ /^Inserted Toner Number \(C\).*\s(\d+)/
     tonercin = $1
-  elsif line =~ /^Inserted Toner Number \(M\) = (\d+)/
+  elsif line =~ /^Inserted Toner Number \(M\).*\s(\d+)/
     tonermin = $1
-  elsif line =~ /^Inserted Toner Number \(Y\) = (\d+)/
+  elsif line =~ /^Inserted Toner Number \(Y\).*\s(\d+)/
     toneryin = $1
-  elsif line =~ /^Toner NN End \(Bk\) = (\d+)/
+  elsif line =~ /^Toner NN End \(Bk\).*\s(\d+)/
     tonernnendbk = $1
-  elsif line =~ /^Toner NN End \(C\) = (\d+)/
+  elsif line =~ /^Toner NN End \(C\).*\s(\d+)/
     tonernnendc = $1
-  elsif line =~ /^Toner NN End \(M\) = (\d+)/
+  elsif line =~ /^Toner NN End \(M\).*\s(\d+)/
     tonernnendm = $1
-  elsif line =~ /^Toner NN End \(Y\) = (\d+)/
+  elsif line =~ /^Toner NN End \(Y\).*\s(\d+)/
     tonernnendy = $1
-  elsif line =~ /^Toner End \(Bk\) = (\d+)/
+  elsif line =~ /^Toner End \(Bk\).*\s(\d+)/
     tonerendbk = $1
-  elsif line =~ /^Toner End \(C\) = (\d+)/
+  elsif line =~ /^Toner End \(C\).*\s(\d+)/
     tonerendc = $1
-  elsif line =~ /^Toner End \(M\) = (\d+)/
+  elsif line =~ /^Toner End \(M\).*\s(\d+)/
     tonerendm = $1
-  elsif line =~ /^Toner End \(Y\) = (\d+)/
+  elsif line =~ /^Toner End \(Y\).*\s(\d+)/
     tonerendy = $1
-  elsif line =~ /^Toner Residual \(Bk\) = (.+)/
+  elsif line =~ /^Toner Residual \(Bk\).*\s(.+)/
     tonerleftbk = $1
-  elsif line =~ /^Toner Residual \(C\) = (.+)/
+  elsif line =~ /^Toner Residual \(C\).*\s(.+)/
     tonerleftc = $1
-  elsif line =~ /^Toner Residual \(M\) = (.+)/
+  elsif line =~ /^Toner Residual \(M\).*\s(.+)/
     tonerleftm = $1
-  elsif line =~ /^Toner Residual \(Y\) = (.+)/
+  elsif line =~ /^Toner Residual \(Y\).*\s(.+)/
     tonerlefty = $1
-  elsif line =~ /^Copy Count = (\d+)/
+  elsif line =~ /^Copy Count.*\s(\d+)/
     copybw = $1
-  elsif line =~ /^Print Count = (\d+)/
+  elsif line =~ /^Print Count.*\s(\d+)/
     printbw = $1
-  elsif line =~ /^Total Count = (\d+)/
+  elsif line =~ /^Total Count.*\s(\d+)/
     totalprintbw = $1
   elsif line =~ /^.+ = .+/
     puts "Unrecognized line: [#{line}]"
@@ -218,7 +218,8 @@ end
   :totalprint1c => totalprint1c,
   :totalprintc => totalprintc,
   :scanbw => scanbw,
-  :scan2c => scan2c, :scan1c => scan1c,
+  :scan2c => scan2c,
+  :scan1c => scan1c,
   :scanfc => scanfc,
   :fileprintbw => fileprintbw,
   :fileprint2c => fileprint2c,
@@ -254,6 +255,8 @@ end
   :tonerleftm => Counter.reslevel[tonerleftm],
   :tonerlefty => Counter.reslevel[tonerlefty]
 )
+
+print @last.inspect
 
 # Check if we have print volume data for this device
 if dev.print_volume.nil?
