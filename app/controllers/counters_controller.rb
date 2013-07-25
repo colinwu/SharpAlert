@@ -60,6 +60,8 @@ class CountersController < ApplicationController
           @healthbw[d.device_id] = 'yellow'
         elsif (@bw_ratio[d.device_id] < 0.5)
           @healthbw[d.device_id] = 'cyan'
+        else 
+          @healthbw[d.device_id] = 'white'
         end
         unless (d.device.print_volume.ave_c.nil? or d.device.print_volume.ave_c == 0)
           @c_ratio[d.device_id] = (totalc * 30 / days) / d.device.print_volume.ave_c
@@ -69,6 +71,8 @@ class CountersController < ApplicationController
             @healthc[d.device_id] = 'yellow'
           elsif (@c_ratio[d.device_id] < 0.5)
             @healthc[d.device_id] = 'cyan'
+          else
+            @healthc[d.device_id] = 'white'
           end
         end
       else

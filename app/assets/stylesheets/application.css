@@ -88,6 +88,10 @@ h1 {
   background: cyan;
 }
 
+.white {
+  background: white;
+}
+
 .black {
   color: black;
 }
