@@ -27,11 +27,7 @@
       <% end %>
     </td>
     <td rowspan=2>
-      <% unless d.device.client.name.nil? %>
-        <%=h d.device.client.name %>
-      <% else %>
-        <em>Client Not Configured</em>
-      <% end %>
+      <%= d.device.client.nil? ? link_to("<Edit Device Info>", edit_device_path(d.device)) : d.device.client.name %>
     </td>
     <td class="right-justify"><%=h number_with_delimiter(@oldbw[d.device_id]) %></td>
     <td class="right-justify"><%=h number_with_delimiter(@oldc[d.device_id]) %></td>

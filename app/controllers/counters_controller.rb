@@ -58,8 +58,10 @@ class CountersController < ApplicationController
           @healthbw[d.device_id] = 'red'
         elsif (@bw_ratio[d.device_id] <= 1.5 and @bw_ratio[d.device_id] > 1)
           @healthbw[d.device_id] = 'yellow'
-        elsif (@bw_ratio[d.device_id] < 0.5)
+        elsif (@bw_ratio[d.device_id] <= 0.5 and @bw_ratio[d.device_id] > 0)
           @healthbw[d.device_id] = 'cyan'
+        elsif (@bw_ratio[d.device_id] < 0)
+          @healthbw[d.device_id] = 'pink'
         else 
           @healthbw[d.device_id] = 'white'
         end
@@ -69,8 +71,10 @@ class CountersController < ApplicationController
             @healthc[d.device_id] = 'red'
           elsif (@c_ratio[d.device_id] <= 1.5 and @c_ratio[d.device_id] > 1)
             @healthc[d.device_id] = 'yellow'
-          elsif (@c_ratio[d.device_id] < 0.5)
+          elsif (@c_ratio[d.device_id] <= 0.5 and @c_ratio[d.device_id] > 0)
             @healthc[d.device_id] = 'cyan'
+          elsif (@c_ratio[d.device_id] < 0)
+            @healthc[d.device_id] = 'pink'
           else
             @healthc[d.device_id] = 'white'
           end

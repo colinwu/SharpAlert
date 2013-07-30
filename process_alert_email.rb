@@ -36,6 +36,8 @@ while (line = gets)
     alert.alert_msg = msg
   elsif line =~ /^(\d{4,4}\/\d{2,2}\/\d{2,2}\s+\d{2,2}:\d{2,2}:\d{2,2})/
     alert.alert_date = $1
+  elsif line =~ /^From: (.+)/
+    from = $1
   end
 end
 
@@ -64,7 +66,7 @@ if @d.nil?
     :waste_almost_full => ndef.waste_almost_full,
     :waste_full => ndef.waste_full,
     :job_log_full => ndef.job_log_full)
-  NotifyMailer.new_device('wuc@sharpsec.com',alert,@n).deliver
+  NotifyMailer.new_device('wuc@sharpsec.com',@d,from).deliver
 else
   alert.device_id = @d.id
   @n = @d.notify_control

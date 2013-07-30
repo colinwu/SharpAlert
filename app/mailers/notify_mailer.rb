@@ -51,10 +51,10 @@ class NotifyMailer < ActionMailer::Base
     @n.save
   end
 
-  def new_device(who,alert,n)
+  def new_device(who,dev,from)
     @who = who
-    @alert = alert
-    @control = n
+    @device = dev
+    @from = from
     mail(:to => who, :subject => "New device detected")
   end
 
@@ -100,8 +100,12 @@ class NotifyMailer < ActionMailer::Base
         @c_bkgnd = 'cyan'
       end
     end
-    unless (@c_bkgnd.empty? and @bw_bkgnd.empty? )
-      mail(:to => @dev.notify_control.tech, :subject => "MFP utilization alert for #{@dev.name}")
+    if (@c_ratio < 0 or @bw_ratio < 0)
+      mail(:to => @dev.notify_control.tech, :subject => "#{@dev.name}: Utilization is NEGATIVE")
+#     else
+#       unless (@c_ratio > 1.5 or @c_ratio < 0.5 or @bw_ratio > 1.5 or @bw_ratio < 0.5 )
+#         mail(:to => @dev.notify_control.tech, :subject => "MFP utilization alert for #{@dev.name}")
+#       end
     end
   end
   
