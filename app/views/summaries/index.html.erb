@@ -204,24 +204,24 @@
   <%   dev_count = @count_by_model[d.model] %>
   <tr class="<%= cycle('light','dark') -%>">
     <td>
-      <%= link_to h(d.model), alerts_path + "?model_q=#{d.model}&commit=Find", :title => "Click to view all alerts for this model" -%> (<%= dev_count -%>)</td>
+      <%= link_to h(d.model), alerts_path + "?model_q=#{d.model}&client_q=#{@client_q}&commit=Find", :title => "Click to view all alerts for this model" -%> (<%= dev_count -%>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @misfeed[d.model].empty?, @misfeed[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=misfeed&commit=Find", :title => @misfeed[d.model].empty? ? '' : "#{@misfeed[d.model].last.alert_date.to_formatted_s(:db)} from #{@misfeed[d.model].last.name}" -%> (<%= (@misfeed[d.model].length.to_f / dev_count).round(1) -%>)</td>
+      <%= link_to_unless @misfeed[d.model].empty?, @misfeed[d.model].length, alerts_path + "?model_q=#{d.model}&client_q=#{@client_q}&msg_q=misfeed&commit=Find", :title => @misfeed[d.model].empty? ? '' : "#{@misfeed[d.model].last.alert_date.to_formatted_s(:db)} from #{@misfeed[d.model].last.name}" -%> (<%= (@misfeed[d.model].length.to_f / dev_count).round(1) -%>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @paper[d.model].empty?, @paper[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=paper&commit=Find", :title => @paper[d.model].empty? ? '' : "#{@paper[d.model].last.alert_date.to_formatted_s(:db)} from #{@paper[d.model].last.name}" -%> (<%= (@paper[d.model].length.to_f / dev_count).round(1) -%>)</td>
+      <%= link_to_unless @paper[d.model].empty?, @paper[d.model].length, alerts_path + "?model_q=#{d.model}&client_q=#{@client_q}&msg_q=paper&commit=Find", :title => @paper[d.model].empty? ? '' : "#{@paper[d.model].last.alert_date.to_formatted_s(:db)} from #{@paper[d.model].last.name}" -%> (<%= (@paper[d.model].length.to_f / dev_count).round(1) -%>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @toner_low[d.model].empty?, @toner_low[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=toner supply&commit=Find", :title => @toner_low[d.model].empty? ? '' : "#{@toner_low[d.model].last.alert_date.to_formatted_s(:db)} from #{@toner_low[d.model].last.name}" -%> (<%= (@toner_low[d.model].length.to_f / dev_count).round(1) -%>)</td>
+      <%= link_to_unless @toner_low[d.model].empty?, @toner_low[d.model].length, alerts_path + "?model_q=#{d.model}&client_q=#{@client_q}&msg_q=toner supply&commit=Find", :title => @toner_low[d.model].empty? ? '' : "#{@toner_low[d.model].last.alert_date.to_formatted_s(:db)} from #{@toner_low[d.model].last.name}" -%> (<%= (@toner_low[d.model].length.to_f / dev_count).round(1) -%>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @toner_out[d.model].empty?, @toner_out[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=add toner&commit=Find", :title => @toner_out[d.model].empty? ? '' : "#{@toner_out[d.model].last.alert_date.to_formatted_s(:db)} from #{@toner_out[d.model].last.name}" -%> (<%= (@toner_out[d.model].length.to_f / dev_count).round(1) -%>)</td>
+      <%= link_to_unless @toner_out[d.model].empty?, @toner_out[d.model].length, alerts_path + "?model_q=#{d.model}&client_q=#{@client_q}&msg_q=add toner&commit=Find", :title => @toner_out[d.model].empty? ? '' : "#{@toner_out[d.model].last.alert_date.to_formatted_s(:db)} from #{@toner_out[d.model].last.name}" -%> (<%= (@toner_out[d.model].length.to_f / dev_count).round(1) -%>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @waste_warn[d.model].empty?, @waste_warn[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=replacement&commit=Find", :title => @waste_warn[d.model].empty? ? '' : "#{@waste_warn[d.model].last.alert_date.to_formatted_s(:db)} from #{@waste_warn[d.model].last.name}" -%> (<%= (@waste_warn[d.model].length.to_f / dev_count).round(1) -%>)</td>
+      <%= link_to_unless @waste_warn[d.model].empty?, @waste_warn[d.model].length, alerts_path + "?model_q=#{d.model}&client_q=#{@client_q}&msg_q=replacement&commit=Find", :title => @waste_warn[d.model].empty? ? '' : "#{@waste_warn[d.model].last.alert_date.to_formatted_s(:db)} from #{@waste_warn[d.model].last.name}" -%> (<%= (@waste_warn[d.model].length.to_f / dev_count).round(1) -%>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @waste_full[d.model].empty?, @waste_full[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=replace used toner&commit=Find", :title => @waste_full[d.model].empty? ? '' : "#{@waste_full[d.model].last.alert_date.to_formatted_s(:db)} from #{@waste_full[d.model].last.name}" -%> (<%= (@waste_full[d.model].length.to_f / dev_count).round(1) -%>)</td>
+      <%= link_to_unless @waste_full[d.model].empty?, @waste_full[d.model].length, alerts_path + "?model_q=#{d.model}&client_q=#{@client_q}&msg_q=replace used toner&commit=Find", :title => @waste_full[d.model].empty? ? '' : "#{@waste_full[d.model].last.alert_date.to_formatted_s(:db)} from #{@waste_full[d.model].last.name}" -%> (<%= (@waste_full[d.model].length.to_f / dev_count).round(1) -%>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @service[d.model].empty?, @service[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=service&commit=Find", :title => @service[d.model].empty? ? '' : "#{@service[d.model].last.alert_date.to_formatted_s(:db)} from #{@service[d.model].last.name}" -%> (<%= (@service[d.model].length.to_f / dev_count).round(1) -%>)</td>
+      <%= link_to_unless @service[d.model].empty?, @service[d.model].length, alerts_path + "?model_q=#{d.model}&client_q=#{@client_q}&msg_q=service&commit=Find", :title => @service[d.model].empty? ? '' : "#{@service[d.model].last.alert_date.to_formatted_s(:db)} from #{@service[d.model].last.name}" -%> (<%= (@service[d.model].length.to_f / dev_count).round(1) -%>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @maint[d.model].empty?, @maint[d.model].length, alerts_path + "?model_q=#{d.model}&msg_q=maintenance&commit=Find", :title => @maint[d.model].empty? ? '' : "#{@maint[d.model].last.alert_date.to_formatted_s(:db)} from #{@maint[d.model].last.name}" -%> (<%= (@maint[d.model].length.to_f / dev_count).round(1) -%>)</td>
-    </tr>
+      <%= link_to_unless @maint[d.model].empty?, @maint[d.model].length, alerts_path + "?model_q=#{d.model}&client_q=#{@client_q}&msg_q=maintenance&commit=Find", :title => @maint[d.model].empty? ? '' : "#{@maint[d.model].last.alert_date.to_formatted_s(:db)} from #{@maint[d.model].last.name}" -%> (<%= (@maint[d.model].length.to_f / dev_count).round(1) -%>)</td>
+  </tr>
 <% end %>
 </table> 
 

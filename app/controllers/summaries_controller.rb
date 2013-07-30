@@ -42,6 +42,7 @@ class SummariesController < ApplicationController
         where_clause = "serial <> 'default'"
       else
         where_clause = "serial <> 'default' and client_id = #{client_id}"
+        @client_q = Client.find(client_id).name
       end
       @paper = Hash.new
       @misfeed = Hash.new
