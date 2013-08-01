@@ -100,8 +100,8 @@ class NotifyMailer < ActionMailer::Base
         @c_bkgnd = 'cyan'
       end
     end
-    if (@c_ratio < 0 or @bw_ratio < 0)
-      mail(:to => @dev.notify_control.tech, :subject => "#{@dev.name}: Utilization is NEGATIVE")
+    if (@c_ratio < 0 or @bw_ratio < 0 or @c_ratio > 1.5 or @bw_ratio > 1.5)
+      mail(:to => @dev.notify_control.tech, :subject => "#{@dev.name}: Utilization alert")
 #     else
 #       unless (@c_ratio > 1.5 or @c_ratio < 0.5 or @bw_ratio > 1.5 or @bw_ratio < 0.5 )
 #         mail(:to => @dev.notify_control.tech, :subject => "MFP utilization alert for #{@dev.name}")

@@ -23,7 +23,7 @@
     <td><%=h @first[d.device_id].nil? ? '<no previous entry>' : @first[d.device_id].status_date.to_formatted_s(:db) %></td>
     <td>
       <% unless d.device.name.nil? %>
-        <%=h link_to d.device.name, "/counters/detail?model_q=#{d.device.model}&serial_q=#{d.device.serial}&commit=Find", :title => "Click to show all meter reads for this device" %> 
+        <%=h link_to d.device.name, "/counters/detail?model_q=#{d.device.model}&serial_q=#{d.device.serial}&commit=Find", :title => "Click to show all meter reads for this #{d.device.model}" %> 
       <% end %>
     </td>
     <td rowspan=2>
@@ -50,7 +50,7 @@
   </tr>
   <% end %>
 </table>
-<p><%= will_paginate @devices %></p>
+<p><%= will_paginate @devices, :class => :digg_pagination %></p>
 <hr>
 <h2>NOTES</h2>
 <ul>

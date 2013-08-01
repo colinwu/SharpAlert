@@ -265,6 +265,8 @@ if dev.print_volume.nil?
   exit 1
 end
 
+# Send a usage alert message if the ratio is either negative or above 150%
+
 @first = Counter.earliest_or_before(@last.status_date.months_ago(1).to_date, dev.id)
 unless @first.nil?
   NotifyMailer.counter_alert(@first, @last).deliver

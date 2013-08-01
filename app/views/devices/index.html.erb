@@ -36,5 +36,5 @@
   <% end %>
 <!--   <%= submit_tag "Batch Edit Selected" %> -->
 </table>
-<p><%= will_paginate @devices %></p>
+<p><%= will_paginate @devices, :class => 'digg_pagination' %></p>
 <p><%= link_to "New Device", new_device_path %></p>

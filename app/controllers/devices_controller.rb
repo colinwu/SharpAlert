@@ -47,7 +47,6 @@ class DevicesController < ApplicationController
     @device = Device.new
   end
 
-  # TODO 10-Jun-2013 Turn off batch updates for now. Later make available to update client info only.
   def batch_edit
     @device = Device.new
     # @selected contains ids to be used in hidden fields in the batch_edit form.

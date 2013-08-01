@@ -1,1 +1,11 @@
-23288004088369
+Do we need to have authentication where users are only allowed to see/modify clients and devices assigned to them?
+
+There would have to be at least one "super user" who can do everything. This is necessary, at the very least, to handle new devices and create new clients.
+
+Each client will need an admin_id column. (Can there ever be more than one admin per client?)
+
+Will devices (and controls) need an admin_id as well? Test.
+
+Simpler solution: allow only the logged-in user (super user) to make changes. Everyone else can only view.
+
+May need to add a column for "received timestamp" to both alert and counter tables. Some printers do not have the correct time. Is it reasonable to expect all printers to be synchronised to a SNTP server? There are plenty of public ones and any printer that's networked should be.
