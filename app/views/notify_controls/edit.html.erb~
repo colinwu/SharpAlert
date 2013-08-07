@@ -1,7 +1,0 @@
-<h1>Edit Notify Control for Device <%=h @device_name -%></h1>
-
-<%= form_for @notify_control do |f| %>
-
-<%= render 'form' %>
-
-<% end %>
