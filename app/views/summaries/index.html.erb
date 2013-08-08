@@ -147,10 +147,11 @@
 
 <table class="list">
   <tr>
-    <th colspan=9>Alerts by Device</th>
+    <th colspan=10>Alerts by Device - Number in parenthesis is number of alerts per day on average</th>
   </tr>
   <tr>
     <th>Device</th>
+    <th>Monitored for</th>
     <th>Misfeed</th>
     <th>Paper Out</th>
     <th>Toner Low</th>
@@ -161,25 +162,29 @@
     <th>Maintenance</th>
   </tr>
   <% @devices_by_name.each do |d| %>
-  <%   key = "#{d.name}|#{d.model}|#{d.serial}" %>
+  <%   
+    key = "#{d.name}|#{d.model}|#{d.serial}"
+    days = (DateTime.now - d.created_at.to_datetime).to_f
+  %>
   <tr class="<%= cycle('light','dark') -%>">
     <td><%= link_to h(d.name), alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&commit=Find", :title => "#{d.model}, #{d.serial}, #{d.code}" -%> (<%= d.client.nil? ? link_to("<Edit Device Info>", edit_device_path(d)) : d.client.name %>)</td>
+    <td class='right-justify'><%= days.round(1) %> days</td>
     <td class='right-justify'>
-      <%= link_to_unless @misfeed[key].empty?, @misfeed[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=misfeed&commit=Find", :title => @misfeed[key].empty? ? '' : "Last misfeed: #{@misfeed[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @misfeed[key].empty?, @misfeed[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=misfeed&commit=Find", :title => @misfeed[key].empty? ? '' : "Last misfeed: #{@misfeed[key].last.alert_date.to_formatted_s(:db)}" -%> (<%= (@misfeed[key].length / days).round(1) %>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @paper[key].empty?, @paper[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=paper&commit=Find", :title => @paper[key].empty? ? '' : "Last Paper Out: #{@paper[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @paper[key].empty?, @paper[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=paper&commit=Find", :title => @paper[key].empty? ? '' : "Last Paper Out: #{@paper[key].last.alert_date.to_formatted_s(:db)}" -%> (<%= (@paper[key].length / days).round(1) %>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @toner_low[key].empty?, @toner_low[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=toner supply&commit=Find", :title => @toner_low[key].empty? ? '' : "Last Low Toner: #{@toner_low[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @toner_low[key].empty?, @toner_low[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=toner supply&commit=Find", :title => @toner_low[key].empty? ? '' : "Last Low Toner: #{@toner_low[key].last.alert_date.to_formatted_s(:db)}" -%> (<%= (@toner_low[key].length / days).round(1) %>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @toner_out[key].empty?, @toner_out[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=add toner&commit=Find", :title => @toner_out[key].empty? ? '' : "Last Toner Empty: #{@toner_out[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @toner_out[key].empty?, @toner_out[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=add toner&commit=Find", :title => @toner_out[key].empty? ? '' : "Last Toner Empty: #{@toner_out[key].last.alert_date.to_formatted_s(:db)}" -%> (<%= (@toner_out[key].length / days).round(1) %>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @waste_warn[key].empty?, @waste_warn[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=replacement&commit=Find", :title => @waste_warn[key].empty? ? '' : "Last Waste Container Warning: #{@waste_warn[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @waste_warn[key].empty?, @waste_warn[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=replacement&commit=Find", :title => @waste_warn[key].empty? ? '' : "Last Waste Container Warning: #{@waste_warn[key].last.alert_date.to_formatted_s(:db)}" -%> (<%= (@waste_warn[key].length / days).round(1) %>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @waste_full[key].empty?, @waste_full[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=replace used toner&commit=Find", :title => @waste_full[key].empty? ? '' : "Last Waste Container Full: #{@waste_full[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @waste_full[key].empty?, @waste_full[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=replace used toner&commit=Find", :title => @waste_full[key].empty? ? '' : "Last Waste Container Full: #{@waste_full[key].last.alert_date.to_formatted_s(:db)}" -%> (<%= (@waste_full[key].length / days).round(1) %>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @service[key].empty?, @service[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=service&commit=Find", :title => @service[key].empty? ? '' : "Last Call for Service: #{@service[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @service[key].empty?, @service[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=service&commit=Find", :title => @service[key].empty? ? '' : "Last Call for Service: #{@service[key].last.alert_date.to_formatted_s(:db)}" -%> (<%= (@service[key].length / days).round(1) %>)</td>
     <td class='right-justify'>
-      <%= link_to_unless @maint[key].empty?, @maint[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=maintenance&commit=Find", :title => @maint[key].empty? ? '' : "Last Maint. Req.: #{@maint[key].last.alert_date.to_formatted_s(:db)}" -%></td>
+      <%= link_to_unless @maint[key].empty?, @maint[key].length, alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&msg_q=maintenance&commit=Find", :title => @maint[key].empty? ? '' : "Last Maint. Req.: #{@maint[key].last.alert_date.to_formatted_s(:db)}" -%> (<%= (@maint[key].length / days).round(1) %>)</td>
   </tr>
   <% end %>
 </table>
@@ -187,7 +192,7 @@
 <br />
 <table class="list">
   <tr>
-    <th colspan=9>Alerts by Model</th>
+    <th colspan=9>Alerts by Model - Number in parenthesis is number of alerts per device</th>
   </tr>
   <tr>
     <th>Model</th>
