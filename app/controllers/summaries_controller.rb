@@ -52,6 +52,7 @@ class SummariesController < ApplicationController
       @maint = Hash.new
       @waste_warn = Hash.new
       @waste_full = Hash.new
+      @first_alert = Hash.new
       @devices_by_name = Device.order(:name).where(where_clause)
       @devices_by_model = Device.group(:model).order(:model).where(where_clause)
       @count_by_model = Device.group(:model).where(where_clause).count
@@ -66,6 +67,7 @@ class SummariesController < ApplicationController
         @maint[key] = d.alerts.where('alert_msg regexp "maintenance"').select(:alert_date)
         @waste_warn[key] = d.alerts.where('alert_msg regexp "toner collection container"').select(:alert_date)
         @waste_full[key] = d.alerts.where('alert_msg regexp "replace used toner container"').select(:alert_date)
+	@first_alert[key] = d.alerts.order(:created_at).first
       end
       
       @devices_by_model.each do |d|
