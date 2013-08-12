@@ -165,6 +165,7 @@
   <%   
     key = "#{d.name}|#{d.model}|#{d.serial}"
     days = @first_alert[key].nil? ? nil : (DateTime.now - @first_alert[key].created_at.to_datetime).to_f
+    unless days.nil?
   %>
   <tr class="<%= cycle('light','dark') -%>">
     <td><%= link_to h(d.name), alerts_path + "?model_q=#{d.model}&serial_q=#{d.serial}&commit=Find", :title => "#{d.model}, #{d.serial}, #{d.code}" -%> (<%= d.client.nil? ? link_to("<Edit Device Info>", edit_device_path(d)) : d.client.name %>)</td>
@@ -226,6 +227,7 @@
       <% end %>
     </td>
   </tr>
+    <% end %>
   <% end %>
 </table>
 
