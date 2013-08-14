@@ -18,9 +18,9 @@ class AlertsController < ApplicationController
   def index
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
     if params[:sort].nil?
-      sort = 'alerts.id'
+      @sort = 'alerts.id'
     else
-      sort = "#{params[:sort]},alert_date"
+      @sort = "#{params[:sort]},alert_date"
     end
     unless (params[:commit].nil?)
       where_array = Array.new
@@ -68,7 +68,9 @@ class AlertsController < ApplicationController
         condition_array << @msg_q.condition
         comment_array << "Message = #{@msg_q}"
       end
-          
+      if(not params['sort'].nil? and not params['sort'].empty?)
+        @sort = params['sort']
+      end
       unless where_array.empty?
         condition_array[0] = where_array.join(' and ')
         comment = comment_array.join(' and ')
@@ -76,14 +78,14 @@ class AlertsController < ApplicationController
         condition_array = []
       end
     end
-    @alerts = Alert.where(condition_array).order(sort).paginate(:page => params[:page], :per_page => 30, :include => {:device => :client})
+    @alerts = Alert.where(condition_array).order(@sort).paginate(:page => params[:page], :per_page => 30, :include => {:device => :client})
     if (params[:commit] == 'Export')
       @request.sub!(/commit=Export/,'commit=Find')
       csv_data = '"alert date","device name","model","serial number","machine code","client","message"' + "\n"
       unless (condition_array.empty?)
         csv_data += "### Filter condition: #{comment}\n\n"
       end
-      Alert.order(sort).where(condition_array).all(:include => {:device => :client}).each do |a|
+      Alert.order(@sort).where(condition_array).all(:include => {:device => :client}).each do |a|
         csv_data += a.to_csv + "\n"
       end
       send_data(csv_data, :type => "text/csv", :filename => 'alerts.csv', :disposition => "attachment")

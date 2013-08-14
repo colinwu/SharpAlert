@@ -4,6 +4,7 @@
 <table class="list">
   <tr class='searchform'>
     <%= form_tag '/alerts', :method => 'get' do -%>
+    <%= hidden_field_tag 'sort', @sort %>
     <td><%= text_field_tag 'date_q', @date_q, :size => 10, :placeholder => "Search Date" -%></td>
       <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Search Name" -%></td>
       <td><%= text_field_tag 'model_q', @model_q, :size => 10, :placeholder => "Search Model" -%></td>
