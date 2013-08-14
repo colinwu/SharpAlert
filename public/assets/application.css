@@ -57,6 +57,10 @@ h1 {
   border: 1px solid black;
 }
 
+.list td a {
+  text-decoration: none;
+}
+
 .searchform {
   vertical-align: center;
 }
