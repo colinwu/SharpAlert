@@ -12,4 +12,40 @@ Client
 Alerts
  ... belongs_to Device
 
-- using .joins method will result in missing records in views; e.g. When a new device is first detected it will not have a client associated with it (i.e. it's client_id field will be nil). Such device will not appear in the device list if the controller uses Device.join(:client) to generate the list. Instead use Deivce.find(:include => :client). It's the difference between inner and outer join. 
+- using .joins method will result in missing records in views; e.g. When a new device is first detected it will not have a client associated with it (i.e. it's client_id field will be nil). Such device will not appear in the device list if the controller uses Device.joins(:client) to generate the list. Instead use Deivce.find(:include => :client). It's the difference between inner and outer join. 
+
+Handling RED attachments
+- use ripmime utility (in a Procmail recipe) to extract the attachments.
+- "Jam Trouble Data" attachment file format:
+
+Start  Length  Description
+0x00      15   "JAM TROUBLE HIS"
+0x10      01   Part code (always 0x05 for Jam)
+0x11      01   Message Cause (always 0x05 for Jam)
+0x12      16   zero-padded model name (e.g. "MX-2300N")
+0x22      10   Serial number
+0x32      06   Hex encoded sent date and time; i.e. 0x13 0x08 0x15 
+               0x10 0x01 0x25 represnts "Aug 15, 2013 10:01:25"
+0x39      01   Number of DF jam history records in file. 
+0x3b      01   If number of DF jam history is zero then number of MB jam history
+               records in file is here. Otherwise MB history count is
+               immediately after the DF jam history records.
+
+Each DF and MB record is 20 bytes long:
+0x01      01   Jam Code
+0x02      06   Date of Jam record
+We don't care about the rest of the record for now but...
+0x08      01   Paper Code
+0x09      01   Paper Type Code
+0x0c      04   BW valid output counter
+0x10      04   Colour valid output counter
+
+Use the "sent date" (ignoring seconds field) to find appropriate DF or MB record from which to extract the jam code
+=======================
+process_alert_status.rb
+
+New process:
+- all alert attachments should be extracted into a temp directory by 'ripmime'
+- if 'textfile1' exists then it contains the plain-text portion of the message; i.e. the alert message itself
+- if 'textfile1' does not exist then 'textfile0' contains the message
+- if the alert is for a misfeed then process the '*.R05' file to obtain the jam code

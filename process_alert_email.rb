@@ -13,10 +13,85 @@
 #    Device has detected:
 # 
 #    !!!!! Maintenance required. Code:FK3 !!!!!
+
+# Parse the Jam Trouble attachment file in directory dir for the jam code.
+def getJamCode(dir)
+  f = File.open(dir + '/E-mail DIAG Jam Trouble Data.R05')
+  jamcode = 'unknown'
+  
+  title = f.read(15)
+  if (title == 'JAM TROUBLE HIS')
+    f.read(35)
+    # read and convert send date and time
+    yr = "%02x" % f.read(1).ord
+    mon = "%02x" % f.read(1).ord
+    day = "%02x" % f.read(1).ord
+    hr = "%02x" % f.read(1).ord
+    min = "%02x" % f.read(1).ord
+    sec = "%02x" % f.read(1).ord
+    sentdate = yr + mon + day + hr + min
+    puts "Sent date: #{sentdate}"
+    f.read(1)
+    dfcount = f.read(1).ord
+    # start of first DF history record - most recent first
+    f.read(1)
+    if (dfcount != 0)
+      jamcode = '%02x' % f.read(1).ord
+      yr = "%02x" % f.read(1).ord
+      mon = "%02x" % f.read(1).ord
+      day = "%02x" % f.read(1).ord
+      hr = "%02x" % f.read(1).ord
+      min = "%02x" % f.read(1).ord
+      sec = "%02x" % f.read(1).ord
+      recdate = yr + mon + day + hr + min
+      f.read(12)               # skip over the rest of this record
+      f.read(20 * (dfcount-1)) # skip over all remaining records
+      #       puts "First DF/MB record date: #{recdate}"
+    end
+    if (sentdate == recdate)
+      return jamcode
+    else
+      # skip over the MB count - we don't care since we're only interested
+      # in the first record
+      f.read(2) 
+      f.read(1)
+      jamcode = '%02x' % f.read(1).ord
+      yr = "%02x" % f.read(1).ord
+      mon = "%02x" % f.read(1).ord
+      day = "%02x" % f.read(1).ord
+      hr = "%02x" % f.read(1).ord
+      min = "%02x" % f.read(1).ord
+      sec = "%02x" % f.read(1).ord
+      recdate = yr + mon + day + hr + min
+      #       puts "First MB record date: #{recdate}"
+      if (sentdate == recdate)
+        return jamcode
+      end
+    end
+  end
+end
+
+require 'getopt/std'
+
+opt = Getopt::Std.getopts('d:')
+if opt['d']
+  dir = opt['d']
+#   puts "Directory specified. Read input from file."
+  if File.exist?(dir + '/textfile1')
+    f = File.open(dir + '/textfile1')
+  elsif File.exist?(dir + '/textfile0')
+    f = File.open(dir + '/textfile0')
+  else
+    f = $stdin
+  end
+else
+  f = $stdin
+end
+
 alert = Alert.new
 
-# Parse the email
-while (line = gets)
+# Parse the alert message
+while (line = f.gets)
   if line =~ /^Device Name: (.+)/i
     name = $1
   elsif line =~ /^Device Model: (.+)/i
@@ -28,10 +103,15 @@ while (line = gets)
   elsif line =~ /^!!!!! (.+) !!!!!/
     msg = $1
     if msg =~ /Call for service/
-      codes = gets.strip
+      codes = f.gets.strip
       msg += ": #{codes}"
     elsif msg =~ /Maintenance required. Code:(.+)$/
       codes = $1
+    elsif msg =~ /Misfeed/i
+      jamcode = getJamCode(dir)
+      unless jamcode.nil?
+        msg += " (Jam code 0x#{jamcode})"
+      end
     end
     alert.alert_msg = msg
   elsif line =~ /^(\d{4,4}\/\d{2,2}\/\d{2,2}\s+\d{2,2}:\d{2,2}:\d{2,2})/
@@ -44,7 +124,6 @@ end
 # retrieve details of the last alert for this device before committing this alert
 alert.save
 
-# TODO figure out how to do create_notify_control after removing "belongs_to notify_control" from Alerts.rb
 # retrieve (or create using defaults) the notification profile for this device.
 @d = Device.find_by_serial_and_model(serial,model)
 if @d.nil?
@@ -115,6 +194,9 @@ else
   send_to = nil
 end
 
+# TODO: Uncomment the following before deploying
+system("/bin/rm -r #{dir}")
+
 if not send_to.nil? and not period.nil? and (last_time.nil? or (alert.alert_date <=> last_time + period) > 0)
   # Send alert
   NotifyMailer.notify_email(alert).deliver
@@ -123,4 +205,3 @@ if not send_to.nil? and not period.nil? and (last_time.nil? or (alert.alert_date
 else
   exit 1
 end
-  

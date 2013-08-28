@@ -49,6 +49,7 @@ GEM
     execjs (1.4.0)
       multi_json (~> 1.0)
     fastercsv (1.5.5)
+    getopt (1.4.1)
     highline (1.6.15)
     hike (1.2.1)
     i18n (0.6.1)
@@ -135,6 +136,7 @@ DEPENDENCIES
   capistrano
   coffee-rails (~> 3.2.1)
   csv-mapper
+  getopt
   jquery-rails
   minitest
   mocha
