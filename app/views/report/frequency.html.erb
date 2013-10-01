@@ -1,0 +1,59 @@
+<h1><%= @msg_q.nil? ? '' : @msg_q.titleize %> Frequency Report</h1>
+<p><%= @comment -%></p>
+
+<div id="search_form">
+<%= form_tag report_frequency_url, :method => 'get' do %>
+<table><tr>
+  <td>
+    <%= label_tag 'Days' %><br />
+    <%= number_field_tag 'days', @days, in: 1...30 %>
+  </td>
+  <td>
+    <%= label_tag 'name' %><br />
+    <%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => 'Device Name' %>
+  </td>
+  <td>
+    <%= label_tag 'model' %><br />
+    <%= text_field_tag 'model_q', @model_q, :size => 10, :placeholder => 'Model' %>
+  </td>
+  <td>
+    <%= label_tag 'serial' %><br />
+    <%= text_field_tag 'serial_q', @serial_q, :size => 10, :placeholder => 'Serial #' %>
+  </td>
+  <td>
+    <%= label_tag 'code' %><br />
+    <%= text_field_tag 'code_q', @code_q, :size => 10, :placeholder => 'Code' %>
+  </td>
+  <td>
+    <%= label_tag 'client' %><br />
+    <%= text_field_tag 'client_q', @client_q, :size => 10, :placeholder => 'Client' %>
+  </td>
+  <td>
+    <%= label_tag 'msg' %><br />
+    <%= text_field_tag 'msg_q', @msg_q, :size => 15, :placeholder => 'Message' %>
+  </td>
+  <td>
+    <%= submit_tag 'Find' -%>
+  </td>
+  </tr>
+</table>
+<% end %>
+</div>
+
+<table>
+  <tr>
+    <th>Device</th>
+    <% for date in @dates %>
+      <th><%= date.to_s %></th>
+    <% end %>
+  </tr>
+  <% for dev_id in @devices %>
+    <tr class="<%= cycle('light','dark') %>">
+    <% dev = Device.find(dev_id) %>
+    <td><%= link_to dev.name, alerts_path + "/?msq_q=misfeed&model_q=#{dev.model}&serial_q=#{dev.serial}&commit=", :title => "#{dev.model}, #{dev.serial}, #{dev.code}" %></td>
+    <% for date in @dates %>
+      <td><%= @alert_counts[[dev_id,date]].nil? ? '' : @alert_counts[[dev_id,date]] %></td>
+    <% end %>
+    </tr>
+  <% end %>
+</table>

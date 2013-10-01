@@ -1,4 +1,8 @@
 SharpApp::Application.routes.draw do
+  get "report/frequency"
+
+  get "report/volume"
+
   resources :print_volumes
 
   resources :summaries

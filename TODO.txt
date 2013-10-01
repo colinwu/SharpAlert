@@ -9,3 +9,10 @@ Will devices (and controls) need an admin_id as well? Test.
 Simpler solution: allow only the logged-in user (super user) to make changes. Everyone else can only view.
 
 May need to add a column for "received timestamp" to both alert and counter tables. Some printers do not have the correct time. Is it reasonable to expect all printers to be synchronised to a SNTP server? There are plenty of public ones and any printer that's networked should be.
+
+=====
+Sept 30, 2013
+Create reports for 
+- number of misfeeds per device over the past N days with link to show specific alerts for each device
+- devices that have exceeded their recommended monthly volume
+- graphs showing last 30-day volume for each device

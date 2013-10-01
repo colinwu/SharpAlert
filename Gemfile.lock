@@ -50,6 +50,7 @@ GEM
       multi_json (~> 1.0)
     fastercsv (1.5.5)
     getopt (1.4.1)
+    googlecharts (1.6.8)
     highline (1.6.15)
     hike (1.2.1)
     i18n (0.6.1)
@@ -137,6 +138,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   csv-mapper
   getopt
+  googlecharts
   jquery-rails
   minitest
   mocha
