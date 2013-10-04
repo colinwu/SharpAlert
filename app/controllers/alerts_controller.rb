@@ -56,11 +56,12 @@ class AlertsController < ApplicationController
         condition_array << @code_q.condition
         comment_array << "Machine Code = #{@code_q}"
       end
-      if (not params['client_q'].nil? and not params['client_q'].empty?)
-        @client_q = params[:client_q]
-        where_array << @client_q.where('clients.name')
-        condition_array << @client_q.condition
-        comment_array << "Client Name = #{@client_q}"
+      if (not params[:client].nil? and not params[:client][:name].empty?)
+        @client = Client.new
+        @client.name = params[:client][:name]
+        where_array << @client.name.where('clients.name')
+        condition_array << @client.name.condition
+        comment_array << "Client Name = #{@client.name}"
       end
       if(not params['msg_q'].nil? and not params['msg_q'].empty?)
         @msg_q = params[:msg_q]
@@ -78,7 +79,12 @@ class AlertsController < ApplicationController
         condition_array = []
       end
     end
-    @alerts = Alert.where(condition_array).order(@sort).paginate(:page => params[:page], :per_page => 30, :include => {:device => :client})
+    if (params[:page].nil? or params[:page].empty?)
+      page_to_show = (Alert.where(condition_array).joins(:device => :client).count / 30.0 + 0.5).round
+    else
+      page_to_show = params[:page]
+    end
+    @alerts = Alert.where(condition_array).order(@sort).paginate(:page => page_to_show, :per_page => 30, :include => {:device => :client})
     if (params[:commit] == 'Export')
       @request.sub!(/commit=Export/,'commit=Find')
       csv_data = '"alert date","device name","model","serial number","machine code","client","message"' + "\n"

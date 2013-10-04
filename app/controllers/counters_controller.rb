@@ -7,10 +7,11 @@ class CountersController < ApplicationController
       where_array << @name_q.where('devices.name')
       conditions_array << @name_q.condition
     end
-    if (not params[:client_q].nil? and not params[:client_q].empty?)
-      @client_q = params[:client_q]
-      where_array << @client_q.where('clients.name')
-      conditions_array << @client_q.condition
+    if (not params[:client].nil? and not params[:client][:name].empty?)
+      @client = Client.new
+      @client.name = params[:client][:name]
+      where_array << @client.name.where('clients.name')
+      conditions_array << @client.name.condition
     end
     unless( where_array.empty? )
       conditions_array[0] = where_array.join(' and ')
@@ -32,7 +33,7 @@ class CountersController < ApplicationController
     
     @devices.each do |d|
       if (params[:end_q].nil? or params[:end_q].empty?)
-        @last[d.device_id] = Counter.where("device_id = #{d.device_id}").order("status_date").last
+        @last[d.device_id] = Counter.latest(d.device_id)
       else
         @end_q = params[:end_q]
         @last[d.device_id] = Counter.latest_or_after(@end_q, d.device_id)

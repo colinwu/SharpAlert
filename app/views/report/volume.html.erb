@@ -1,2 +1,76 @@
-<h1>Report#volume</h1>
-<p>Find me in app/views/report/volume.html.erb</p>
+<% title 'Meter Read Summary' %>
+<table class='list'>
+  <tr class='searchform'>
+    <%= form_tag report_volume_path, :method => 'get' do -%>
+      <td>
+        <%= label_tag 'Days' %><br />
+        <%= select_tag :days, options_for_select([['30 Days', 30],
+                                                  ['60 Days', 60],
+                                                ['90 Days', 90]], @days) -%>
+      </td>
+      <td>
+        <%= label_tag 'Device Name' %><br />
+        <%= text_field_tag 'name_q', @name_q, :size => 10 -%>
+      </td>
+      <td>
+        <%= label_tag 'Client Name' %><br />
+        <%= collection_select :client, :name, Client.all, :name, :name, :include_blank => 'All' %>
+      </td>
+      <td><%= submit_tag 'Find' -%></td>
+    <%end%>
+  </tr>
+  <tr>
+    <th>Status Date</th>
+    <th>Device</th>
+    <th>Client</th>
+    <th>B&amp;W Total</th>
+    <th>Color Total</th>
+    <th>B&amp;W Diff</th>
+    <th>Color Diff</th>
+  </tr>
+  <% for d in @devices %>
+  <% bkgnd = cycle('light', 'dark') %>
+  <tr class='<%= bkgnd %>'>
+    <td><%=h @first[d.device_id].nil? ? '<no previous entry>' : @first[d.device_id].status_date.to_formatted_s(:db) %></td>
+    <td>
+      <% unless d.device.name.nil? %>
+        <%=h link_to d.device.name, "/counters/detail?model_q=#{d.device.model}&serial_q=#{d.device.serial}&commit=Find", :title => "Click to show all meter reads for this #{d.device.model}" %> 
+      <% end %>
+    </td>
+    <td rowspan=2>
+      <%= d.device.client.nil? ? link_to("<Edit Device Info>", edit_device_path(d.device)) : d.device.client.name %>
+    </td>
+    <td class="right-justify"><%=h number_with_delimiter(@oldbw[d.device_id]) %></td>
+    <td class="right-justify"><%=h number_with_delimiter(@oldc[d.device_id]) %></td>
+    <td rowspan=2 class="right-justify"><%=h number_with_delimiter(@newbw[d.device_id] - @oldbw[d.device_id]) %></td>
+    <td rowspan=2 class="right-justify"><%=h number_with_delimiter(@newc[d.device_id] - @oldc[d.device_id]) %></td>
+  </tr>
+  <tr class='<%= bkgnd %>'>
+    <td><%=h @last[d.device_id].status_date.to_formatted_s(:db) %></td>
+    <td>
+      <% unless @healthbw[d.device_id].nil? %>
+        <span style='background: <%= @healthbw[d.device_id] %>'> BW: <%= (@bw_ratio[d.device_id]*100).round(1) %>% </span>
+      <% end %>
+      &nbsp;
+      <% unless @healthc[d.device_id].nil? %>
+        <span style='background: <%= @healthc[d.device_id] %>'> Colour: <%= (@c_ratio[d.device_id]*100).round(1) %>% </span>
+      <% end %>
+    </td>
+    <td class="right-justify"><%=h number_with_delimiter(@newbw[d.device_id]) %></td>
+    <td class="right-justify"><%=h number_with_delimiter(@newc[d.device_id]) %></td>
+  </tr>
+  <% end %>
+</table>
+<hr>
+<h2>NOTES</h2>
+<ul>
+  <li>This summary shows the totals for two meter reads that are 30 days (or more) apart. The 2nd record is the latest available.</li>
+  <li>The timestamps are from the devices' internal clock settings and may not match reality.</li>
+  <li>If you specify a start and end date in the search the first record will be the earliest record <em>during</em> the start date (or the latest before) while the second record will be the latest record <em>during or earliest after</em> the end date.</li>
+  <li>Colour patches after the device name indicates counter alarms for BW and Colour counters during the last 30 days from the date of the last record displayed (not the current date):
+  <ul>
+    <li><span style="background: cyan">&nbsp;</span> print volume was &lt; 50% of average recommended volume</li>
+    <li><span style="background: yellow">&nbsp;</span> print volume was between 100% and 150% of recommended volume</li>
+    <li><span style="background: red">&nbsp;</span> print volume was greater than 150% of recommended volume</li>
+  </ul>
+</ul>

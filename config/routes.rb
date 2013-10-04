@@ -1,4 +1,6 @@
 SharpApp::Application.routes.draw do
+  get "report/index"
+  
   get "report/frequency"
 
   get "report/volume"

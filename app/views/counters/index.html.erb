@@ -4,7 +4,7 @@
     <%= form_tag '/counters', :method => 'get' do -%>
       <td>Start: <%= text_field_tag 'start_q', @start_q, :size => 10, :placeholder => 'YYYY-MM-DD' -%> End: <%= text_field_tag 'end_q', @end_q, :size => 10, :placeholder => 'YYYY-MM-DD' -%></td>
       <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Search Name" -%></td>
-      <td><%= text_field_tag 'client_q', @client_q, :size => 10, :placeholder => "Client name" -%></td>
+      <td><%= collection_select :client, :name, Client.all, :name, :name, :include_blank => 'All' %></td>
       <td colspan=4><%= submit_tag 'Find' -%></td>
     <%end%>  
   </tr>

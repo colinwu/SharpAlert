@@ -22,4 +22,10 @@ class Counter < ActiveRecord::Base
     end
     return a
   end
+  
+  def self.latest(dev_id)
+    a = Counter.where("device_id = #{dev_id}").order('status_date').last
+    return a
+  end
+  
 end

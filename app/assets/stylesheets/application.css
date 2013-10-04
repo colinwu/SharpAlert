@@ -43,6 +43,15 @@ h1 {
   border-bottom: 3px double black;
 }
 
+legend {
+  font-size: medium;
+  color: blue;
+}
+
+fieldset {
+  margin-bottom: .5em;
+}
+
 .light {
   background-color: white;
 }
@@ -62,6 +71,7 @@ h1 {
 
 .searchform {
   vertical-align: center;
+  border: 1px dashed blue;
 }
 
 .right-justify {

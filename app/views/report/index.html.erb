@@ -1,7 +1,11 @@
-<h1><%= @msg_q.nil? ? '' : @msg_q.titleize %> Frequency Report</h1>
+<h1>Special Reports</h1>
 
-<div class="searchform">
-<%= form_tag report_frequency_url, :method => 'get' do %>
+<div>
+<%= form_tag report_frequency_path, :method => 'get' do %>
+<fieldset>
+  <legend>Alert Frequency Report</legend>
+  <p>
+  This special report shows the number of alerts per day for selected devices. The devices can be selected by name, model, serial number, machine code, or client. Where you can enter text (e.g. name, model, etc) you do not need to enter an exact match.</p>
 <table><tr>
   <td>
     <%= label_tag 'Days (1 to 30)' %><br />
@@ -43,23 +47,33 @@
   </td>
   </tr>
 </table>
+</fieldset>
 <% end %>
 </div>
 
-<table>
-  <tr>
-    <th>Device</th>
-    <% for date in @dates %>
-      <th><%= date.to_s %></th>
-    <% end %>
-  </tr>
-  <% for dev_id in @devices %>
-    <tr class="<%= cycle('light','dark') %>">
-    <% dev = Device.find(dev_id) %>
-    <td><%= link_to dev.name, alerts_path + "?msg_q=#{@msg_q}&model_q=#{dev.model}&serial_q=#{dev.serial}&commit=", :title => "#{dev.model}, #{dev.serial}, #{dev.code}" %></td>
-    <% for date in @dates %>
-      <td><%= @alert_counts[[dev_id,date]].nil? ? '' : @alert_counts[[dev_id,date]] %></td>
-    <% end %>
+<div>
+  <%= form_tag report_volume_path, :method => 'get' do -%>
+    <fieldset>
+    <legend>High Print Volume Report</legend>
+    <p>This special report shows volume summaries for devices whose usage exceed recommended volumes.</p>
+    <table><tr>
+      <td>
+        <%= label_tag 'Days' %><br />
+        <%= select_tag :days, options_for_select([['30 Days', 30],
+                                                  ['60 Days', 60],
+                                                ['90 Days', 90]], @days) -%>
+      </td>
+      <td>
+        <%= label_tag 'Device Name' %><br />
+        <%= text_field_tag 'name_q', @name_q, :size => 10 -%>
+      </td>
+      <td>
+        <%= label_tag 'Client Name' %><br />
+        <%= collection_select :client, :name, Client.all, :name, :name, :include_blank => 'All' %>
+      </td>
+      <td><%= submit_tag 'Find' -%></td>
     </tr>
-  <% end %>
-</table>
+    </table>
+    </fieldset>
+  <%end%>
+</div>
