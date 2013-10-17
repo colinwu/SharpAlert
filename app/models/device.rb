@@ -6,4 +6,8 @@ class Device < ActiveRecord::Base
   belongs_to :client
   belongs_to :print_volume, :foreign_key => 'model', :primary_key => 'model'
   
+  def name_model_serial
+    "#{name}, #{model}, #{serial}"
+  end
+  
 end

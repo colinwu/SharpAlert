@@ -1,0 +1,25 @@
+<div>
+  <%= form_tag report_graph_path, :method => 'get' do -%>
+    <fieldset>
+    <legend>Graph Misfeed, Maintenance and Service alerts</legend>
+    <p>This report graphs the number of daily <strong>misfeed</strong>, <strong>maintenance requests</strong> and <strong>service</strong> alerts over the past 30, 60 or 90 days on one chart. Easier to see if there is a corrolation.</p>
+    <table><tr>
+      <td>
+        <%= label_tag 'Days' %><br />
+        <%= select_tag :days, options_for_select([['30 Days', 30],
+                                                  ['60 Days', 60],
+                                                  ['90 Days', 90]], @days) -%>
+      </td>
+      <td>
+        <%= label_tag 'Device' %><br />
+        <%= collection_select :device, :id, Device.order('name'), :id, :name_model_serial %>
+      </td>
+      <td><%= submit_tag 'Graph' %></td>
+    </tr></table>
+    </fieldset>
+  <% end %>
+</div>
+
+<div id='my_id4'>
+<%= high_chart("my_id4", @chart) %>
+</div>

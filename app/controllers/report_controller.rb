@@ -143,4 +143,46 @@ class ReportController < ApplicationController
 #     render 'counters/index'
   end
 
+  def graph
+    @days = 30
+    if (params.nil? or params[:device].nil? or params[:device][:id].empty?)
+      @chart = LazyHighCharts::HighChart.new('graph') do |f|
+        f.title(:text => "No device selected")
+      end
+    else
+      if (not params[:days].nil? and not params[:days].empty?)
+        @days = params[:days].to_i
+      end
+      @device_id = params[:device][:id]
+      @device = Device.find @device_id
+      misfeed_alerts = Alert.where("device_id=#{@device_id} and alert_msg regexp 'misfeed' and alert_date > date_sub(curdate(), interval #{@days}  day)").group('date(alert_date)').count
+      maint_alerts = Alert.where("device_id=#{@device_id} and alert_msg regexp 'maintenance' and alert_date > date_sub(curdate(), interval #{@days} day)").group('date(alert_date)').count
+      service_alerts = Alert.where("device_id=#{@device_id} and alert_msg regexp 'service' and alert_date > date_sub(curdate(), interval #{@days} day)").group('date(alert_date)').count
+      misfeed_data = Hash.new
+      maint_data = Hash.new
+      service_data = Hash.new
+      (@days.days.ago.to_date..Date.today).map do |date|
+        misfeed_data[date] = misfeed_alerts[date].nil? ? 0 : misfeed_alerts[date]
+        maint_data[date] = maint_alerts[date].nil? ? 0 : maint_alerts[date]
+        service_data[date] = service_alerts[date].nil? ? 0 : service_alerts[date]
+      end
+      @chart = LazyHighCharts::HighChart.new('graph') do |f|
+        f.title({:text => "Alerts for #{@device.name}"})
+        f.xAxis(:type => 'datetime')
+        f.series(:type => 'line', :name => 'Misfeed', 
+                :pointInterval => 1.day,
+                :pointStart => @days.days.ago.to_date,
+                :data => misfeed_data.to_a )
+        f.series(:type => 'line', :name => 'Maintenance Request', 
+                :pointInterval => 1.day,
+                :pointStart => @days.days.ago.to_date,
+                :data => maint_data.to_a )
+        f.series(:type => 'line', :name => 'Service', 
+                :pointInterval => 1.day,
+                :pointStart => @days.days.ago.to_date,
+                :data => service_data.to_a )
+
+      end
+    end
+  end
 end
