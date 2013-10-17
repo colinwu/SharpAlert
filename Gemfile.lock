@@ -50,7 +50,7 @@ GEM
       multi_json (~> 1.0)
     fastercsv (1.5.5)
     getopt (1.4.1)
-    googlecharts (1.6.8)
+    hash-deep-merge (0.1.1)
     highline (1.6.15)
     hike (1.2.1)
     i18n (0.6.1)
@@ -59,6 +59,9 @@ GEM
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.7.6)
+    lazy_high_charts (1.4.3)
+      bundler (>= 1.0)
+      hash-deep-merge
     libv8 (3.11.8.13)
     mail (2.4.4)
       i18n (>= 0.4.0)
@@ -138,8 +141,8 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   csv-mapper
   getopt
-  googlecharts
   jquery-rails
+  lazy_high_charts
   minitest
   mocha
   mysql2

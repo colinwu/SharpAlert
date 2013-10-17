@@ -58,7 +58,7 @@
     <% dev = Device.find(dev_id) %>
     <td><%= link_to dev.name, alerts_path + "?msg_q=#{@msg_q}&model_q=#{dev.model}&serial_q=#{dev.serial}&commit=", :title => "#{dev.model}, #{dev.serial}, #{dev.code}" %></td>
     <% for date in @dates %>
-      <td><%= @alert_counts[[dev_id,date]].nil? ? '' : @alert_counts[[dev_id,date]] %></td>
+      <td><%= @alert_counts[[dev_id,date]].nil? ? '' : link_to(@alert_counts[[dev_id,date]], alerts_path + "?msg_q=#{@msg_q}&date_q=#{date}&model_q=#{dev.model}&serial_q=#{dev.serial}&commit=", :title => "View these alerts") %></td>
     <% end %>
     </tr>
   <% end %>
