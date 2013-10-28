@@ -1,10 +1,9 @@
 SharpApp::Application.routes.draw do
   get "report/index"
   
-  get "report/graph"
-  
+  get "report/alerts_graph"
+  get "report/volume_graph"
   get "report/frequency"
-
   get "report/volume"
 
   resources :print_volumes

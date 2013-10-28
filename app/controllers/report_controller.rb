@@ -143,7 +143,11 @@ class ReportController < ApplicationController
 #     render 'counters/index'
   end
 
-  def graph
+  # Produce chart of number of daily "Misfeed", "Maintenance Request" and
+  # "Call for Service" alerts for a single device over the past 30-, 60-, or 90-days.
+  # Actually the number of days can be arbitrary but I only provide selection
+  # options for those three.
+  def alerts_graph
     @days = 30
     if (params.nil? or params[:device].nil? or params[:device][:id].empty?)
       @chart = LazyHighCharts::HighChart.new('graph') do |f|
@@ -166,23 +170,41 @@ class ReportController < ApplicationController
         maint_data[date] = maint_alerts[date].nil? ? 0 : maint_alerts[date]
         service_data[date] = service_alerts[date].nil? ? 0 : service_alerts[date]
       end
-      @chart = LazyHighCharts::HighChart.new('graph') do |f|
-        f.title({:text => "Alerts for #{@device.name}"})
-        f.xAxis(:type => 'datetime')
-        f.series(:type => 'line', :name => 'Misfeed', 
+      test_data = [['Date.UTC(2013,8,12)', 5],['2013-09-15'.to_date, 7],['2013-10-01'.to_date,4]]
+      @chart = LazyHighCharts::HighChart.new('chart') do |f|
+        f.title( {:text => "Alerts for #{@device.name}"} )
+        f.xAxis( :type => 'datetime' )
+        f.series( :type => 'line', :name => 'Misfeed', 
                 :pointInterval => 1.day,
                 :pointStart => @days.days.ago.to_date,
                 :data => misfeed_data.to_a )
-        f.series(:type => 'line', :name => 'Maintenance Request', 
+        f.series( :type => 'line', :name => 'Maintenance Request', 
                 :pointInterval => 1.day,
                 :pointStart => @days.days.ago.to_date,
                 :data => maint_data.to_a )
-        f.series(:type => 'line', :name => 'Service', 
+        f.series( :type => 'line', :name => 'Call for Service', 
                 :pointInterval => 1.day,
                 :pointStart => @days.days.ago.to_date,
                 :data => service_data.to_a )
-
+        f.series( :type => 'line', :name => 'test', :data => test_data )
       end
+    end
+  end
+
+  # Produce chart of bw and colour (if available) page counts between readings.
+  def volume_graph
+    @days = 30
+    if (params.nil? or params[:device].nil? or params[:device][:id].empty?)
+      @chart = LazyHighCharts::HighChart.new('graph') do |f|
+        f.title(:text => "No device selected")
+      end
+    else
+      if (not params[:days].nil? and not params[:days].empty?)
+        @days = params[:days].to_i
+      end
+      @device_id = params[:device][:id]
+      @device = Device.find @device_id
+      @last = Counter.latest(@device_id)
     end
   end
 end
