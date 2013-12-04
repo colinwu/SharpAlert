@@ -56,7 +56,7 @@
   <% for dev_id in @devices %>
     <tr class="<%= cycle('light','dark') %>">
     <% dev = Device.find(dev_id) %>
-    <td><%= link_to dev.name, report_graph_path +  "?device[id]=#{dev.id}&commit=", :title => "#{dev.model}, #{dev.serial}, #{dev.code}" %></td>
+    <td><%= link_to dev.name, report_alerts_graph_path +  "?device[id]=#{dev.id}&commit=", :title => "#{dev.model}, #{dev.serial}, #{dev.code}" %></td>
     <% for date in @dates %>
       <td><%= @alert_counts[[dev_id,date]].nil? ? '' : link_to(@alert_counts[[dev_id,date]], alerts_path + "?msg_q=#{@msg_q}&date_q=#{date}&model_q=#{dev.model}&serial_q=#{dev.serial}&commit=", :title => "View these alerts") %></td>
     <% end %>
