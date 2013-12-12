@@ -170,24 +170,23 @@ class ReportController < ApplicationController
         maint_data[date] = maint_alerts[date].nil? ? 0 : maint_alerts[date]
         service_data[date] = service_alerts[date].nil? ? 0 : service_alerts[date]
       end
-      test_data = [['2013-8-12'.to_date, 5],['2013-09-15'.to_time, 7],['2013-10-01'.to_time,4]]
       @chart = LazyHighCharts::HighChart.new('chart') do |f|
         f.type('scatter')
         f.title( {:text => "Alerts for #{@device.name}"} )
         f.xAxis( :type => 'datetime' )
-#         f.series( :type => 'line', :name => 'Misfeed', 
-#                 :pointInterval => 1.day,
-#                 :pointStart => @days.days.ago.to_date,
-#                 :data => misfeed_data.to_a )
-#         f.series( :type => 'line', :name => 'Maintenance Request', 
-#                 :pointInterval => 1.day,
-#                 :pointStart => @days.days.ago.to_date,
-#                 :data => maint_data.to_a )
-#         f.series( :type => 'line', :name => 'Call for Service', 
-#                 :pointInterval => 1.day,
-#                 :pointStart => @days.days.ago.to_date,
-#                 :data => service_data.to_a )
-        f.series( :name => 'test', :data => test_data )
+        f.series( :type => 'line', :name => 'Misfeed', 
+                  :pointInterval => 1.day,
+                  :pointStart => @days.days.ago.to_date,
+                  :data => misfeed_data.to_a )
+        f.series( :type => 'line', :name => 'Maintenance Request', 
+                  :pointInterval => 1.day,
+                  :pointStart => @days.days.ago.to_date,
+                  :data => maint_data.to_a )
+        f.series( :type => 'line', :name => 'Call for Service', 
+                  :pointInterval => 1.day,
+                  :pointStart => @days.days.ago.to_date,
+                  :data => service_data.to_a )
+#         f.series( :name => 'test', :data => test_data )
       end
     end
   end
