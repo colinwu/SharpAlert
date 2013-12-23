@@ -7,6 +7,7 @@
     <th>Max BW</th>
     <th>Ave Colour</th>
     <th>Max Colour</th>
+    <th>Lifetime Vol</th>
   </tr>
   <% for print_volume in @print_volumes %>
     <tr class="<%= cycle('light','dark')%>">
@@ -15,6 +16,7 @@
       <td class='right-justify'><%= number_with_delimiter(print_volume.max_bw) %></td>
       <td class='right-justify'><%= number_with_delimiter(print_volume.ave_c) %></td>
       <td class='right-justify'><%= number_with_delimiter(print_volume.max_c) %></td>
+      <td class='right-justify'><%= number_with_delimiter(print_volume.lifetime) %></td>
       <td><%= link_to "Edit", edit_print_volume_path(print_volume) %></td>
       <td><%= link_to "Destroy", print_volume, :confirm => 'Are you sure?', :method => :delete %></td>
     </tr>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130614143400) do
+ActiveRecord::Schema.define(:version => 20131223161250) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -126,6 +126,7 @@ ActiveRecord::Schema.define(:version => 20130614143400) do
     t.integer  "max_c"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "lifetime"
   end
 
 end

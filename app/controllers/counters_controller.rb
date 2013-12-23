@@ -30,8 +30,10 @@ class CountersController < ApplicationController
     @healthc = Hash.new
     @bw_ratio = Hash.new
     @c_ratio = Hash.new
+    @lifetime = Hash.new
     
     @devices.each do |d|
+      @lifetime[d.device_id] = d.device.print_volume.lifetime
       if (params[:end_q].nil? or params[:end_q].empty?)
         @last[d.device_id] = Counter.latest(d.device_id)
       else

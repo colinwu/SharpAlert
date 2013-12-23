@@ -77,16 +77,17 @@ opt = Getopt::Std.getopts('d:')
 if opt['d']
   dir = opt['d']
 #   puts "Directory specified. Read input from file."
-  if File.exist?(dir + '/textfile1')
-    f = File.open(dir + '/textfile1')
-  elsif File.exist?(dir + '/textfile0')
-    f = File.open(dir + '/textfile0')
-  else
-    f = $stdin
-  end
-else
-  f = $stdin
+#   if File.exist?(dir + '/textfile1')
+#     f = File.open(dir + '/textfile1')
+#   elsif File.exist?(dir + '/textfile0')
+#     f = File.open(dir + '/textfile0')
+#   else
+#     f = $stdin
+#   end
 end
+
+f = $stdin
+
 
 alert = Alert.new
 
@@ -119,6 +120,9 @@ while (line = f.gets)
   elsif line =~ /^From: (.+)/
     from = $1
   end
+  
+#   next if name.nil? or model.nil? or serial.nil? or code.nil? or msg.nil? or from.nil? or alert.alert_date.nil?
+  
 end
 
 # retrieve details of the last alert for this device before committing this alert

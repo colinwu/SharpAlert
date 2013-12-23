@@ -16,6 +16,7 @@
     <th>Color Total</th>
     <th>B&amp;W Diff</th>
     <th>Color Diff</th>
+    <th>Age</th>
   </tr>
   <% for d in @devices %>
   <% bkgnd = cycle('light', 'dark') %>
@@ -48,6 +49,8 @@
     <td><%=h @last[d.device_id].status_date.to_formatted_s(:db) %></td>
     <td class="right-justify"><%=h number_with_delimiter(@newbw[d.device_id]) %></td>
     <td class="right-justify"><%=h number_with_delimiter(@newc[d.device_id]) %></td>
+    <% age = ((@newbw[d.device_id] + @newc[d.device_id]) * 100.0 / @lifetime[d.device_id]).round(1) %>
+    <td class="right-justify"><%=h age %>%</td>
   </tr>
   <% end %>
 </table>
