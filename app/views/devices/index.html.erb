@@ -14,10 +14,10 @@
   </tr>
   <tr>
 <!--     <th></th> -->
-    <th>Name</th>
-    <th>Model</th>
-    <th>Serial</th>
-    <th>Code</th>
+    <th><%= link_to 'Name', "/devices?sort=name&#{@request}", :title => "Sort by Device Name" -%></th>
+    <th><%= link_to 'Model', "/devices?sort=model&#{@request}", :title => "Sort by Model" -%></th>
+    <th><%= link_to "Serial", "/devices?sort=serial&#{@request}", :title => "Sort by Serial Number" -%></th>
+    <th><%= link_to "Code", "/devices?sort=code&#{@request}", :title => "Sort by machine code" -%></th>
     <th>Client</th>
   </tr>
   <% for device in @devices %>

@@ -271,3 +271,4 @@ end
 unless @first.nil?
   NotifyMailer.counter_alert(@first, @last).deliver
 end
+system("/bin/rm -r #{dir}")

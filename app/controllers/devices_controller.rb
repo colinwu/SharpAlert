@@ -1,6 +1,13 @@
 class DevicesController < ApplicationController
   def index
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
+    if params[:sort].nil? or params[:sort].empty?
+      @sort = 'name'
+    else
+      @sort = params[:sort]
+    end
+    
+    @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
     unless (params[:commit].nil?)
       where_array = Array.new
       condition_array = ['place holder']
@@ -36,7 +43,7 @@ class DevicesController < ApplicationController
         condition_array = []
       end
     end
-    @devices = Device.order('devices.name').where(condition_array).paginate(:page => params[:page], :per_page => 30, :include => :client)
+    @devices = Device.order(@sort).where(condition_array).paginate(:page => params[:page], :per_page => 30, :include => :client)
   end
 
   def show

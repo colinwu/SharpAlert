@@ -9,3 +9,54 @@ Will devices (and controls) need an admin_id as well? Test.
 Simpler solution: allow only the logged-in user (super user) to make changes. Everyone else can only view.
 
 May need to add a column for "received timestamp" to both alert and counter tables. Some printers do not have the correct time. Is it reasonable to expect all printers to be synchronised to a SNTP server? There are plenty of public ones and any printer that's networked should be.
+
+=============
+Use fetchmail to download email messages from dha@sharpsec.com rather than having the mail server (sharpmail.sharpamericas.com) forward them. Paul thinks this will keep it under IT's radar.
+
+fetchmail options to use:
+-k
+  keep retrieved messages on the mail server
+
+-p IMAP
+  Protocol to use to talk to the mail server
+  
+--fetchlimit <number>
+  For testing only - limits the number of messges fetched from the mail server per connection.
+  
+-u <username>
+
+---------------------------
+.fetchmailrc file
+
+# Specify mail server to poll for new messages
+poll sharpmail.sharpamericas.com
+  protocol IMAP
+  # Deliver new messages from user "dha" to local user "sharpmon" and
+  # leave message on the server
+  user "dha" with password "W3lcome1" there is "sharpmon" here keep
+# Put into daemon mode, polling every 300 seconds (5 min)
+# set daemon 300
+# Direct error mail to the local postmaster
+set no bouncemail
+# Keep undeliverable messages on the server
+set softbounce
+# Use syslog
+set syslog
+
+---------------------------
+Plan:
+
+- Access DHA inbox with Thunderbird
+- Delete all "Mail Delivery System" messages
+- Mark all messages as read
+- Disable redirect rule on DHA inbox
+- TO TEST: 
+    - run fetchmail manually once DHA has received one new alert
+    - see if it shows up in RED db
+- start fetchmail on RED server
+- make sure fetchmail will automatically start on reboot - use cron instead of daemon
+
+===============================
+Handle different languages
+
+Most likely languages we need to worry about are English and French

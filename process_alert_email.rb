@@ -204,8 +204,7 @@ system("/bin/rm -r #{dir}")
 if not send_to.nil? and not period.nil? and (last_time.nil? or (alert.alert_date <=> last_time + period) > 0)
   # Send alert
   NotifyMailer.notify_email(alert).deliver
-  # but do not let Procmail forward a copy
-  exit 1
+#   exit 1
 else
   exit 1
 end
