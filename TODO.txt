@@ -59,4 +59,6 @@ Plan:
 ===============================
 Handle different languages
 
-Most likely languages we need to worry about are English and French
+Most likely languages we need to worry about are English and French. Where do we need care? 
+- both process_*_email.rb programs.
+- wherever we search for, or process alert messages

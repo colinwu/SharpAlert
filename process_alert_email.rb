@@ -16,6 +16,10 @@
 
 # Parse the Jam Trouble attachment file in directory dir for the jam code.
 def getJamCode(dir)
+  unless (File.exists?(dir + '/E-mail DIAG Jam Trouble Data.R05'))
+    return 'unknown'
+  end
+  
   f = File.open(dir + '/E-mail DIAG Jam Trouble Data.R05')
   jamcode = 'unknown'
   
