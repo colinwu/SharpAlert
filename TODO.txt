@@ -10,7 +10,7 @@ Simpler solution: allow only the logged-in user (super user) to make changes. Ev
 
 May need to add a column for "received timestamp" to both alert and counter tables. Some printers do not have the correct time. Is it reasonable to expect all printers to be synchronised to a SNTP server? There are plenty of public ones and any printer that's networked should be.
 
-=============
+============= DONE =============
 Use fetchmail to download email messages from dha@sharpsec.com rather than having the mail server (sharpmail.sharpamericas.com) forward them. Paul thinks this will keep it under IT's radar.
 
 fetchmail options to use:
@@ -56,9 +56,16 @@ Plan:
 - start fetchmail on RED server
 - make sure fetchmail will automatically start on reboot - use cron instead of daemon
 
-===============================
+============= TODO ==============
 Handle different languages
 
 Most likely languages we need to worry about are English and French. Where do we need care? 
 - both process_*_email.rb programs.
 - wherever we search for, or process alert messages
+
+============= TODO ==============
+Do something to predict when toner needs to be added based on past usage. Must have at least two data points (i.e. two "add toner" alerts). Predict using linear regression.
+
+* Can not assume there will always be an "Add toner" alert. Some people *may* change
+  toner cartridge before that point. 
+* There *should* always be at least one "toner supply is low" alert.

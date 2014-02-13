@@ -17,10 +17,17 @@ class AlertsController < ApplicationController
   
   def index
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
-    if params[:sort].nil?
+    if (params[:sort].nil?)
       @sort = 'alerts.id'
-    else
+    elsif (params[:sort] == 'devices.model' or 
+           params[:sort] == 'devices.serial' or 
+           params[:sort] == 'devices.code' or
+           params[:sort] == 'alert_msg')
+      @sort = "#{params[:sort]},devices.name,alert_date"
+    elsif (params[:sort] == 'devices.name')
       @sort = "#{params[:sort]},alert_date"
+    else
+      @sort = params[:sort]
     end
     unless (params[:commit].nil?)
       where_array = Array.new
@@ -69,9 +76,9 @@ class AlertsController < ApplicationController
         condition_array << @msg_q.condition
         comment_array << "Message = #{@msg_q}"
       end
-      if(not params['sort'].nil? and not params['sort'].empty?)
-        @sort = params['sort']
-      end
+#       if(not params['sort'].nil? and not params['sort'].empty?)
+#         @sort = params['sort']
+#       end
       unless where_array.empty?
         condition_array[0] = where_array.join(' and ')
         comment = comment_array.join(' and ')
