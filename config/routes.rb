@@ -1,4 +1,10 @@
 SharpApp::Application.routes.draw do
+  resources :maint_counters
+
+  resources :sheet_counts
+
+  resources :jam_stats
+
   get "report/index"
   
   get "report/alerts_graph"

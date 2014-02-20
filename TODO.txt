@@ -46,7 +46,7 @@ set syslog
 ---------------------------
 Plan:
 
-- Access DHA inbox with Thunderbird
+- Access DHA inbox with Thunderbirdq
 - Delete all "Mail Delivery System" messages
 - Mark all messages as read
 - Disable redirect rule on DHA inbox
@@ -55,6 +55,9 @@ Plan:
     - see if it shows up in RED db
 - start fetchmail on RED server
 - make sure fetchmail will automatically start on reboot - use cron instead of daemon
+
+============= TODO ==============
+Fix alert_date for records between 2014-02-13 15:32:44 (8501629700) and 2014-02-18:17:50 (7507223Y00). Need to subtract 5 hrs from them.
 
 ============= TODO ==============
 Handle different languages
@@ -69,3 +72,83 @@ Do something to predict when toner needs to be added based on past usage. Must h
 * Can not assume there will always be an "Add toner" alert. Some people *may* change
   toner cartridge before that point. 
 * There *should* always be at least one "toner supply is low" alert.
+
+============= TODO ==============
+Start tracking bw and colour sheet counts for all alerts except "Load Paper" and "Job log full". Also track maintenance counters available in file "E-mail DIAG Maintenance Counter Data.R09".
+
+* Need new tables: 
+  - jam_stats (from file "E-mail DIAG Jam Trouble Data.R05")
+    - jam code
+    - paper type
+    - paper code
+    - jam type (doc feeder (DF) or machine body (MB))
+    - BELONGS_TO :alerts
+
+  There will be one sheet_count and maint_counter entry for each alert.
+  
+  - sheet_counts (from file "E-mail DIAG Job Counter Data.R08")
+    - skip 232
+    - bw (offset 0xe8)
+    - color (offset 0xec)
+    - BELONGS_TO :alerts
+    
+  - maint_counters (from file "E-mail DIAG Maintenance Counter Data.R09")
+    - all counters are 4 bytes long
+    - skip 60
+    - maint_counter (total, color at offsets 0x3c, 0x40)
+    - drum_print_(b,c,m,y at 0x44, 0x48, 0x4c, 0x50)
+    - dev_print_(b,c,m,y at 0x54, 0x58, 0x5c, 0x60)
+    - skip 16
+    - drum_dist_(b,c,m,y at 0x74, 0x78, 0x7c, 0x80)
+    - dev_dist_(b,c,m,y at 0x84, 0x88, 0x8c, 0x90)
+    - skip 16
+    - scan (at 0xa4)
+    - spf_counter (at 0xa8)
+    - skip 60
+    - ptu_print (ptu = Primary Transfer Unit) (at 0xe8)
+    - ptu_distance (at 0xec)
+    - skip 4
+    - stu_print (stu = Secondary Transfer Unit) (at 0xf4)
+    - stu_distance (at 0xf8)
+    - stu_days (at 0xfc)
+    - fusing_print (at 0x100)
+    - fusing_days (at 0x104)
+    - fusing_web_clean (at 0x108)
+    - skip 16
+    - toner_motor_(b,c,m,y at 0x11c, 0x120, 0x124, 0x128)
+    - drum_rotation_(b,c,m,y at 0x12c, 0x130, 0x134, 0x138)
+    - dev_rotation_(b,c,m,y at 0x13c, 0x140, 0x144, 0x148)
+    - BELONGS_TO :alerts
+
+* Modify Alert model
+  - HAS_ONE :jam_stat
+  - HAS_ONE :sheet_count
+  - HAS_ONE :maint_counter
+  
+* Only works for MFPs that send dealer attachments
+
+
+----- Things to test
+Parse the Jam Trouble file to see how well the history match up with past alerts (JamTroubleDecode.rb) RESULT: GENERALLY GOOD 
+
+----- Implementation
+Phase I
+- Start recording counters for all alerts, whenever available
+- Ignore counters for "Load Paper", and "Job Log" alerts
+- For all alerts (other than the two above) we want to capture
+  - bw and colour sheet count
+  - all maintenance counters
+- For "Misfeed" and "Call for Service" we also want the jam code and trouble code, respectively. (The trouble code we already have from the text of the alert.)
+
+  Phase I testing
+  - process plain (no attachments) alert
+  - process alert with attachments - verify numbers are all correct
+  
+Phase II
+- Figure out how to show the data
+  
+Phase III
+- Try to match up jam and trouble history with past alerts
+
+Phase IV
+- Create queries that make use of counters to predict future events

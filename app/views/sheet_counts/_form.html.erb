@@ -1,0 +1,16 @@
+<%= form_for @sheet_count do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :bw %><br />
+    <%= f.number_field :bw %>
+  </p>
+  <p>
+    <%= f.label :color %><br />
+    <%= f.number_field :color %>
+  </p>
+  <p>
+    <%= f.label :alert_id %><br />
+    <%= f.number_field :alert_id %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

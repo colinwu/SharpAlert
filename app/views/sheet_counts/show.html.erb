@@ -1,0 +1,20 @@
+<% title "Sheet Count" %>
+
+<p>
+  <strong>Bw:</strong>
+  <%= @sheet_count.bw %>
+</p>
+<p>
+  <strong>Color:</strong>
+  <%= @sheet_count.color %>
+</p>
+<p>
+  <strong>Alert:</strong>
+  <%= @sheet_count.alert_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_sheet_count_path(@sheet_count) %> |
+  <%= link_to "Destroy", @sheet_count, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", sheet_counts_path %>
+</p>

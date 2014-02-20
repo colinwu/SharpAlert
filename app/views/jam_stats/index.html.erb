@@ -1,0 +1,25 @@
+<% title "Jam Stats" %>
+
+<table>
+  <tr>
+    <th>Jam Code</th>
+    <th>Paper Type</th>
+    <th>Paper Code</th>
+    <th>Jam Type</th>
+    <th>Alert</th>
+  </tr>
+  <% for jam_stat in @jam_stats %>
+    <tr>
+      <td><%= jam_stat.jam_code %></td>
+      <td><%= jam_stat.paper_type %></td>
+      <td><%= jam_stat.paper_code %></td>
+      <td><%= jam_stat.jam_type %></td>
+      <td><%= jam_stat.alert_id %></td>
+      <td><%= link_to "Show", jam_stat %></td>
+      <td><%= link_to "Edit", edit_jam_stat_path(jam_stat) %></td>
+      <td><%= link_to "Destroy", jam_stat, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Jam Stat", new_jam_stat_path %></p>

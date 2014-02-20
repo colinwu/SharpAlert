@@ -1,0 +1,32 @@
+<% title "Maint Counter" %>
+
+<p>
+  <strong>Maint Total:</strong>
+  <%= @maint_counter.maint_total %>
+</p>
+<p>
+  <strong>Maint Color:</strong>
+  <%= @maint_counter.maint_color %>
+</p>
+<p>
+  <strong>Drum Print B:</strong>
+  <%= @maint_counter.drum_print_b %>
+</p>
+<p>
+  <strong>Drum Print C:</strong>
+  <%= @maint_counter.drum_print_c %>
+</p>
+<p>
+  <strong>Drum Print M:</strong>
+  <%= @maint_counter.drum_print_m %>
+</p>
+<p>
+  <strong>Drum Print Y:</strong>
+  <%= @maint_counter.drum_print_y %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_maint_counter_path(@maint_counter) %> |
+  <%= link_to "Destroy", @maint_counter, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", maint_counters_path %>
+</p>

@@ -1,0 +1,13 @@
+one:
+  jam_code: 1
+  paper_type: MyString
+  paper_code: MyString
+  jam_type: MyString
+  alert_id: 1
+
+two:
+  jam_code: 1
+  paper_type: MyString
+  paper_code: MyString
+  jam_type: MyString
+  alert_id: 1

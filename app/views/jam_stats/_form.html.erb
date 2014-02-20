@@ -1,0 +1,24 @@
+<%= form_for @jam_stat do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :jam_code %><br />
+    <%= f.number_field :jam_code %>
+  </p>
+  <p>
+    <%= f.label :paper_type %><br />
+    <%= f.text_field :paper_type %>
+  </p>
+  <p>
+    <%= f.label :paper_code %><br />
+    <%= f.text_field :paper_code %>
+  </p>
+  <p>
+    <%= f.label :jam_type %><br />
+    <%= f.text_field :jam_type %>
+  </p>
+  <p>
+    <%= f.label :alert_id %><br />
+    <%= f.number_field :alert_id %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

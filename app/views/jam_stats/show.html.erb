@@ -1,0 +1,28 @@
+<% title "Jam Stat" %>
+
+<p>
+  <strong>Jam Code:</strong>
+  <%= @jam_stat.jam_code %>
+</p>
+<p>
+  <strong>Paper Type:</strong>
+  <%= @jam_stat.paper_type %>
+</p>
+<p>
+  <strong>Paper Code:</strong>
+  <%= @jam_stat.paper_code %>
+</p>
+<p>
+  <strong>Jam Type:</strong>
+  <%= @jam_stat.jam_type %>
+</p>
+<p>
+  <strong>Alert:</strong>
+  <%= @jam_stat.alert_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_jam_stat_path(@jam_stat) %> |
+  <%= link_to "Destroy", @jam_stat, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", jam_stats_path %>
+</p>

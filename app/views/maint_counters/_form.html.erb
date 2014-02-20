@@ -1,0 +1,28 @@
+<%= form_for @maint_counter do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :maint_total %><br />
+    <%= f.number_field :maint_total %>
+  </p>
+  <p>
+    <%= f.label :maint_color %><br />
+    <%= f.number_field :maint_color %>
+  </p>
+  <p>
+    <%= f.label :drum_print_b %><br />
+    <%= f.number_field :drum_print_b %>
+  </p>
+  <p>
+    <%= f.label :drum_print_c %><br />
+    <%= f.number_field :drum_print_c %>
+  </p>
+  <p>
+    <%= f.label :drum_print_m %><br />
+    <%= f.number_field :drum_print_m %>
+  </p>
+  <p>
+    <%= f.label :drum_print_y %><br />
+    <%= f.number_field :drum_print_y %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

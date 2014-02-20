@@ -16,15 +16,16 @@
 
 # Parse the Jam Trouble attachment file in directory dir for the jam code.
 def getJamCode(dir)
-  unless (File.exists?(dir + '/E-mail DIAG Jam Trouble Data.R05'))
-    return 'unknown'
+  # returns JamStat record id or nil if no matching history found
+  unless (!dir.nil? and File.exists?(dir + '/E-mail DIAG Jam Trouble Data.R05'))
+    return nil
   end
   
   f = File.open(dir + '/E-mail DIAG Jam Trouble Data.R05')
-  jamcode = 'unknown'
   
   title = f.read(15)
   if (title == 'JAM TROUBLE HIS')
+    js = JamStat.new()
     f.read(35)
     # read and convert send date and time
     yr = "%02x" % f.read(1).ord
@@ -34,12 +35,11 @@ def getJamCode(dir)
     min = "%02x" % f.read(1).ord
     sec = "%02x" % f.read(1).ord
     sentdate = yr + mon + day + hr + min
-    puts "Sent date: #{sentdate}"
-    f.read(1)
-    dfcount = f.read(1).ord
+
+    dfcount = f.read(2).unpack('S>')[0]
     # start of first DF history record - most recent first
     f.read(1)
-    if (dfcount != 0)
+    if (dfcount > 0)
       jamcode = '%02x' % f.read(1).ord
       yr = "%02x" % f.read(1).ord
       mon = "%02x" % f.read(1).ord
@@ -48,30 +48,122 @@ def getJamCode(dir)
       min = "%02x" % f.read(1).ord
       sec = "%02x" % f.read(1).ord
       recdate = yr + mon + day + hr + min
-      f.read(12)               # skip over the rest of this record
+      paper_code = "%02x" % f.read(1).ord
+      paper_type = "%02x" % f.read(1).ord
+      f.read(2) # skip over the 0xffff
+      sheet_count_bw = f.read(4).unpack('L>')[0]
+      sheet_count_colour = f.read(4).unpack('L>')[0]
+      
       f.read(20 * (dfcount-1)) # skip over all remaining records
       #       puts "First DF/MB record date: #{recdate}"
     end
     if (sentdate == recdate)
-      return jamcode
+      js.jam_code = jamcode
+      js.paper_type = paper_type
+      js.paper_code = paper_code
+      js.jam_type = 'DF'
+      js.save
+      f.close
+      return js
     else
-      # skip over the MB count - we don't care since we're only interested
-      # in the first record
-      f.read(2) 
-      f.read(1)
-      jamcode = '%02x' % f.read(1).ord
-      yr = "%02x" % f.read(1).ord
-      mon = "%02x" % f.read(1).ord
-      day = "%02x" % f.read(1).ord
-      hr = "%02x" % f.read(1).ord
-      min = "%02x" % f.read(1).ord
-      sec = "%02x" % f.read(1).ord
-      recdate = yr + mon + day + hr + min
-      #       puts "First MB record date: #{recdate}"
+      # see if there is a matching MB jam history
+      mbcount = f.read(2).unpack('S>')[0]
+      if (mbcount > 0)
+        f.read(1)
+        jamcode = '%02x' % f.read(1).ord
+        yr = "%02x" % f.read(1).ord
+        mon = "%02x" % f.read(1).ord
+        day = "%02x" % f.read(1).ord
+        hr = "%02x" % f.read(1).ord
+        min = "%02x" % f.read(1).ord
+        sec = "%02x" % f.read(1).ord
+        recdate = yr + mon + day + hr + min
+        
+        paper_code = "%02x" % f.read(1).ord
+        paper_type = "%02x" % f.read(1).ord
+        f.read(2) # skip over the 0xffff
+        sheet_count_bw = f.read(4).unpack('L>')[0]
+        sheet_count_colour = f.read(4).unpack('L>')[0]
+      end
       if (sentdate == recdate)
-        return jamcode
+        js.jam_code = jamcode
+        js.paper_type = paper_type
+        js.paper_code = paper_code
+        js.jam_type = 'DF'
+        js.save
+        f.close
+        return js
+      else
+        f.close
+        return nil
       end
     end
+  else
+    f.close
+    return nil
+  end
+end
+
+def getSheetCount(dir)
+  # returns SheetCount record id or nil if error or none found
+  unless (!dir.nil? and File.exists?(dir + '/E-mail DIAG Job Counter Data.R08'))
+    return nil
+  end
+  f = File.open(dir + '/E-mail DIAG Job Counter Data.R08')
+  title = f.read(16)
+  if (title == 'JOB COUNTER DATA')
+    sc = SheetCount.new()
+    f.read(216)
+    (sc.bw, sc.color) = f.read(8).unpack('L>L>')
+    sc.save
+    f.close
+    return sc
+  else
+    f.close
+    return nil
+  end
+end
+
+def getMaintCounter(dir)
+  # returns MaintCounter record id or nil if error or none found
+  unless (!dir.nil? and File.exists?(dir + '/E-mail DIAG Maintenance Counter Data.R09'))
+    return nil
+  end
+  f = File.open(dir + '/E-mail DIAG Maintenance Counter Data.R09')
+  title = f.read(15)
+  if (title == 'MAINTE CNT DATA')
+    mc = MaintCounter.new
+    f.read(45)
+    (mc.maint_total,mc.maint_color) = f.read(8).unpack('L>L>')
+    (mc.drum_print_b,mc.drum_print_c,mc.drum_print_m,mc.drum_print_y) =
+        f.read(16).unpack('L>' * 4)
+    (mc.dev_print_b,mc.dev_print_c,mc.dev_print_m,mc.dev_print_y) =
+        f.read(16).unpack('L>' * 4)
+    f.read(16)
+    (mc.drum_dist_b,mc.drum_dist_c,mc.drum_dist_m,mc.drum_dist_y) =
+        f.read(16).unpack('L>' * 4)
+    (mc.dev_dist_b,mc.dev_dist_c,mc.dev_dist_m,mc.dev_dist_y) =
+        f.read(16).unpack('L>' * 4)
+    f.read(16)
+    (mc.scan,mc.spf_count) = f.read(8).unpack('L>L>')
+    f.read(60)
+    (mc.ptu_print,mc.ptu_dist) = f.read(8).unpack('L>L>')
+    f.read(4)
+    (mc.stu_print,mc.stu_dist,mc.stu_days) = f.read(12).unpack('L>' * 3)
+    (mc.fusing_print,mc.fusing_days,mc.fusing_web_clean) = f.read(12).unpack('L>' * 3)
+    f.read(16)
+    (mc.toner_motor_b,mc.toner_motor_c,mc.toner_motor_m,mc.toner_motor_y) =
+        f.read(16).unpack('L>' * 4)
+    (mc.drum_rotation_b,mc.drum_rotation_c,mc.drum_rotation_m,mc.drum_rotation_y) =
+        f.read(16).unpack('L>' * 4)
+    (mc.dev_rotation_b,mc.dev_rotation_c,mc.dev_rotation_m,mc.dev_rotation_y) =
+        f.read(16).unpack('L>' * 4)
+    mc.save
+    f.close
+    return mc
+  else
+    f.close
+    return nil
   end
 end
 
@@ -80,18 +172,9 @@ require 'getopt/std'
 opt = Getopt::Std.getopts('d:')
 if opt['d']
   dir = opt['d']
-#   puts "Directory specified. Read input from file."
-#   if File.exist?(dir + '/textfile1')
-#     f = File.open(dir + '/textfile1')
-#   elsif File.exist?(dir + '/textfile0')
-#     f = File.open(dir + '/textfile0')
-#   else
-#     f = $stdin
-#   end
 end
 
 f = $stdin
-
 
 alert = Alert.new
 
@@ -110,13 +193,22 @@ while (line = f.gets)
     if msg =~ /Call for service/
       codes = f.gets.strip
       msg += ": #{codes}"
+      sc = getSheetCount(dir)
+      mc = getMaintCounter(dir)
     elsif msg =~ /Maintenance required. Code:(.+)$/
       codes = $1
+      sc = getSheetCount(dir)
+      mc = getMaintCounter(dir)
     elsif msg =~ /Misfeed/i
-      jamcode = getJamCode(dir)
-      unless jamcode.nil?
-        msg += " (Jam code 0x#{jamcode})"
+      js = getJamCode(dir)
+      unless js.nil?
+        msg += " (Jam code #{js.jam_code})"
       end
+      sc = getSheetCount(dir)
+      mc = getMaintCounter(dir)
+    elsif msg =~ /toner/i
+      sc = getSheetCount(dir)
+      mc = getMaintCounter(dir)
     end
     alert.alert_msg = msg
   elsif line =~ /^(\d{4,4}\/\d{2,2}\/\d{2,2}\s+\d{2,2}:\d{2,2}:\d{2,2})/
@@ -131,6 +223,18 @@ end
 
 # retrieve details of the last alert for this device before committing this alert
 alert.save
+unless mc.nil?
+  mc.alert_id = alert.id
+  mc.save
+end
+unless sc.nil?
+  sc.alert_id = alert.id
+  sc.save
+end
+unless js.nil?
+  js.alert_id = alert.id
+  js.save
+end
 
 # retrieve (or create using defaults) the notification profile for this device.
 @d = Device.find_by_serial_and_model(serial,model)
