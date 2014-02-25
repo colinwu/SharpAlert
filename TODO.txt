@@ -56,8 +56,8 @@ Plan:
 - start fetchmail on RED server
 - make sure fetchmail will automatically start on reboot - use cron instead of daemon
 
-============= TODO ==============
-Fix alert_date for records between 2014-02-13 15:32:44 (8501629700) and 2014-02-18:17:50 (7507223Y00). Need to subtract 5 hrs from them.
+============= DONE ==============
+Fix alert_date for records between alert id 67062 (2014-02-13 15:32:44 s/n:8501629700) and alert id 68360 (2014-02-18 18:17:50 s/n:7507223Y00). Need to subtract 5 hrs from them. Need to subtract 5 hours.
 
 ============= TODO ==============
 Handle different languages
@@ -132,7 +132,7 @@ Start tracking bw and colour sheet counts for all alerts except "Load Paper" and
 Parse the Jam Trouble file to see how well the history match up with past alerts (JamTroubleDecode.rb) RESULT: GENERALLY GOOD 
 
 ----- Implementation
-Phase I
+Phase I  *** DEPLOYED ***
 - Start recording counters for all alerts, whenever available
 - Ignore counters for "Load Paper", and "Job Log" alerts
 - For all alerts (other than the two above) we want to capture
@@ -145,10 +145,14 @@ Phase I
   - process alert with attachments - verify numbers are all correct
   
 Phase II
-- Figure out how to show the data
-  
-Phase III
-- Try to match up jam and trouble history with past alerts
+- Reprocess available past alerts
+- modify process_alert_email.rb so old alerts are not duplicated
+- move a limited number of old message (dha@sharpsec.com) to a temp folder and use fetchmail to grab them and process them
+  - fetchmail --all --folder INBOX/temp
+  - after each iteration move the messages in the temp folder to an archive folder and delete them from sharpmon's mailbox
 
+Phase III
+- Figure out how to display the data
+  
 Phase IV
 - Create queries that make use of counters to predict future events

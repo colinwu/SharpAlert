@@ -35,11 +35,10 @@ def getJamCode(dir)
     min = "%02x" % f.read(1).ord
     sec = "%02x" % f.read(1).ord
     sentdate = yr + mon + day + hr + min
-
     dfcount = f.read(2).unpack('S>')[0]
     # start of first DF history record - most recent first
-    f.read(1)
     if (dfcount > 0)
+      f.read(1)
       jamcode = '%02x' % f.read(1).ord
       yr = "%02x" % f.read(1).ord
       mon = "%02x" % f.read(1).ord
@@ -89,7 +88,7 @@ def getJamCode(dir)
         js.jam_code = jamcode
         js.paper_type = paper_type
         js.paper_code = paper_code
-        js.jam_type = 'DF'
+        js.jam_type = 'MB'
         js.save
         f.close
         return js
@@ -176,8 +175,6 @@ end
 
 f = $stdin
 
-alert = Alert.new
-
 # Parse the alert message
 while (line = f.gets)
   if line =~ /^Device Name: (.+)/i
@@ -186,6 +183,9 @@ while (line = f.gets)
     model = $1
   elsif line =~ /^Serial Number: (\S+)/i
     serial = $1
+    if serial.empty? # ignore the alert if there is no serial number
+      exit
+    end
   elsif line =~ /^Machine Code: (.+)/i
     code = $1
   elsif line =~ /^!!!!! (.+) !!!!!/
@@ -193,51 +193,62 @@ while (line = f.gets)
     if msg =~ /Call for service/
       codes = f.gets.strip
       msg += ": #{codes}"
-      sc = getSheetCount(dir)
-      mc = getMaintCounter(dir)
     elsif msg =~ /Maintenance required. Code:(.+)$/
       codes = $1
-      sc = getSheetCount(dir)
-      mc = getMaintCounter(dir)
-    elsif msg =~ /Misfeed/i
-      js = getJamCode(dir)
-      unless js.nil?
-        msg += " (Jam code #{js.jam_code})"
-      end
-      sc = getSheetCount(dir)
-      mc = getMaintCounter(dir)
-    elsif msg =~ /toner/i
-      sc = getSheetCount(dir)
-      mc = getMaintCounter(dir)
     end
-    alert.alert_msg = msg
+    alert_msg = msg
   elsif line =~ /^(\d{4,4}\/\d{2,2}\/\d{2,2}\s+\d{2,2}:\d{2,2}:\d{2,2})/
-    alert.alert_date = $1
+    alert_date = $1
   elsif line =~ /^From: (.+)/
     from = $1
   end
-  
-#   next if name.nil? or model.nil? or serial.nil? or code.nil? or msg.nil? or from.nil? or alert.alert_date.nil?
-  
 end
 
-# retrieve details of the last alert for this device before committing this alert
-alert.save
-unless mc.nil?
-  mc.alert_id = alert.id
-  mc.save
+# Check if this alert already exists (in case we're processing old alerts)
+@d = Device.find_by_serial_and_model(serial,model)
+unless @d.nil?
+  # if the device does not exist (in the db) don't bother checking for old alert
+  alert = Alert.where("alert_date = '#{alert_date}' and (alert_msg = '#{alert_msg}' or alert_msg regexp 'Misfeed') and device_id = #{@d.id}").first
 end
-unless sc.nil?
-  sc.alert_id = alert.id
-  sc.save
+
+if alert.nil?
+  # No old alert exists that matches this one so create a new one
+  alert = Alert.new
+  alert.alert_date = alert_date
+  alert.alert_msg = alert_msg
+  alert.save
 end
-unless js.nil?
-  js.alert_id = alert.id
-  js.save
+
+
+unless (alert_msg =~ /paper/ or alert_msg =~ /records/) 
+  # ignore "Load Paper" and "job log full" alerts, also make sure there are no 
+  # SheetCount, MaintCounter and JamStat records already
+  if (alert.sheet_count.nil?)
+    sc = getSheetCount(dir)
+    unless sc.nil?
+      sc.alert_id = alert.id
+      sc.save
+    end
+  end
+  if (alert.maint_counter.nil?)
+    mc = getMaintCounter(dir)
+    unless mc.nil?
+      mc.alert_id = alert.id
+      mc.save
+    end
+  end
+  if (alert_msg =~ /Misfeed/ and alert.jam_stat.nil?)
+    puts "Retrieving Jam Stats"
+    js = getJamCode(dir)
+    unless js.nil?
+      puts "Jam Code = js.jam_code"
+      js.alert_id = alert.id
+      js.save
+    end
+  end
 end
 
 # retrieve (or create using defaults) the notification profile for this device.
-@d = Device.find_by_serial_and_model(serial,model)
 if @d.nil?
   ndef = Device.find_by_serial('default').notify_control
   @d = alert.create_device(
