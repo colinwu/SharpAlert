@@ -220,7 +220,7 @@ if alert.nil?
 end
 
 
-unless (alert_msg =~ /paper/ or alert_msg =~ /records/) 
+unless (alert_msg =~ /paper/ or alert_msg =~ /Job Log/) 
   # ignore "Load Paper" and "job log full" alerts, also make sure there are no 
   # SheetCount, MaintCounter and JamStat records already
   if (alert.sheet_count.nil?)
