@@ -13,6 +13,9 @@ class AlertsController < ApplicationController
   end
 
   def show
+    @alert = Alert.find(params[:id])
+    @mc = @alert.maint_counter
+    @sc = @alert.sheet_count
   end
   
   def index

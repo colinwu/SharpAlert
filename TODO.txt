@@ -102,22 +102,27 @@ Start tracking bw and colour sheet counts for all alerts except "Load Paper" and
     - drum_dist_(b,c,m,y at 0x74, 0x78, 0x7c, 0x80)
     - dev_dist_(b,c,m,y at 0x84, 0x88, 0x8c, 0x90)
     - skip 16
+    
     - scan (at 0xa4)
     - spf_counter (at 0xa8)
-    - skip 60
-    - ptu_print (ptu = Primary Transfer Unit) (at 0xe8)
-    - ptu_distance (at 0xec)
+    - skip 44
+    - mft_total (at 0xd8)
+    - tray_(1,2,3,4) (at 0xdc, 0xe0, 0xe4, 0xe8)
     - skip 4
-    - stu_print (stu = Secondary Transfer Unit) (at 0xf4)
-    - stu_distance (at 0xf8)
-    - stu_days (at 0xfc)
-    - fusing_print (at 0x100)
-    - fusing_days (at 0x104)
-    - fusing_web_clean (at 0x108)
-    - skip 16
+    - adu (at 0xf4)
+    - ptu_print (at 0xf8)
+    - ptu_dist (at 0xfc)
+    - ptu_days (at 0x100)
+    - stu_print (at 0x104)
+    - stu_dist (at 0x108)
+    - stu_days (at 0x10c)
+    - fuser_print (at 0x110)
+    - fuser_days (at 0x114)
+    - skip 4
     - toner_motor_(b,c,m,y at 0x11c, 0x120, 0x124, 0x128)
-    - drum_rotation_(b,c,m,y at 0x12c, 0x130, 0x134, 0x138)
-    - dev_rotation_(b,c,m,y at 0x13c, 0x140, 0x144, 0x148)
+    - toner_rotation_(b,c,m,y at 0x12c, 0x130, 0x134, 0x138)
+    - drum_life_used_(b,c,m,y at 0x13c, 0x140, 0x144, 0x148)
+    - dev_life_used_(b,c,m,y at 0x14c, 0x150, 0x154, 0x158)
     - BELONGS_TO :alerts
 
 * Modify Alert model
@@ -146,13 +151,17 @@ Phase I  *** DEPLOYED ***
   
 Phase II
 - Reprocess available past alerts
-- modify process_alert_email.rb so old alerts are not duplicated
+- modify process_alert_email.rb so old (existing) alerts are not duplicated
+  - NB. Since "Load Paper" alerts older than 1 month are automatically deleted
+    make sure old "load paper" alerts are not processed again.
 - move a limited number of old message (dha@sharpsec.com) to a temp folder and use fetchmail to grab them and process them
   - fetchmail --all --folder INBOX/temp
   - after each iteration move the messages in the temp folder to an archive folder and delete them from sharpmon's mailbox
 
 Phase III
 - Figure out how to display the data
+- Only makes sense for device/alert combinations.
+- Show difference in page counts (bw and colour) between successive alerts
   
 Phase IV
 - Create queries that make use of counters to predict future events

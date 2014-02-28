@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140218190721) do
+ActiveRecord::Schema.define(:version => 20140228025752) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -128,24 +128,34 @@ ActiveRecord::Schema.define(:version => 20140218190721) do
     t.integer  "stu_print"
     t.integer  "stu_dist"
     t.integer  "stu_days"
-    t.integer  "fusing_print"
-    t.integer  "fusing_days"
-    t.integer  "fusing_web_clean"
+    t.integer  "fuser_print"
+    t.integer  "fuser_days"
     t.integer  "toner_motor_b"
     t.integer  "toner_motor_c"
     t.integer  "toner_motor_m"
     t.integer  "toner_motor_y"
-    t.integer  "drum_rotation_b"
-    t.integer  "drum_rotation_c"
-    t.integer  "drum_rotation_m"
-    t.integer  "drum_rotation_y"
-    t.integer  "dev_rotation_b"
-    t.integer  "dev_rotation_c"
-    t.integer  "dev_rotation_m"
-    t.integer  "dev_rotation_y"
+    t.integer  "toner_rotation_b"
+    t.integer  "toner_rotation_c"
+    t.integer  "toner_rotation_m"
+    t.integer  "toner_rotation_y"
+    t.integer  "drum_life_used_b"
+    t.integer  "drum_life_used_c"
+    t.integer  "drum_life_used_m"
+    t.integer  "drum_life_used_y"
     t.integer  "alert_id"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.integer  "mft_total"
+    t.integer  "tray1"
+    t.integer  "tray2"
+    t.integer  "tray3"
+    t.integer  "tray4"
+    t.integer  "dev_life_used_b"
+    t.integer  "dev_life_used_c"
+    t.integer  "dev_life_used_m"
+    t.integer  "dev_life_used_y"
+    t.integer  "ptu_days"
+    t.integer  "adu"
   end
 
   create_table "notify_controls", :force => true do |t|

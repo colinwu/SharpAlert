@@ -133,29 +133,39 @@ def getMaintCounter(dir)
   if (title == 'MAINTE CNT DATA')
     mc = MaintCounter.new
     f.read(45)
+    # at 0x003C
     (mc.maint_total,mc.maint_color) = f.read(8).unpack('L>L>')
+    # 0x0044
     (mc.drum_print_b,mc.drum_print_c,mc.drum_print_m,mc.drum_print_y) =
         f.read(16).unpack('L>' * 4)
     (mc.dev_print_b,mc.dev_print_c,mc.dev_print_m,mc.dev_print_y) =
         f.read(16).unpack('L>' * 4)
     f.read(16)
+    # 0x0074
     (mc.drum_dist_b,mc.drum_dist_c,mc.drum_dist_m,mc.drum_dist_y) =
         f.read(16).unpack('L>' * 4)
     (mc.dev_dist_b,mc.dev_dist_c,mc.dev_dist_m,mc.dev_dist_y) =
         f.read(16).unpack('L>' * 4)
     f.read(16)
+    # 0x00A4
     (mc.scan,mc.spf_count) = f.read(8).unpack('L>L>')
-    f.read(60)
-    (mc.ptu_print,mc.ptu_dist) = f.read(8).unpack('L>L>')
-    f.read(4)
+    f.read(44)
+    # 0x00D8
+    mc.mft_total = f.read(4).unpack('L>')[0]
+    (mc.tray1,mc.tray2,mc.tray3,mc.tray4) = f.read(16).unpack('L>' * 4)
+    f.read(8)
+    mc.adu = f.read(4).unpack('L>')[0]
+    (mc.ptu_print,mc.ptu_dist,mc.ptu_days) = f.read(12).unpack('L>' * 3)
     (mc.stu_print,mc.stu_dist,mc.stu_days) = f.read(12).unpack('L>' * 3)
-    (mc.fusing_print,mc.fusing_days,mc.fusing_web_clean) = f.read(12).unpack('L>' * 3)
-    f.read(16)
+    (mc.fuser_print,mc.fuser_days) = f.read(8).unpack('L>' * 2)
+    f.read(4)
     (mc.toner_motor_b,mc.toner_motor_c,mc.toner_motor_m,mc.toner_motor_y) =
         f.read(16).unpack('L>' * 4)
-    (mc.drum_rotation_b,mc.drum_rotation_c,mc.drum_rotation_m,mc.drum_rotation_y) =
+    (mc.toner_rotation_b,mc.toner_rotation_c,mc.toner_rotation_m,mc.toner_rotation_y) =
         f.read(16).unpack('L>' * 4)
-    (mc.dev_rotation_b,mc.dev_rotation_c,mc.dev_rotation_m,mc.dev_rotation_y) =
+    (mc.drum_life_used_b,mc.drum_life_used_c,mc.drum_life_used_m,mc.drum_life_used_y) =
+        f.read(16).unpack('L>' * 4)
+    (mc.dev_life_used_b,mc.dev_life_used_c,mc.dev_life_used_m,mc.dev_life_used_y) =
         f.read(16).unpack('L>' * 4)
     mc.save
     f.close
@@ -318,7 +328,7 @@ else
 end
 
 # TODO: Uncomment the following before deploying
-system("/bin/rm -r #{dir}")
+# system("/bin/rm -r #{dir}")
 
 if not send_to.nil? and not period.nil? and (last_time.nil? or (alert.alert_date <=> last_time + period) > 0)
   # Send alert

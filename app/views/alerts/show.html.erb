@@ -1,0 +1,154 @@
+<% title "Alert Details" %>
+
+<table>
+<tr><th>Name</th><th>Model</th><th>S/N</th><th>Code</th><th>Client</th><th>Alert Date</th><th>Alert Message</th></tr>
+<tr>
+  <td><%= @alert.device.name %></td>
+  <td><%= @alert.device.model %></td>
+  <td><%= @alert.device.serial %></td>
+  <td><%= @alert.device.code %></td>
+  <td><%= @alert.device.client.name %></td>
+  <td><%= @alert.alert_date.to_formatted_s(:db) %></td>
+  <td>
+    <% unless (@alert.jam_stat.nil?) %>
+      <%= @alert.alert_msg + " (#{@alert.jam_stat.jam_type} Jam Code: #{@alert.jam_stat.jam_code})" %>
+    <% else %>
+      <%= @alert.alert_msg %>
+    <% end %>
+  </td>
+</tr>
+</table>
+
+<h2>Counters associated with this alert</h2>
+<table class='counters'>
+<tr><th colspan=2>Total Device Page Count</th></tr>
+<tr><td>BW</td><td><%=h number_with_delimiter(@sc.bw) %></td></tr>
+<tr><td>Colour</td><td><%=h number_with_delimiter(@sc.color) %></td></tr>
+</table>
+
+<table class='counters'>
+<tr><th colspan=9>Maintenance Counters</th></tr>
+<tr>
+  <th>Total Pages</th>
+  <td><%=h number_with_delimiter(@mc.maint_total) %></td>
+</tr>
+<tr>
+  <th>Colour Pages</th>
+  <td><%=h number_with_delimiter(@mc.maint_color) %></td>
+</tr>
+
+<tr>
+  <th>&nbsp;</th>
+  <th colspan=3>Drum</th>
+  <th colspan=3>Developer</th>
+  <th colspan=2>Toner Motor</th>
+</tr>
+<tr>
+  <th>&nbsp;</th>
+  <th>Prints</th>
+  <th>Dist (cm)</th>
+  <th>Age (%)</th>
+  <th>Prints</th>
+  <th>Dist (cm)</th>
+  <th>Age (%)</th>
+  <th>Prints</th>
+  <th>Rotation Time(sec)</th>
+</tr>
+<tr>
+  <th>Black</th>
+  <td><%=h number_with_delimiter(@mc.drum_print_b) %></td>
+  <td><%=h number_with_delimiter(@mc.drum_dist_b) %></td>
+  <td><%=h number_with_delimiter(@mc.drum_life_used_b) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_print_b) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_dist_b) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_life_used_b) %></td>
+  <td><%=h number_with_delimiter(@mc.toner_motor_b) %></td>
+  <td><%=h number_with_delimiter(@mc.toner_rotation_b) %></td>
+</tr>
+<tr>
+  <th>Cyan</th>
+  <td><%=h number_with_delimiter(@mc.drum_print_c) %></td>
+  <td><%=h number_with_delimiter(@mc.drum_dist_c) %></td>
+  <td><%=h number_with_delimiter(@mc.drum_life_used_c) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_print_c) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_dist_c) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_life_used_c) %></td>
+  <td><%=h number_with_delimiter(@mc.toner_motor_c) %></td>
+  <td><%=h number_with_delimiter(@mc.toner_rotation_c) %></td>
+</tr>
+<tr>
+  <th>Magenta</th>
+  <td><%=h number_with_delimiter(@mc.drum_print_m) %></td>
+  <td><%=h number_with_delimiter(@mc.drum_dist_m) %></td>
+  <td><%=h number_with_delimiter(@mc.drum_life_used_m) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_print_m) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_dist_m) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_life_used_m) %></td>
+  <td><%=h number_with_delimiter(@mc.toner_motor_m) %></td>
+  <td><%=h number_with_delimiter(@mc.toner_rotation_m) %></td>
+</tr>
+<tr>
+  <th>Yellow</th>
+  <td><%=h number_with_delimiter(@mc.drum_print_y) %></td>
+  <td><%=h number_with_delimiter(@mc.drum_dist_y) %></td>
+  <td><%=h number_with_delimiter(@mc.drum_life_used_y) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_print_y) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_dist_y) %></td>
+  <td><%=h number_with_delimiter(@mc.dev_life_used_y) %></td>
+  <td><%=h number_with_delimiter(@mc.toner_motor_y) %></td>
+  <td><%=h number_with_delimiter(@mc.toner_rotation_y) %></td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr>
+  <th colspan=2>Paper/Original Handling</th>
+</tr>
+<tr>
+  <th>SPF</th><td><%=h number_with_delimiter(@mc.spf_count) %></td>
+</tr>
+<tr>
+  <th>ADU</th><td><%=h number_with_delimiter(@mc.adu) %></td>
+</tr>
+<tr>
+  <th>MFT</th><td><%=h number_with_delimiter(@mc.mft_total) %></td>
+</tr>
+<tr>
+  <th>Mirror Scans</th><td><%=h number_with_delimiter(@mc.scan) %></td>
+</tr>
+<tr>
+  <th>Tray 1</th><td><%=h number_with_delimiter(@mc.tray1) %></td>
+</tr>
+<tr>
+  <th>Tray 2</th><td><%=h number_with_delimiter(@mc.tray2) %></td>
+</tr>
+<tr>
+  <th>Tray 3</th><td><%=h number_with_delimiter(@mc.tray3) %></td>
+</tr>
+<tr>
+  <th>Tray 4</th><td><%=h number_with_delimiter(@mc.tray4) %></td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr>
+  <th>&nbsp;</th>
+  <th colspan = 2>Transfer Units</th>
+  <th>Fuser</th>
+</tr>
+<tr><th>&nbsp;</th><th>Primary</th><th>Secondary</th></tr>
+<tr>
+  <th>Print</th>
+  <td><%=h number_with_delimiter(@mc.ptu_print) %></td>
+  <td><%=h number_with_delimiter(@mc.stu_print) %></td>
+  <td><%=h number_with_delimiter(@mc.fuser_print) %></td>
+  </tr>
+<tr>
+  <th>Distance</th>
+  <td><%=h number_with_delimiter(@mc.ptu_dist) %></td>
+  <td><%=h number_with_delimiter(@mc.stu_dist) %></td>
+</tr>
+<tr>
+  <th>Use (days)</th>
+  <td><%=h number_with_delimiter(@mc.ptu_days) %></td>
+  <td><%=h number_with_delimiter(@mc.stu_days) %></td>
+  <td><%=h number_with_delimiter(@mc.fuser_days) %></td>
+  </tr>
+
+</table>

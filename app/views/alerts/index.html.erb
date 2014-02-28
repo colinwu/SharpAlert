@@ -34,7 +34,16 @@
       <td>
       <%= alert.device.client.nil? ? link_to("<Edit Device Info>", edit_device_path(alert.device)) : alert.device.client.name %>
       </td>
-      <td><%= alert.alert_msg %></td>
+      <td><% if (alert.alert_msg =~ /Misfeed/ and not alert.jam_stat.nil?) %>
+            <%= alert.alert_msg + " (Jam Code: #{alert.jam_stat.jam_code})" %>
+          <% else %>
+            <%= alert.alert_msg %>
+          <% end %>
+      </td>
+      <td><% unless (alert.sheet_count.nil?) %>
+            <%= link_to 'Detail', alert_path(alert), :title => 'Show counter data' %>
+          <% end %>
+      </td>
     </tr>
   <% end %>
 </table>
