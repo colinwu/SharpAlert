@@ -1,0 +1,28 @@
+<% title "Jam Code Stats" %>
+<%= form_tag report_jam_code_stats_path, :method => 'get' do -%>
+  <%= select_tag :days, options_for_select([['30 Days', 30],
+                                          ['60 Days', 60],
+                                          ['90 Days', 90]], @days) -%>
+  <%= submit_tag "Go" %>
+<% end %>
+                                         
+<table class='counters'>
+<tr><th colspan=<%= @code_list.length + 1 %>>Jam Codes</th></tr>
+<tr>
+  <th>Devices</th>
+  <% @code_list.each do |c| %>
+    <th><%= c.jam_code %></th>
+  <% end %>
+</tr>
+
+<% @dev_list.each do |d| %>
+  <% unless @dev_stats[d.id].nil? %>
+    <tr class="<%= cycle('dark','light') %>">
+      <th><%= d.name %></th>
+      <% @code_list.each do |code| %>
+      <td><% unless (@dev_stats[d.id][code.jam_code].nil?) %><%= link_to @dev_stats[d.id][code.jam_code], "/report/jam_detail?dev=#{d.id}&code=#{code.jam_code}&days=#{@days}" %><% end %></td>
+      <% end %>
+    </tr>
+  <% end %>
+<% end %>
+</table>

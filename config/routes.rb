@@ -11,6 +11,11 @@ SharpApp::Application.routes.draw do
   get "report/volume_graph"
   get "report/frequency"
   get "report/volume"
+  get "report/jam_code_stats"
+  get "report/jam_detail"
+  get "report/service_detail"
+  get "report/maint_detail"
+  get "report/toner_detail"
 
   resources :print_volumes
 

@@ -1,6 +1,6 @@
 <h1>Special Reports</h1>
 
-<div>
+<div> <!-- Alert Frequency -->
 <%= form_tag report_frequency_path, :method => 'get' do %>
 <fieldset>
   <legend>Alert Frequency Report</legend>
@@ -51,7 +51,7 @@
 <% end %>
 </div>
 
-<div>
+<div> <!-- High Print Volume -->
   <%= form_tag report_volume_path, :method => 'get' do -%>
     <fieldset>
     <legend>High Print Volume Report</legend>
@@ -78,14 +78,13 @@
   <% end %>
 </div>
 
-<div>
+<div> <!-- Graph Misfeed, Maintenance and Service alerts by day -->
   <%= form_tag report_alerts_graph_path, :method => 'get' do -%>
     <fieldset>
     <legend>Graph Misfeed, Maintenance and Service alerts</legend>
     <p>This report graphs the number of daily <strong>misfeed</strong>, <strong>maintenance requests</strong> and <strong>service</strong> alerts over the past 30, 60 or 90 days on one chart. Easier to see if there is a corrolation.</p>
     <table><tr>
       <td>
-        <%= label_tag 'Days' %><br />
         <%= select_tag :days, options_for_select([['30 Days', 30],
                                                   ['60 Days', 60],
                                                   ['90 Days', 90]], @days) -%>
@@ -98,4 +97,28 @@
     </tr></table>
     </fieldset>
   <% end %>
+</div>
+
+<div> <!-- Misfeed type frequency per device -->
+  <%= form_tag report_jam_code_stats_path, :method => 'get' do -%>
+    <fieldset>
+    <legend>Ffrequency and detail of misfeed alerts</legend>
+    <p>The Frequency report provides an overview of the number of misfeed codes each device has reports.</p>
+    <p>The Detail report shows, for a specific device, the B/W and Colour counters when the alert as reported as well as the difference in counter values and time between successive alerts.</p>
+    <table><tr>
+      <td>
+        <%= select_tag :days, options_for_select([['30 Days', 30],
+                                                  ['60 Days', 60],
+                                                  ['90 Days', 90]], @days) -%>
+      </td>
+      <td>
+        <%= submit_tag 'Go' -%>
+      </td>
+    </tr></table>
+    </fieldset>
+  <% end %>
+</div>
+
+<div> <!-- Service call frequency per device -->
+
 </div>

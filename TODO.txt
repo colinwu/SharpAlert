@@ -118,7 +118,7 @@ Start tracking bw and colour sheet counts for all alerts except "Load Paper" and
     - stu_days (at 0x10c)
     - fuser_print (at 0x110)
     - fuser_days (at 0x114)
-    - skip 4
+    - skip 8
     - toner_motor_(b,c,m,y at 0x11c, 0x120, 0x124, 0x128)
     - toner_rotation_(b,c,m,y at 0x12c, 0x130, 0x134, 0x138)
     - drum_life_used_(b,c,m,y at 0x13c, 0x140, 0x144, 0x148)
@@ -149,19 +149,21 @@ Phase I  *** DEPLOYED ***
   - process plain (no attachments) alert
   - process alert with attachments - verify numbers are all correct
   
-Phase II
-- Reprocess available past alerts
-- modify process_alert_email.rb so old (existing) alerts are not duplicated
+Phase II - Reprocess available past alerts  *** ON-GOING ***
+  - modify process_alert_email.rb so old (existing) alerts are not duplicated
   - NB. Since "Load Paper" alerts older than 1 month are automatically deleted
     make sure old "load paper" alerts are not processed again.
 - move a limited number of old message (dha@sharpsec.com) to a temp folder and use fetchmail to grab them and process them
   - fetchmail --all --folder INBOX/temp
   - after each iteration move the messages in the temp folder to an archive folder and delete them from sharpmon's mailbox
 
-Phase III
-- Figure out how to display the data
-- Only makes sense for device/alert combinations.
+Phase III - Figure out how to display the data
+- Only makes sense for device/alert combinations, I think.
 - Show difference in page counts (bw and colour) between successive alerts
+- Special Report: misfeed frequency
+  - for each device show how many times a misfeed code has occurred
+  - click on jam code to show history of specific jam code for that device, including delta-time and delta-(bw,color)-sheet_count
+- Special Report: drum or developer at or above 85%
   
 Phase IV
 - Create queries that make use of counters to predict future events

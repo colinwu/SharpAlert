@@ -67,6 +67,53 @@ class ReportController < ApplicationController
     @dates = (Date.today-@days.to_i..Date.today-1).map {|d| d }
   end
 
+  # Jam Code frequency per device
+  def jam_code_stats
+    unless (params['days'].nil?)
+      @days = params['days']
+      @code_list = JamStat.select('jam_code').group('jam_code').joins(:alert).where(["alert_date > date_sub(now(),interval ? day)", @days])
+    else
+      @code_list = JamStat.select('jam_code').group('jam_code')
+    end
+    @dev_stats = Hash.new
+    @dev_list = Device.order(:name)
+    @dev_list.each do |d|
+      unless @days.nil?
+        g = JamStat.where(["alert_msg = 'Misfeed has occurred.' and device_id = ? and alert_date > date_sub(now(),interval ? day)", d.id, @days]).joins(:alert).group('jam_code').select('jam_stats.jam_code').count
+      else
+        g = JamStat.where(["alert_msg = 'Misfeed has occurred.' and device_id = ?", d.id]).joins(:alert).group('jam_code').select('jam_stats.jam_code').count
+      end
+      unless g.empty?
+        @dev_stats[d.id] = g
+      end
+    end
+  end
+  
+  def jam_detail
+    if (params.nil? or params[:dev].empty? or params[:dev].empty?)
+      # should show an error message
+    else
+      @dev = Device.find params[:dev]
+      @jam = params[:code]
+      unless (params[:days].nil? or params[:days].empty?)
+        @days = params[:days]
+        @alerts = Alert.where(["device_id = ? and jam_code = ? and alert_date > date_sub(now(),interval ? day)",@dev.id,@jam,@days]).joins(:jam_stat).order(:alert_date)
+      else
+        @alerts = Alert.where(["device_id = ? and jam_code = ?",@dev.id,@jam]).joins(:jam_stat).order(:alert_date)
+      end
+    end
+    @title = "Jam Code #{@jam} Detail for #{@dev.name}"
+    render :detail
+  end
+  
+  def toner_detail
+    @dev = Device.find params[:dev]
+    @alerts = Alert.where("device_id = #{@dev.id} and (alert_msg regexp 'add toner') and sheet_counts.bw is not NULL").joins(:sheet_count).order(:alert_date)
+    @title = "Toner Supply Alert Details for #{@dev.name}"
+    render :detail
+  end
+  
+    
   # Show list of devices that have usage(s) that exceed their rated volume
   def volume
     where_array = Array.new
