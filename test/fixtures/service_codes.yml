@@ -1,0 +1,7 @@
+one:
+  code: MyString
+  alert_id: 1
+
+two:
+  code: MyString
+  alert_id: 1

@@ -27,6 +27,7 @@ default_run_options[:pty] = true
 # set :use_sudo false
 
 # Passenger
+after "migrations", "deploy:bundle_gems"
 after "deploy", "deploy:bundle_gems"
 after "deploy:bundles_gems", "deploy:restart"
 

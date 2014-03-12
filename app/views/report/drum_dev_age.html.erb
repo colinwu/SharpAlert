@@ -1,0 +1,37 @@
+<% title "Drum and Developer Age Report" %>
+
+<table class="counters">
+<tr>
+  <th rowspan=2>Alert Date</th>
+  <th rowspan=2>Device</th>
+  <th colspan=4>Drum</th>
+  <th colspan=4>Developer</th>
+</tr>
+<tr>
+  <th>Black</th><th>Cyan</th><th>Magenta</th><th>Yellow</th><th>Black</th><th>Cyan</th><th>Magenta</th><th>Yellow</th>
+</tr>
+<% @mc_bydev.each do |id,mc|
+  if (mc.drum_life_used_b >= 85 or mc.drum_life_used_c >= 85 or
+      mc.drum_life_used_m >= 85 or mc.drum_life_used_y >= 85 or
+      mc.dev_life_used_b >= 85 or mc.dev_life_used_c >= 85 or
+      mc.dev_life_used_m >= 85 or mc.dev_life_used_y >= 85)
+    bkgrd = 'yellow'
+    cycle('light','dark')
+  else
+    bkgrd = cycle('light','dark')
+  end
+%>
+  <tr class="<%= bkgrd %>">
+    <td><%= mc.alert.alert_date.to_formatted_s(:db) %></td>
+    <td><%= Device.find(id).name %></td>
+    <td><%= mc.drum_life_used_b %></td>
+    <td><%= mc.drum_life_used_c %></td>
+    <td><%= mc.drum_life_used_m %></td>
+    <td><%= mc.drum_life_used_y %></td>
+    <td><%= mc.dev_life_used_b %></td>
+    <td><%= mc.dev_life_used_c %></td>
+    <td><%= mc.dev_life_used_m %></td>
+    <td><%= mc.dev_life_used_y %></td>
+  </tr>
+<% end %>
+</table>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140228025752) do
+ActiveRecord::Schema.define(:version => 20140311172528) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -100,6 +100,11 @@ ActiveRecord::Schema.define(:version => 20140228025752) do
     t.integer  "alert_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "maint_codes", :force => true do |t|
+    t.string  "code"
+    t.integer "alert_id"
   end
 
   create_table "maint_counters", :force => true do |t|
@@ -195,12 +200,22 @@ ActiveRecord::Schema.define(:version => 20140228025752) do
     t.integer  "lifetime"
   end
 
+  create_table "service_codes", :force => true do |t|
+    t.string  "code"
+    t.integer "alert_id"
+  end
+
   create_table "sheet_counts", :force => true do |t|
     t.integer  "bw"
     t.integer  "color"
     t.integer  "alert_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "toner_codes", :force => true do |t|
+    t.string  "colour"
+    t.integer "alert_id"
   end
 
 end

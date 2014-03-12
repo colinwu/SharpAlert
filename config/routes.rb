@@ -1,22 +1,29 @@
 SharpApp::Application.routes.draw do
+  resources :service_codes
+
+  resources :maint_codes
+
+  resources :toner_codes
+
   resources :maint_counters
 
   resources :sheet_counts
 
   resources :jam_stats
 
-  get "report/index"
-  
+  get "report/" => 'report#index', :as => :reports 
   get "report/alerts_graph"
   get "report/volume_graph"
   get "report/frequency"
   get "report/volume"
-  get "report/jam_code_stats"
-  get "report/jam_detail"
-  get "report/service_detail"
-  get "report/maint_detail"
-  get "report/toner_detail"
-
+  get "report/jam_code_stats" => 'report#jam_code_stats', :as => :jam_code_stats_report
+  get 'report/:id/jam_detail/:code' => 'report#jam_detail', :as => :jam_detail_report
+  get 'report/:id/service_detail' => 'report#service_detail', :as => :service_detail_report
+  get 'report/:id/maint_detail' => 'report#maint_detail', :as => :maint_detail_report
+  get 'report/:id/toner_detail' => 'report#toner_detail', :as => :toner_detail_report
+  match 'report/drum_dev_age', :as => :drum_dev_age_report
+  
+  
   resources :print_volumes
 
   resources :summaries

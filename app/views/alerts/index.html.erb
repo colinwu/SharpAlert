@@ -42,6 +42,9 @@
       </td>
       <td><% unless (alert.sheet_count.nil?) %>
             <%= link_to 'Detail', alert_path(alert), :title => 'Show counter data' %>
+            <% if (!alert.jam_stat.nil? and alert.alert_msg =~ /misfeed/i) %>
+              <%= link_to 'History', jam_detail_report_path(alert.device_id, alert.jam_stat.jam_code) + "?days=30" %>
+            <% end %>
           <% end %>
       </td>
     </tr>

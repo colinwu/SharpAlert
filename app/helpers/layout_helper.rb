@@ -19,4 +19,12 @@ module LayoutHelper
   def javascript(*args)
     content_for(:head) { javascript_include_tag(*args) }
   end
+  
+  def red_or_black(num,thresh)
+    if (num >= thresh)
+      return 'red'
+    else
+      return 'black'
+    end
+  end
 end

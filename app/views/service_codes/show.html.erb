@@ -1,0 +1,16 @@
+<% title "Service Code" %>
+
+<p>
+  <strong>Code:</strong>
+  <%= @service_code.code %>
+</p>
+<p>
+  <strong>Alert:</strong>
+  <%= @service_code.alert_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_service_code_path(@service_code) %> |
+  <%= link_to "Destroy", @service_code, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", service_codes_path %>
+</p>

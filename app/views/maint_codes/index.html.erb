@@ -1,0 +1,19 @@
+<% title "Maint Codes" %>
+
+<table>
+  <tr>
+    <th>Code</th>
+    <th>Alert</th>
+  </tr>
+  <% for maint_code in @maint_codes %>
+    <tr>
+      <td><%= maint_code.code %></td>
+      <td><%= maint_code.alert_id %></td>
+      <td><%= link_to "Show", maint_code %></td>
+      <td><%= link_to "Edit", edit_maint_code_path(maint_code) %></td>
+      <td><%= link_to "Destroy", maint_code, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Maint Code", new_maint_code_path %></p>

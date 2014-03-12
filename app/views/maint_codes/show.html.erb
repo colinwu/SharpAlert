@@ -1,0 +1,16 @@
+<% title "Maint Code" %>
+
+<p>
+  <strong>Code:</strong>
+  <%= @maint_code.code %>
+</p>
+<p>
+  <strong>Alert:</strong>
+  <%= @maint_code.alert_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_maint_code_path(@maint_code) %> |
+  <%= link_to "Destroy", @maint_code, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", maint_codes_path %>
+</p>

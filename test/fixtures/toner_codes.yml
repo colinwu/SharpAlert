@@ -1,0 +1,7 @@
+one:
+  colour: MyString
+  alert_id: 1
+
+two:
+  colour: MyString
+  alert_id: 1

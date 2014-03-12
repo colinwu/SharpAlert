@@ -1,0 +1,19 @@
+<% title "Service Codes" %>
+
+<table>
+  <tr>
+    <th>Code</th>
+    <th>Alert</th>
+  </tr>
+  <% for service_code in @service_codes %>
+    <tr>
+      <td><%= service_code.code %></td>
+      <td><%= service_code.alert_id %></td>
+      <td><%= link_to "Show", service_code %></td>
+      <td><%= link_to "Edit", edit_service_code_path(service_code) %></td>
+      <td><%= link_to "Destroy", service_code, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Service Code", new_service_code_path %></p>

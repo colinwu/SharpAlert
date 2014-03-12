@@ -185,6 +185,7 @@ end
 
 f = $stdin
 
+code_list = Array.new
 # Parse the alert message
 while (line = f.gets)
   if line =~ /^Device Name: (.+)/i
@@ -203,8 +204,12 @@ while (line = f.gets)
     if msg =~ /Call for service/
       codes = f.gets.strip
       msg += ": #{codes}"
+      code_list = codes.split
     elsif msg =~ /Maintenance required. Code:(.+)$/
       codes = $1
+      code_list = codes.split
+    elsif msg =~ /toner.+\( (\S+) \)/i
+      code_list = $1.split
     end
     alert_msg = msg
   elsif line =~ /^(\d{4,4}\/\d{2,2}\/\d{2,2}\s+\d{2,2}:\d{2,2}:\d{2,2})/
@@ -230,7 +235,7 @@ if alert.nil?
 end
 
 
-unless (alert_msg =~ /paper/ or alert_msg =~ /Job Log/) 
+unless (alert_msg =~ /paper/i or alert_msg =~ /Job Log/i) 
   # ignore "Load Paper" and "job log full" alerts, also make sure there are no 
   # SheetCount, MaintCounter and JamStat records already
   if (alert.sheet_count.nil?)
@@ -247,13 +252,32 @@ unless (alert_msg =~ /paper/ or alert_msg =~ /Job Log/)
       mc.save
     end
   end
-  if (alert_msg =~ /Misfeed/ and alert.jam_stat.nil?)
-    puts "Retrieving Jam Stats"
+  if (alert_msg =~ /Misfeed/i and alert.jam_stat.nil?)
     js = getJamCode(dir)
     unless js.nil?
-      puts "Jam Code = js.jam_code"
       js.alert_id = alert.id
       js.save
+    end
+  elsif (alert_msg =~ /Maintenance/i)
+    code_list.each do |c|
+      if (alert.maint_codes.empty?)
+        alert.maint_codes.create(:code => c)
+      end
+    end
+  elsif (alert_msg =~ /Service/i)
+    puts "Alert ID: #{alert.id}"
+    puts code_list.inspect
+    code_list.each do |c|
+      if (alert.service_codes.empty?)
+        puts "Service Code: #{c}"
+        alert.service_codes.create(:code => c)
+      end
+    end
+  elsif (alert_msg =~ /toner.+\( \S+ \)/i)
+    code_list.each do |c|
+      if (alert.toner_codes.empty?)
+        alert.toner_codes.create(:colour => c)
+      end
     end
   end
 end
@@ -281,6 +305,8 @@ if @d.nil?
   NotifyMailer.new_device('wuc@sharpsec.com',@d,from).deliver
 else
   alert.device_id = @d.id
+  # keep device name updated - just in case the client changes it.
+  @d.update_attribute('name', name)
   @n = @d.notify_control
 end
 alert.save

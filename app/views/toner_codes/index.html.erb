@@ -1,0 +1,19 @@
+<% title "Toner Codes" %>
+
+<table>
+  <tr>
+    <th>Colour</th>
+    <th>Alert</th>
+  </tr>
+  <% for toner_code in @toner_codes %>
+    <tr>
+      <td><%= toner_code.colour %></td>
+      <td><%= toner_code.alert_id %></td>
+      <td><%= link_to "Show", toner_code %></td>
+      <td><%= link_to "Edit", edit_toner_code_path(toner_code) %></td>
+      <td><%= link_to "Destroy", toner_code, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Toner Code", new_toner_code_path %></p>

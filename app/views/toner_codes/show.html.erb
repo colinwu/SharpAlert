@@ -1,0 +1,16 @@
+<% title "Toner Code" %>
+
+<p>
+  <strong>Colour:</strong>
+  <%= @toner_code.colour %>
+</p>
+<p>
+  <strong>Alert:</strong>
+  <%= @toner_code.alert_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_toner_code_path(@toner_code) %> |
+  <%= link_to "Destroy", @toner_code, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", toner_codes_path %>
+</p>

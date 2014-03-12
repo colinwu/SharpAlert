@@ -20,7 +20,7 @@
     <tr class="<%= cycle('dark','light') %>">
       <th><%= d.name %></th>
       <% @code_list.each do |code| %>
-      <td><% unless (@dev_stats[d.id][code.jam_code].nil?) %><%= link_to @dev_stats[d.id][code.jam_code], "/report/jam_detail?dev=#{d.id}&code=#{code.jam_code}&days=#{@days}" %><% end %></td>
+      <td><% unless (@dev_stats[d.id][code.jam_code].nil?) %><%= link_to @dev_stats[d.id][code.jam_code], jam_detail_report_path(d.id,code.jam_code) + "?days=#{@days}" %><% end %></td>
       <% end %>
     </tr>
   <% end %>

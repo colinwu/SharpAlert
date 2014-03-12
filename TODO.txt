@@ -157,13 +157,13 @@ Phase II - Reprocess available past alerts  *** ON-GOING ***
   - fetchmail --all --folder INBOX/temp
   - after each iteration move the messages in the temp folder to an archive folder and delete them from sharpmon's mailbox
 
-Phase III - Figure out how to display the data
+Phase III - Figure out how to display the data *** ON-GOING ***
 - Only makes sense for device/alert combinations, I think.
 - Show difference in page counts (bw and colour) between successive alerts
-- Special Report: misfeed frequency
+- Special Report: misfeed frequency (DONE)
   - for each device show how many times a misfeed code has occurred
   - click on jam code to show history of specific jam code for that device, including delta-time and delta-(bw,color)-sheet_count
-- Special Report: drum or developer at or above 85%
+- Special Report: drum or developer at or above 85% (DONE)
   
 Phase IV
 - Create queries that make use of counters to predict future events

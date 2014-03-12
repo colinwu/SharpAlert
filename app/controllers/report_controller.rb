@@ -90,10 +90,12 @@ class ReportController < ApplicationController
   end
   
   def jam_detail
-    if (params.nil? or params[:dev].empty? or params[:dev].empty?)
+    @uri = request.env['REQUEST_URI'].sub(/[&?]*days=\d+&*/, '')
+    
+    if (params.nil? or params[:id].empty? or params[:code].empty?)
       # should show an error message
     else
-      @dev = Device.find params[:dev]
+      @dev = Device.find params[:id]
       @jam = params[:code]
       unless (params[:days].nil? or params[:days].empty?)
         @days = params[:days]
@@ -106,11 +108,30 @@ class ReportController < ApplicationController
     render :detail
   end
   
+  def drum_dev_age
+    @mc_bydev = Hash.new
+    @devs = Device.order(:name)
+    @devs.each do |d|
+      mc = MaintCounter.joins(:alert).where("alerts.device_id = #{d.id}").order(:alert_date).last
+      unless mc.nil?
+        @mc_bydev[d.id] = mc
+      end
+    end
+  end
+  
   def toner_detail
-    @dev = Device.find params[:dev]
-    @alerts = Alert.where("device_id = #{@dev.id} and (alert_msg regexp 'add toner') and sheet_counts.bw is not NULL").joins(:sheet_count).order(:alert_date)
+    @uri = request.env['REQUEST_URI'].sub(/[&?]*days=\d+&*/, '')
+    
+    if (params.nil?)
+      # should show an error message
+    else
+      @dev = Device.find params[:id]
+      unless (@days.nil?)
+        # TODO Figure out how to retrieve appropriate records.
+        @alerts
+      end
+    end
     @title = "Toner Supply Alert Details for #{@dev.name}"
-    render :detail
   end
   
     

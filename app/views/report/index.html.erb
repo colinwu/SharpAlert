@@ -100,9 +100,9 @@
 </div>
 
 <div> <!-- Misfeed type frequency per device -->
-  <%= form_tag report_jam_code_stats_path, :method => 'get' do -%>
+  <%= form_tag jam_code_stats_report_path, :method => 'get' do -%>
     <fieldset>
-    <legend>Ffrequency and detail of misfeed alerts</legend>
+    <legend>Frequency of misfeed alerts</legend>
     <p>The Frequency report provides an overview of the number of misfeed codes each device has reports.</p>
     <p>The Detail report shows, for a specific device, the B/W and Colour counters when the alert as reported as well as the difference in counter values and time between successive alerts.</p>
     <table><tr>
@@ -119,6 +119,19 @@
   <% end %>
 </div>
 
-<div> <!-- Service call frequency per device -->
-
+<div> <!-- Drum and Developer Age -->
+  <fieldset>
+    <legend>Drum and Developer Age</legend>
+    <p>
+    Report the age (in percent) of all drum and developer units. This is based on the dealer attachments sent as part of any alert, if enabled.
+    </p>
+    <p>The <strong>Highlight Threshold</strong> determines whether the values will be highlighted. If any of the values are above this threshold, the record will be highlighted.
+    </p>
+    <%= form_tag drum_dev_age_report_path, :method => 'get' do %>
+      <%= label_tag "Highlight Threshold: " %>
+      <%= number_field_tag 'h_thresh', @h_thresh, in: 1...100 %>
+      &nbsp;
+      <%= submit_tag 'Show' %>
+    <% end %>
+  </fieldset>
 </div>
