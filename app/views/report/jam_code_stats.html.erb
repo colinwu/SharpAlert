@@ -1,5 +1,5 @@
 <% title "Jam Code Stats" %>
-<%= form_tag report_jam_code_stats_path, :method => 'get' do -%>
+<%= form_tag jam_code_stats_report_path, :method => 'get' do -%>
   <%= select_tag :days, options_for_select([['30 Days', 30],
                                           ['60 Days', 60],
                                           ['90 Days', 90]], @days) -%>
@@ -20,7 +20,7 @@
     <tr class="<%= cycle('dark','light') %>">
       <th><%= d.name %></th>
       <% @code_list.each do |code| %>
-      <td><% unless (@dev_stats[d.id][code.jam_code].nil?) %><%= link_to @dev_stats[d.id][code.jam_code], jam_detail_report_path(d.id,code.jam_code) + "?days=#{@days}" %><% end %></td>
+      <td><% unless (@dev_stats[d.id][code.jam_code].nil?) %><%= link_to @dev_stats[d.id][code.jam_code], jam_history_report_path(d.id,code.jam_code) + "?days=#{@days}", :title => "Jam code: #{code.jam_code}" %><% end %></td>
       <% end %>
     </tr>
   <% end %>

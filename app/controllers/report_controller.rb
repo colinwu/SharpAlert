@@ -78,18 +78,19 @@ class ReportController < ApplicationController
     @dev_stats = Hash.new
     @dev_list = Device.order(:name)
     @dev_list.each do |d|
+      where_array = ["alert_msg = 'Misfeed has occurred.' and device_id = ?", d.id]
       unless @days.nil?
-        g = JamStat.where(["alert_msg = 'Misfeed has occurred.' and device_id = ? and alert_date > date_sub(now(),interval ? day)", d.id, @days]).joins(:alert).group('jam_code').select('jam_stats.jam_code').count
-      else
-        g = JamStat.where(["alert_msg = 'Misfeed has occurred.' and device_id = ?", d.id]).joins(:alert).group('jam_code').select('jam_stats.jam_code').count
+        where_array[0] += " and alert_date > date_sub(now(),interval ? day)"
+        where_array << @days
       end
+      g = JamStat.where(where_array).joins(:alert).group('jam_code').select('jam_stats.jam_code').count
       unless g.empty?
         @dev_stats[d.id] = g
       end
     end
   end
   
-  def jam_detail
+  def jam_history
     @uri = request.env['REQUEST_URI'].sub(/[&?]*days=\d+&*/, '')
     
     if (params.nil? or params[:id].empty? or params[:code].empty?)
@@ -97,15 +98,15 @@ class ReportController < ApplicationController
     else
       @dev = Device.find params[:id]
       @jam = params[:code]
+      where_array = ["device_id = ? and jam_code = ?",@dev.id,@jam]
       unless (params[:days].nil? or params[:days].empty?)
         @days = params[:days]
-        @alerts = Alert.where(["device_id = ? and jam_code = ? and alert_date > date_sub(now(),interval ? day)",@dev.id,@jam,@days]).joins(:jam_stat).order(:alert_date)
-      else
-        @alerts = Alert.where(["device_id = ? and jam_code = ?",@dev.id,@jam]).joins(:jam_stat).order(:alert_date)
+        where_array[0] += " and alert_date > date_sub(now(),interval ? day)"
+        where_array << @days
       end
+      @alerts = Alert.where(where_array).joins(:jam_stat).order(:alert_date)
     end
-    @title = "Jam Code #{@jam} Detail for #{@dev.name}"
-    render :detail
+    @title = "Jam Code #{@jam} History for #{@dev.name}"
   end
   
   def drum_dev_age
@@ -119,19 +120,46 @@ class ReportController < ApplicationController
     end
   end
   
-  def toner_detail
+  # Toner history for one device. Access as /report/:id/toner_history?days=N
+  def toner_history
     @uri = request.env['REQUEST_URI'].sub(/[&?]*days=\d+&*/, '')
     
     if (params.nil?)
       # should show an error message
     else
       @dev = Device.find params[:id]
-      unless (@days.nil?)
-        # TODO Figure out how to retrieve appropriate records.
-        @alerts
+      where_array = ["alert_msg regexp 'toner supply is low' and device_id = ?", @dev.id]
+#       unless (params[:days].nil? or params[:days].empty?)
+#         @days = params[:days]
+#         where_array[0] += " and alert_date > date_sub(now(),interval ? day)"
+#         where_array << @days
+#       end
+      @alerts = Alert.where(where_array).joins(:toner_codes).group('date(alert_date)', 'toner_codes.colour').count
+      
+      @data = Hash.new
+      last_entry = Hash.new
+      where_array << '' # just a couple of placeholders
+      where_array << ''
+      @alerts.each do |key,val|
+        where_array[0] = "alert_msg regexp 'toner supply is low' and device_id = ? and toner_codes.colour = ? and date(alert_date) = ?"
+        where_array[-1] = key[0]
+        where_array[-2] = key[1]
+        a = Alert.where(where_array).order('alert_date').joins(:toner_codes).last
+        unless (last_entry[key[1]].nil?)
+          prev_alert = last_entry[key[1]]
+          date_diff = (a.alert_date - prev_alert.alert_date)/86400
+          @data[key[0]] = {key[1] => {'date_diff' => date_diff}}
+          unless (prev_alert.sheet_count.nil? and a.sheet_count.nil?)
+            if (key[1] == 'Bk')
+              @data[key[0]][key[1]]['page_diff'] = a.sheet_count.bw - prev_alert.sheet_count.bw
+            else
+              @data[key[0]][key[1]]['page_diff'] = a.sheet_count.color - prev_alert.sheet_count.color
+            end
+          end
+        end
+        last_entry[key[1]] = a 
       end
     end
-    @title = "Toner Supply Alert Details for #{@dev.name}"
   end
   
     

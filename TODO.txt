@@ -167,3 +167,11 @@ Phase III - Figure out how to display the data *** ON-GOING ***
   
 Phase IV
 - Create queries that make use of counters to predict future events
+* Toner history for one device. Access as /report/:id/toner_history?days=N
+  - Based on "toner supply is low" alert since we can not count on the users to wait until 
+    there's an "add toner" before replacing the toner; but it's more likely they won't
+    replace it before a "low" alert.
+  - Show date of alerts (not time)
+  - Show date interval between successive alerts for the same toner
+  - Show appropriate page count difference between alerts for the same toner
+  

@@ -31,7 +31,11 @@
       <td><%= device.serial %></td>
       <td><%= device.code %></td>
       <td><%= device.client.nil? ? link_to('<Edit device details>', edit_device_path(device)) : device.client.name %></td>
-      <td><%= link_to "Edit", edit_device_path(device) %></td>
+      <td>
+        <%= link_to "Edit", edit_device_path(device) %>&nbsp;
+        <%= link_to "Toner History", toner_history_report_path(device) %>&nbsp;
+
+      </td>
     </tr>
   <% end %>
 <!--   <%= submit_tag "Batch Edit Selected" %> -->

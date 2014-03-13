@@ -209,7 +209,7 @@ while (line = f.gets)
       codes = $1
       code_list = codes.split
     elsif msg =~ /toner.+\( (\S+) \)/i
-      code_list = $1.split
+      code_list = $1.split('/')
     end
     alert_msg = msg
   elsif line =~ /^(\d{4,4}\/\d{2,2}\/\d{2,2}\s+\d{2,2}:\d{2,2}:\d{2,2})/
@@ -233,7 +233,6 @@ if alert.nil?
   alert.alert_msg = alert_msg
   alert.save
 end
-
 
 unless (alert_msg =~ /paper/i or alert_msg =~ /Job Log/i) 
   # ignore "Load Paper" and "job log full" alerts, also make sure there are no 
@@ -260,22 +259,19 @@ unless (alert_msg =~ /paper/i or alert_msg =~ /Job Log/i)
     end
   elsif (alert_msg =~ /Maintenance/i)
     code_list.each do |c|
-      if (alert.maint_codes.empty?)
+      if (MaintCode.where(["alert_id = ? and code = ?", alert.id, c]).empty?)
         alert.maint_codes.create(:code => c)
       end
     end
   elsif (alert_msg =~ /Service/i)
-    puts "Alert ID: #{alert.id}"
-    puts code_list.inspect
     code_list.each do |c|
-      if (alert.service_codes.empty?)
-        puts "Service Code: #{c}"
+      if (ServiceCode.where(["alert_id = ? and code = ?", alert.id, c]).empty?)
         alert.service_codes.create(:code => c)
       end
     end
   elsif (alert_msg =~ /toner.+\( \S+ \)/i)
     code_list.each do |c|
-      if (alert.toner_codes.empty?)
+      if (TonerCode.where(["alert_id = ? and colour = ?", alert.id, c]).empty?)
         alert.toner_codes.create(:colour => c)
       end
     end

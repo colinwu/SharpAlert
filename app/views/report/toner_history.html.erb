@@ -1,0 +1,46 @@
+<h1>Toner Alert History for <%= @dev.name %></h1>
+<!-- 
+# @alerts is array of Alert objects where alert_msg contains "toner supply is low"
+-->
+Model: <strong><%= @dev.model %></strong><br />
+Serial#: <strong><%= @dev.serial %></strong><br />
+<br />
+<table class='counters'>
+<tr>
+  <th rowspan=2>Alert Date</th>
+  <th colspan=2>Black</th>
+  <th colspan=2>Cyan</th>
+  <th colspan=2>Magenta</th>
+  <th colspan=2>Yellow</th>
+</tr>
+<tr>
+  <th>Date diff</th><th>B/W diff</th>
+  <th>Date diff</th><th>Color Diff</th>
+  <th>Date diff</th><th>Color Diff</th>
+  <th>Date diff</th><th>Color Diff</th>
+</tr>
+
+<% 
+  @data.keys.sort.each do |d|
+    bkgrd = cycle('light','dark')
+%>
+    <tr class='<%= bkgrd %>'>
+      <td><%= d %></td>
+<%
+    for c in ['Bk','C','M','Y'] 
+      if (@data[d][c].nil?) 
+%>
+      <td>&nbsp;</td><td>&nbsp;</td>
+<%
+      else
+        for v in ['date_diff','page_diff']
+          disp_val = @data[d][c][v].nil? ? ' ' : @data[d][c][v].to_i
+%>
+          <td><%= disp_val %></td>
+<%
+        end
+      end  
+    end %>
+    </tr>
+<% end %>
+</table>

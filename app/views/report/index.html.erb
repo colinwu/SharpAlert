@@ -79,7 +79,7 @@
 </div>
 
 <div> <!-- Graph Misfeed, Maintenance and Service alerts by day -->
-  <%= form_tag report_alerts_graph_path, :method => 'get' do -%>
+  <%= form_tag report_alerts_graph_url, :method => 'get' do -%>
     <fieldset>
     <legend>Graph Misfeed, Maintenance and Service alerts</legend>
     <p>This report graphs the number of daily <strong>misfeed</strong>, <strong>maintenance requests</strong> and <strong>service</strong> alerts over the past 30, 60 or 90 days on one chart. Easier to see if there is a corrolation.</p>
@@ -112,7 +112,7 @@
                                                   ['90 Days', 90]], @days) -%>
       </td>
       <td>
-        <%= submit_tag 'Go' -%>
+        <%= submit_tag '->Go' -%>
       </td>
     </tr></table>
     </fieldset>
@@ -135,3 +135,4 @@
     <% end %>
   </fieldset>
 </div>
+
