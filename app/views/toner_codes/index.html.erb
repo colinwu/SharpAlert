@@ -4,11 +4,15 @@
   <tr>
     <th>Colour</th>
     <th>Alert</th>
+    <th>
+    <th>
   </tr>
   <% for toner_code in @toner_codes %>
     <tr>
       <td><%= toner_code.colour %></td>
-      <td><%= toner_code.alert_id %></td>
+      <td><%= toner_code.alert.alert_msg %></td>
+      <td><%= toner_code.alert.alert_date.to_formatted_s(:db) %></td>
+      <td><%= link_to toner_code.alert.device.name, toner_history_report_path(toner_code.alert.device_id) %></td>
       <td><%= link_to "Show", toner_code %></td>
       <td><%= link_to "Edit", edit_toner_code_path(toner_code) %></td>
       <td><%= link_to "Destroy", toner_code, :confirm => 'Are you sure?', :method => :delete %></td>
@@ -16,4 +20,3 @@
   <% end %>
 </table>
 
-<p><%= link_to "New Toner Code", new_toner_code_path %></p>
