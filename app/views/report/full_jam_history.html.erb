@@ -1,0 +1,46 @@
+<h1>Full Jam Code History for <%= link_to @dev.name, device_path(@dev) %></h1>
+Model: <strong><%= @dev.model %></strong><br />
+Serial#: <strong><%= @dev.serial %></strong><br />
+<br />
+
+<!--
+# TODO Add control to select between "difference since last displayed alert" and
+# "difference since last alert for this code"
+-->
+<%= form_tag @uri, :method => 'get' do -%>
+Show only alerts for the last 
+<%= select_tag :days, options_for_select([['30 Days', 30],
+                                         ['60 Days', 60],
+                                         ['90 Days', 90],
+                                         ['120 Days', 120]], @days),
+                                         include_blank: true -%>
+                                         <%= submit_tag "Go" %>
+                                         <% end %>          
+                                         
+<p>
+The data within each cell consist of the time (in days, hours, min, and seconds), followed by the number of pages output since the last alert for a specific jam code.</p>
+
+<table class="counters">
+  <tr><th rowspan=2>Alert Date</th><th colspan=<%= @codes.length %>>Jam Codes</th></tr>
+
+  <tr>
+  <% @codes.each do |c| %>
+    <th><%= c %></th>
+  <% end %>
+  </tr>
+
+<% @data.each do |date,val| %>
+  <tr class="<%= cycle('light','dark') %>">
+    <td><%= date.to_formatted_s(:db) %></td>
+  <% @codes.each do |c| %>
+    <% if (val.keys[0] == c) %>
+      <td><%= val[c]['d_date'] %><br />
+      <%= val[c]['d_page'] %></td>
+    <% else %>
+      <td>&nbsp;</td>
+    <% end %>
+  <% end %>
+  </tr>
+<% end %>
+    
+</table>

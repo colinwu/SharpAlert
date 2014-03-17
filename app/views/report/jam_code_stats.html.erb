@@ -18,7 +18,7 @@
 <% @dev_list.each do |d| %>
   <% unless @dev_stats[d.id].nil? %>
     <tr class="<%= cycle('dark','light') %>">
-      <th><%= d.name %></th>
+      <th><%= link_to d.name, full_jam_history_report_path(d.id) %></th>
       <% @code_list.each do |code| %>
       <td><% unless (@dev_stats[d.id][code.jam_code].nil?) %><%= link_to @dev_stats[d.id][code.jam_code], jam_history_report_path(d.id,code.jam_code) + "?days=#{@days}", :title => "Jam code: #{code.jam_code}" %><% end %></td>
       <% end %>

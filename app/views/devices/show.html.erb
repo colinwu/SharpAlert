@@ -1,24 +1,30 @@
-<% title "Device" %>
+<% title @title %>
 
-<p>
-  <strong>Name:</strong>
-  <%= @device.name %>
-</p>
-<p>
-  <strong>Model:</strong>
-  <%= @device.model %>
-</p>
-<p>
-  <strong>Serial:</strong>
-  <%= @device.serial %>
-</p>
-<p>
-  <strong>Code:</strong>
-  <%= @device.code %>
-</p>
+<div>
+  Name:
+  <strong><%= link_to @device.name , edit_device_path(@device), :title => "Click to edit " %></strong><br />
+  Model:
+  <strong><%= @device.model %></strong><br />
+  Serial:
+  <strong><%= @device.serial %></strong><br />
+  Code:
+  <strong><%= @device.code %></strong>
+</div>
 
+<ul>
+<!-- Edit Notification Controls -->
+  <li><%= link_to "Edit Notification Controls", edit_notify_control_path(@device.notify_control) %></li>
+  
+<!-- Report on Toner History -->
+  <li><%= link_to_if (@device.alerts.where("alert_msg regexp 'toner supply' or alert_msg regexp 'add toner'").length > 2), "Show Toner History", toner_history_report_path(@device) %></li>
+  
+<!-- Report on Misfeed History -->
+  <li><%= link_to_if @device.alerts.where("alert_msg regexp 'misfeed'"), "Show Misfeed History", full_jam_history_report_path(@device.id) %></li>
+
+<!-- Show latest maintenance counters -->
+  <li><%= link_to_if @device.alerts.last.maint_counter, "Latest Maintenance Counters", alert_path(@device.alerts.last) %></li>
+</ul>
 <p>
-  <%= link_to "Edit", edit_device_path(@device) %> |
   <%= link_to "Destroy", @device, :confirm => 'Are you sure?', :method => :delete %> |
   <%= link_to "View All", devices_path %>
 </p>

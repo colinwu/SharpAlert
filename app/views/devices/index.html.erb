@@ -32,9 +32,8 @@
       <td><%= device.code %></td>
       <td><%= device.client.nil? ? link_to('<Edit device details>', edit_device_path(device)) : device.client.name %></td>
       <td>
-        <%= link_to "Edit", edit_device_path(device) %>&nbsp;
-        <%= link_to "Toner History", toner_history_report_path(device) %>&nbsp;
-
+        <%= link_to "Edit", edit_device_path(device) %> | 
+        <%= link_to "Reports", device_path(device) %>
       </td>
     </tr>
   <% end %>

@@ -27,10 +27,10 @@
     <% nc = Device.find_by_serial(alert.device.serial) %>
     <tr class="<%=cycle('dark','light')%>">
       <td><%= alert.alert_date.to_formatted_s(:db) %></td>
-      <td><%= link_to alert.device.name, edit_device_path(alert.device), :title => "Click to edit device info" %></td>
-      <td><%= link_to alert.device.model, edit_device_path(alert.device), :title => "Click to edit device info" %></td>
-      <td><%= link_to alert.device.serial, edit_device_path(alert.device), :title => "Click to edit device info" %></td>
-      <td><%= link_to alert.device.code, edit_device_path(alert.device), :title => "Click to edit device info" %></td>
+      <td><%= link_to alert.device.name, device_path(alert.device), :title => "Click to access device reports" %></td>
+      <td><%= link_to alert.device.model, device_path(alert.device), :title => "Click to access device reports" %></td>
+      <td><%= link_to alert.device.serial, device_path(alert.device), :title => "Click to access device reports" %></td>
+      <td><%= link_to alert.device.code, device_path(alert.device), :title => "Click to access device reports" %></td>
       <td>
       <%= alert.device.client.nil? ? link_to("<Edit Device Info>", edit_device_path(alert.device)) : alert.device.client.name %>
       </td>
@@ -42,9 +42,6 @@
       </td>
       <td><% unless (alert.sheet_count.nil?) %>
             <%= link_to 'Detail', alert_path(alert), :title => 'Show counter data' %>
-            <% if (!alert.jam_stat.nil? and alert.alert_msg =~ /misfeed/i) %>
-              <%= link_to 'History', jam_history_report_path(alert.device_id, alert.jam_stat.jam_code) + "?days=30" %>
-            <% end %>
           <% end %>
       </td>
     </tr>

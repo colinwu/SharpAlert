@@ -22,6 +22,7 @@ SharpApp::Application.routes.draw do
   get 'report/:id/maint_detail' => 'report#maint_detail', :as => :maint_detail_report
   get 'report/:id/toner_history' => 'report#toner_history', :as => :toner_history_report
   match 'report/drum_dev_age', :as => :drum_dev_age_report
+  get 'report/:id/full_jam_history' => 'report#full_jam_history', :as => :full_jam_history_report
   
   
   resources :print_volumes

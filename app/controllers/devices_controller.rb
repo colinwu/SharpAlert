@@ -48,6 +48,7 @@ class DevicesController < ApplicationController
 
   def show
     @device = Device.find(params[:id])
+    @title = "Reports Available for #{@device.name}"
   end
 
   def new

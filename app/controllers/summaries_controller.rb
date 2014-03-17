@@ -1,5 +1,4 @@
 class SummariesController < ApplicationController
-  # TODO rewrite Alert.all(:conditions ...) to Alert.where(...)
   def index
     @num_alerts = Alert.all.count
     @num_devices = Alert.joins(:device).group('serial','model').where("serial <> 'default'").length

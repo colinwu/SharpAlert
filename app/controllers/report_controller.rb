@@ -90,6 +90,7 @@ class ReportController < ApplicationController
     end
   end
   
+  # Jam code history for a device/code combination
   def jam_history
     @uri = request.env['REQUEST_URI'].sub(/[&?]*days=\d+&*/, '')
     
@@ -107,6 +108,48 @@ class ReportController < ApplicationController
       @alerts = Alert.where(where_array).joins(:jam_stat).order(:alert_date)
     end
     @title = "Jam Code #{@jam} History for #{@dev.name}"
+  end
+  
+  def full_jam_history
+    # TODO Add control to select between "difference since last displayed alert" and "difference since last alert for this code"
+
+    @dev = Device.find params[:id]
+    code_hash = Hash.new
+    @data = Hash.new
+    
+    # Now build display data array @data
+    where_array = ["alert_msg = 'Misfeed has occurred.' and device_id = ?", @dev.id]
+    unless (params[:days].nil? or params[:days].empty?)
+      @days = params[:days]
+      where_array[0] += " and alert_date > date_sub(now(),interval ? day)"
+      where_array << @days.to_i
+    end
+    @alerts = Alert.where(where_array).joins(:jam_stat).order(:alert_date)
+    
+    # first retrieve complete list of jam codes we know about for the device    
+    @alerts.each do |a|
+      unless a.jam_stat.nil?
+        code_hash[a.jam_stat.jam_code] = 1
+      end
+    end
+    @codes = code_hash.keys.sort
+    
+    last_entry = Hash.new
+    prev_alert = Hash.new
+    @alerts.each do |a|
+      unless last_entry[a.jam_stat.jam_code].nil?
+        prev_alert = last_entry[a.jam_stat.jam_code]
+        diff = a.alert_date - prev_alert.alert_date
+        d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
+        diff = (a.sheet_count.bw + a.sheet_count.color) - (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
+        @data[a.alert_date] = 
+                  {a.jam_stat.jam_code => 
+                    {'d_date' => "#{d.to_i}day, #{"%02d" % h}:#{"%02d" % m}:#{"%02d" % s}",
+                     'd_page' => diff}
+                  }
+      end
+      last_entry[a.jam_stat.jam_code] = a
+    end
   end
   
   def drum_dev_age
