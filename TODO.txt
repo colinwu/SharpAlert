@@ -176,7 +176,6 @@ Phase IV - Reports *** ON-GOING ***
   - Show appropriate page count difference between alerts for the same toner
 - Full Jam History
   * Need to translate jam code to something a service tech or manager can understand.
-  * Add control to select between "difference since last displayed alert" and "difference since last alert for this code"
 - Show latest maintenance counters
 * Maintenance Code History
 * Service Code History

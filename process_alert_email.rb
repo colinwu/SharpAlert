@@ -223,7 +223,7 @@ end
 @d = Device.find_by_serial_and_model(serial,model)
 unless @d.nil?
   # if the device does not exist (in the db) don't bother checking for old alert
-  alert = Alert.where("alert_date = '#{alert_date}' and (alert_msg = '#{alert_msg}' or alert_msg regexp 'Misfeed') and device_id = #{@d.id}").first
+  alert = Alert.where("alert_date = '#{alert_date}' and (alert_msg = '#{alert_msg}' or alert_msg regexp 'Misfeed') and device_id = #{@d.id}").order(:alert_date).last
 end
 
 if alert.nil?

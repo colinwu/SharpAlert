@@ -111,11 +111,9 @@ class ReportController < ApplicationController
   end
   
   def full_jam_history
-    # TODO Add control to select between "difference since last displayed alert" and "difference since last alert for this code"
-
     @dev = Device.find params[:id]
-    code_hash = Hash.new
     @data = Hash.new
+    @codes = Array.new
     
     # Now build display data array @data
     where_array = ["alert_msg = 'Misfeed has occurred.' and device_id = ?", @dev.id]
@@ -129,10 +127,12 @@ class ReportController < ApplicationController
     # first retrieve complete list of jam codes we know about for the device    
     @alerts.each do |a|
       unless a.jam_stat.nil?
-        code_hash[a.jam_stat.jam_code] = 1
+        @codes << a.jam_stat.jam_code
       end
     end
-    @codes = code_hash.keys.sort
+    unless @codes.empty?
+      @codes.uniq!.sort!
+    end
     
     last_entry = Hash.new
     prev_alert = Hash.new
@@ -141,15 +141,75 @@ class ReportController < ApplicationController
         prev_alert = last_entry[a.jam_stat.jam_code]
         diff = a.alert_date - prev_alert.alert_date
         d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
-        diff = (a.sheet_count.bw + a.sheet_count.color) - (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
+        diff = (a.sheet_count.bw + a.sheet_count.color) - 
+            (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
         @data[a.alert_date] = 
                   {a.jam_stat.jam_code => 
                     {'d_date' => "#{d.to_i}day, #{"%02d" % h}:#{"%02d" % m}:#{"%02d" % s}",
                      'd_page' => diff}
                   }
+      else
+        @data[a.alert_date] = {a.jam_stat.jam_code => {'d_date' => '-', 'd_page' => '-'}}
       end
       last_entry[a.jam_stat.jam_code] = a
     end
+  end
+  
+  def full_cfs_history
+    @dev = Device.find params[:id]
+    @codes = Array.new
+    @data = Hash.new
+    
+    where_array = ["alert_msg regexp 'call for service' and device_id = ?", @dev.id]
+    unless (params[:days].nil? or params[:days].empty?)
+      @days = params[:days]
+      where_array[0] += " and alert_date > date_sub(now(),interval ? day)"
+      where_array << @days.to_i
+    end
+    @alerts = Alert.where(where_array).joins(:service_codes).order(:alert_date)
+    
+    @alerts.each do |a|
+      unless a.service_codes.empty?
+        a.service_codes.each do |s|
+          @codes << s.code
+        end
+      end
+    end
+    unless @codes.empty?
+      @codes.uniq!.sort!
+    end
+    
+    last_entry = Hash.new
+    prev_alert = Hash.new
+    @alerts.each do |a|
+      a.service_codes.each do |sc|
+        unless last_entry[sc.code].nil?
+          prev_alert = last_entry[sc.code]
+          diff = a.alert_date - prev_alert.alert_date
+          d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
+          unless (a.sheet_count.nil? or prev_alert.sheet_count.nil?)
+            diff = (a.sheet_count.bw + a.sheet_count.color) - (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
+          else
+            diff = '-'
+          end
+          if (@data[a.alert_date].nil?)
+            @data[a.alert_date] = {sc.code => {'d_date' => "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}}
+          else
+            @data[a.alert_date][sc.code] = {'d_date' => "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}
+          end
+        else
+          @data[a.alert_date] = {sc.code => {'d_date' => '-', 'd_page' => '-'}}
+        end
+        last_entry[sc.code] = a
+      end
+    end
+  end
+  
+  def full_maint_history
+    @dev = Device.find params[:id]
+    code_hash = Hash.new
+    @data = Hash.new
+    
   end
   
   def drum_dev_age

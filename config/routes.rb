@@ -18,8 +18,8 @@ SharpApp::Application.routes.draw do
   get "report/volume"
   get "report/jam_code_stats" => 'report#jam_code_stats', :as => :jam_code_stats_report
   get 'report/:id/jam_history/:code' => 'report#jam_history', :as => :jam_history_report
-  get 'report/:id/service_detail' => 'report#service_detail', :as => :service_detail_report
-  get 'report/:id/maint_detail' => 'report#maint_detail', :as => :maint_detail_report
+  get 'report/:id/full_cfs_history' => 'report#full_cfs_history', :as => :full_cfs_history_report
+  get 'report/:id/full_maint_history' => 'report#full_maint_history', :as => :full_maint_history_report
   get 'report/:id/toner_history' => 'report#toner_history', :as => :toner_history_report
   match 'report/drum_dev_age', :as => :drum_dev_age_report
   get 'report/:id/full_jam_history' => 'report#full_jam_history', :as => :full_jam_history_report
