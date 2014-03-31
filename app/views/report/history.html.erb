@@ -1,6 +1,7 @@
-<h1>Full "Call Fro Service" History for <%= link_to @dev.name, device_path(@dev) %></h1>
+<% title @title %>
 Model: <strong><%= @dev.model %></strong><br />
 Serial#: <strong><%= @dev.serial %></strong><br />
+Code: <strong><%= @dev.code %></strong><br />
 <br />
 
 <%= form_tag @uri, :method => 'get' do -%>
@@ -14,7 +15,7 @@ Show only alerts for the last
 <% end %>          
                                          
 <p>
-The data within each cell consist of the time (in days, hours, min, and seconds), followed by the number of pages output since the last alert for a specific service code.</p>
+The data within each cell consist of the time (in days, hours, min, and seconds), followed by the number of pages output since the last alert for that code.</p>
 
 <table class="counters">
   <tr><th rowspan=2>Alert Date</th><th colspan=<%= @codes.length %>>Service Codes</th></tr>
@@ -29,9 +30,9 @@ The data within each cell consist of the time (in days, hours, min, and seconds)
   <tr class="<%= cycle('light','dark') %>">
     <td><%= date.to_formatted_s(:db) %></td>
   <% @codes.each do |c| %>
-    <% if (val.keys[0] == c) %>
-      <td><%= val[c]['d_date'] %><br />
-      <%= val[c]['d_page'] %></td>
+    <% unless (val[c].nil?) %>
+      <td><span title="Code <%= c %>"><%= val[c]['d_date'] %><br />
+      <%= number_with_delimiter(val[c]['d_page']) %></span></td>
     <% else %>
       <td>&nbsp;</td>
     <% end %>

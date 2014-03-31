@@ -1,4 +1,4 @@
-<h1>Toner Alert History for <%= @dev.name %></h1>
+<h1>Toner Usage Analysis for <%= @dev.name %></h1>
 <!-- 
 # @alerts is array of Alert objects where alert_msg contains "toner supply is low"
 -->
@@ -35,7 +35,7 @@ Serial#: <strong><%= @dev.serial %></strong><br />
 <%
       else
         for v in ['date_diff','page_diff']
-          disp_val = @toner_low[d][c][v].nil? ? ' ' : @toner_low[d][c][v].to_i
+          disp_val = @toner_low[d][c][v].nil? ? ' ' : @toner_low[d][c][v]
 %>
           <td><%= disp_val %></td>
 <%
@@ -77,7 +77,7 @@ for c in ['Bk','C','M','Y']
 <%
   else
     for v in ['date_diff','page_diff']
-      disp_val = @toner_out[d][c][v].nil? ? ' ' : @toner_out[d][c][v].to_i
+      disp_val = @toner_out[d][c][v].nil? ? ' ' : @toner_out[d][c][v]
 %>
       <td><%= disp_val %></td>
 <%

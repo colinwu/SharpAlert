@@ -177,8 +177,8 @@ Phase IV - Reports *** ON-GOING ***
 - Full Jam History
   * Need to translate jam code to something a service tech or manager can understand.
 - Show latest maintenance counters
-* Maintenance Code History
-* Service Code History
+- Maintenance Code History
+- Service Code History
 
 ============= DONE (but keep adding new reports) ==============
 - Clicking on a device (name, model or serial number) from anywhere in the application should take the user to a "What reports are available for this device" screen, one of which would be to edit the device details.

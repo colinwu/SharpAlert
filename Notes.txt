@@ -51,3 +51,8 @@ New process:
 - if 'textfile1' exists then it contains the plain-text portion of the message; i.e. the alert message itself
 - if 'textfile1' does not exist then 'textfile0' contains the message
 - if the alert is for a misfeed then process the '*.R05' file to obtain the jam code
+=======================
+
+Predicting toner use - Simple average method on dates
+- Only look at toner alerts that are at least 5 days apart
+- Examine "toner low" and "toner out" alerts separately

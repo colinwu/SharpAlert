@@ -28,7 +28,7 @@
   <li><%= link_to_if @device.alerts.where("alert_msg regexp 'maintenance required'"), "Show Maintenance Required History", full_maint_history_report_path(@device.id) %></li>
   
 <!-- Show latest maintenance counters -->
-  <li><%= link_to_if @device.alerts.last.maint_counter, "Latest Maintenance Counters", alert_path(@device.alerts.last) %></li>
+  <li><%= link_to_if @device.alerts.last.nil?, "Latest Maintenance Counters", alert_path(@device.alerts.last) %></li>
 </ul>
 
 <p>

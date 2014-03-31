@@ -130,7 +130,7 @@ class ReportController < ApplicationController
         @codes << a.jam_stat.jam_code
       end
     end
-    unless @codes.empty?
+    unless @codes.length < 2
       @codes.uniq!.sort!
     end
     
@@ -149,7 +149,7 @@ class ReportController < ApplicationController
                      'd_page' => diff}
                   }
       else
-        @data[a.alert_date] = {a.jam_stat.jam_code => {'d_date' => '-', 'd_page' => '-'}}
+        @data[a.alert_date] = {a.jam_stat.jam_code => {'d_date' => '*', 'd_page' => '*'}}
       end
       last_entry[a.jam_stat.jam_code] = a
     end
@@ -166,7 +166,7 @@ class ReportController < ApplicationController
       where_array[0] += " and alert_date > date_sub(now(),interval ? day)"
       where_array << @days.to_i
     end
-    @alerts = Alert.where(where_array).joins(:service_codes).order(:alert_date)
+    @alerts = Alert.where(where_array).joins(:service_codes).order(:alert_date).uniq
     
     @alerts.each do |a|
       unless a.service_codes.empty?
@@ -175,7 +175,7 @@ class ReportController < ApplicationController
         end
       end
     end
-    unless @codes.empty?
+    unless @codes.length < 2
       @codes.uniq!.sort!
     end
     
@@ -190,7 +190,7 @@ class ReportController < ApplicationController
           unless (a.sheet_count.nil? or prev_alert.sheet_count.nil?)
             diff = (a.sheet_count.bw + a.sheet_count.color) - (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
           else
-            diff = '-'
+            diff = '*'
           end
           if (@data[a.alert_date].nil?)
             @data[a.alert_date] = {sc.code => {'d_date' => "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}}
@@ -198,17 +198,72 @@ class ReportController < ApplicationController
             @data[a.alert_date][sc.code] = {'d_date' => "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}
           end
         else
-          @data[a.alert_date] = {sc.code => {'d_date' => '-', 'd_page' => '-'}}
+          if (@data[a.alert_date].nil?)
+            @data[a.alert_date] = {sc.code => {'d_date' => '*', 'd_page' => '*'}}
+          else
+            @data[a.alert_date][sc.code] = {'d_date' => '*', 'd_page' => '*'}
+          end
         end
         last_entry[sc.code] = a
       end
     end
+    @title = "Call for Service History for #{@dev.name}"
+    render :template => 'report/history.html.erb'
   end
   
   def full_maint_history
     @dev = Device.find params[:id]
-    code_hash = Hash.new
+    @codes = Array.new
     @data = Hash.new
+    where_array = ["alert_msg regexp 'maintenance required' and device_id = ?", @dev.id]
+    unless (params[:days].nil? or params[:days].empty?)
+      @days = params[:days]
+      where_array[0] += " and alert_date > date_sub(now(),interval ? day)"
+      where_array << @days.to_i
+    end
+    @alerts = Alert.where(where_array).joins(:maint_codes).order(:alert_date).uniq
+    
+    @alerts.each do |a|
+      unless a.maint_codes.empty?
+        a.maint_codes.each do |s|
+          @codes << s.code
+        end
+      end
+    end
+    unless @codes.length < 2
+      @codes.uniq!.sort!
+    end
+    
+    last_entry = Hash.new
+    prev_alert = Hash.new
+    @alerts.each do |a|
+      a.maint_codes.each do |sc|
+        unless last_entry[sc.code].nil?
+          prev_alert = last_entry[sc.code]
+          diff = a.alert_date - prev_alert.alert_date
+          d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
+          unless (a.sheet_count.nil? or prev_alert.sheet_count.nil?)
+            diff = (a.sheet_count.bw + a.sheet_count.color) - (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
+          else
+            diff = '*'
+          end
+          if (@data[a.alert_date].nil?)
+            @data[a.alert_date] = {sc.code => {'d_date' => "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}}
+          else
+            @data[a.alert_date][sc.code] = {'d_date' => "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}
+          end
+        else
+          if (@data[a.alert_date].nil?)
+            @data[a.alert_date] = {sc.code => {'d_date' => '*', 'd_page' => '*'}}
+          else
+            @data[a.alert_date][sc.code] = {'d_date' => '*', 'd_page' => '*'}
+          end
+        end
+        last_entry[sc.code] = a
+      end
+    end
+    @title = "Detailed Maintenance Request Analysis for #{@dev.name}"
+    render :template => 'report/history.html.erb'
     
   end
   
@@ -225,21 +280,26 @@ class ReportController < ApplicationController
   
   # Toner history for one device. Access as /report/:id/toner_history?days=N
   def toner_history
-    @uri = request.env['REQUEST_URI'].sub(/[&?]*days=\d+&*/, '')
-    
     if (params.nil?)
       # should show an error message
     else
       @dev = Device.find params[:id]
       where_array = ["(alert_msg regexp 'toner supply is low') and device_id = ?", @dev.id]
-#       unless (params[:days].nil? or params[:days].empty?)
-#         @days = params[:days]
-#         where_array[0] += " and alert_date > date_sub(now(),interval ? day)"
-#         where_array << @days
-#       end
+      unless (params[:days].nil? or params[:days].empty?)
+        @days = params[:days]
+        where_array[0] += " and alert_date > date_sub(now(),interval ? day)"
+        where_array << @days
+      end
       @alerts = Alert.where(where_array).joins(:toner_codes).group('date(alert_date)', 'toner_codes.colour').count
       
       @toner_low = Hash.new
+      # @toner_low's structure is:
+      # {alert_date.to_date => {
+      #                          colour => {'date_diff' => d, 'page_diff' => p},
+      #                          ...
+      #                        }
+      # }
+      
       last_entry = Hash.new
       where_array << '' # just a couple of placeholders
       where_array << ''
@@ -251,8 +311,8 @@ class ReportController < ApplicationController
         a = Alert.where(where_array).order('alert_date').joins(:toner_codes).first
         unless (last_entry[key[1]].nil?)
           prev_alert = last_entry[key[1]]
-          date_diff = (a.alert_date - prev_alert.alert_date)/86400
-          if (date_diff > 5)
+          date_diff = ((a.alert_date - prev_alert.alert_date)/86400).to_i
+          if (date_diff > 10)
             if (@toner_low[key[0]].nil?)
               @toner_low[key[0]] = {key[1] => {'date_diff' => date_diff}}
             else
@@ -265,7 +325,12 @@ class ReportController < ApplicationController
                 @toner_low[key[0]][key[1]]['page_diff'] = a.sheet_count.color - prev_alert.sheet_count.color
               end
             end
-            
+          end
+        else
+          if @toner_low[key[0]].nil?
+            @toner_low[key[0]] = {key[1] => {'date_diff' => '*', 'page_diff' => '*'}}
+          else
+            @toner_low[key[0]][key[1]] = {'date_diff' => '*', 'page_diff' => '*'}
           end
         end
         if (date_diff > 5 or last_entry[key[1]].nil?)
@@ -275,6 +340,10 @@ class ReportController < ApplicationController
 
     
       where_array = ["(alert_msg regexp 'add toner') and device_id = ?", @dev.id]
+      unless @days.nil? or @days.empty?
+        where_array[0] += " and alert_date > date_sub(now(),interval ? day)"
+        where_array << @days
+      end
       @alerts = Alert.where(where_array).joins(:toner_codes).group('date(alert_date)', 'toner_codes.colour').count
       
       @toner_out = Hash.new
@@ -283,14 +352,15 @@ class ReportController < ApplicationController
       where_array << ''
       date_diff = 0
       where_array[0] = "(alert_msg regexp 'add toner') and device_id = ? and toner_codes.colour = ? and date(alert_date) = ?"
+
       @alerts.each do |key,val|
         where_array[-1] = key[0]
         where_array[-2] = key[1]
         a = Alert.where(where_array).order('alert_date').joins(:toner_codes).first
         unless (last_entry[key[1]].nil?)
           prev_alert = last_entry[key[1]]
-          date_diff = (a.alert_date - prev_alert.alert_date)/86400
-          if (date_diff > 5)
+          date_diff = ((a.alert_date - prev_alert.alert_date)/86400).to_i
+          if (date_diff > 10)
             if (@toner_out[key[0]].nil?)
               @toner_out[key[0]] = {key[1] => {'date_diff' => date_diff}}
             else
@@ -303,7 +373,12 @@ class ReportController < ApplicationController
                 @toner_out[key[0]][key[1]]['page_diff'] = a.sheet_count.color - prev_alert.sheet_count.color
               end
             end
-            
+          end
+        else
+          if @toner_out[key[0]].nil?
+            @toner_out[key[0]] = {key[1] => {'date_diff' => '*', 'page_diff' => '*'}}
+          else
+            @toner_out[key[0]][key[1]] = {'date_diff' => '*', 'page_diff' => '*'}
           end
         end
         if (date_diff > 5 or last_entry[key[1]].nil?)

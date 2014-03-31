@@ -30,8 +30,8 @@ The data within each cell consist of the time (in days, hours, min, and seconds)
     <td><%= date.to_formatted_s(:db) %></td>
   <% @codes.each do |c| %>
     <% if (val.keys[0] == c) %>
-      <td><%= val[c]['d_date'] %><br />
-      <%= val[c]['d_page'] %></td>
+      <td><span title="Jam code <%= c %>"><%= val[c]['d_date'] %><br />
+      <%= val[c]['d_page'] %></span></td>
     <% else %>
       <td>&nbsp;</td>
     <% end %>
