@@ -123,35 +123,51 @@ class ReportController < ApplicationController
       where_array << @days.to_i
     end
     @alerts = Alert.where(where_array).joins(:jam_stat).order(:alert_date)
-    
-    # first retrieve complete list of jam codes we know about for the device    
-    @alerts.each do |a|
-      unless a.jam_stat.nil?
-        @codes << a.jam_stat.jam_code
+    unless @alerts.empty?
+      # first retrieve complete list of jam codes we know about for the device    
+      @alerts.each do |a|
+        unless a.jam_stat.nil?
+          @codes << a.jam_stat.jam_code
+        end
       end
-    end
-    unless @codes.length < 2
-      @codes.uniq!.sort!
-    end
-    
-    last_entry = Hash.new
-    prev_alert = Hash.new
-    @alerts.each do |a|
-      unless last_entry[a.jam_stat.jam_code].nil?
-        prev_alert = last_entry[a.jam_stat.jam_code]
-        diff = a.alert_date - prev_alert.alert_date
-        d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
-        diff = (a.sheet_count.bw + a.sheet_count.color) - 
-            (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
-        @data[a.alert_date] = 
-                  {a.jam_stat.jam_code => 
-                    {'d_date' => "#{d.to_i}day, #{"%02d" % h}:#{"%02d" % m}:#{"%02d" % s}",
-                     'd_page' => diff}
-                  }
-      else
-        @data[a.alert_date] = {a.jam_stat.jam_code => {'d_date' => '*', 'd_page' => '*'}}
+      unless @codes.length < 2
+        @codes.uniq!.sort!
       end
-      last_entry[a.jam_stat.jam_code] = a
+      
+      last_entry = Hash.new
+      prev_alert = Hash.new
+      @alerts.each do |a|
+        unless last_entry[a.jam_stat.jam_code].nil?
+          prev_alert = last_entry[a.jam_stat.jam_code]
+          diff = a.alert_date - prev_alert.alert_date
+          d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
+          diff = (a.sheet_count.bw + a.sheet_count.color) - 
+              (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
+          @data[a.alert_date] = 
+                    {a.jam_stat.jam_code => 
+                    {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{"%02d" % h}:#{"%02d" % m}:#{"%02d" % s}",
+                      'd_page' => diff}
+                    }
+        else
+          @data[a.alert_date] = {a.jam_stat.jam_code => {'d_date' => '*', 'd_page' => '*'}}
+        end
+        last_entry[a.jam_stat.jam_code] = a
+      end
+    else
+      # Device doesn't return dealer attachments
+      @alerts = Alert.where(where_array).order(:alert_date)
+#       prev_alert = Alert.new
+      @codes = ['*']
+      @alerts.each do |a|
+        unless prev_alert.nil?
+          diff = a.alert_date - prev_alert.alert_date
+          d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
+          @data[a.alert_date] = {'*' => {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{"%02d" % h}:#{"%02d" % m}:#{"%02d" % s}", 'd_page' => ' '}}
+        else
+          @data[a.alert_date] = {"*" => {'d_date' => '*', 'd_page' => ' '}}
+        end
+        prev_alert = a
+      end
     end
   end
   
@@ -193,9 +209,9 @@ class ReportController < ApplicationController
             diff = '*'
           end
           if (@data[a.alert_date].nil?)
-            @data[a.alert_date] = {sc.code => {'d_date' => "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}}
+            @data[a.alert_date] = {sc.code => {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}}
           else
-            @data[a.alert_date][sc.code] = {'d_date' => "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}
+            @data[a.alert_date][sc.code] = {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}
           end
         else
           if (@data[a.alert_date].nil?)
@@ -248,9 +264,9 @@ class ReportController < ApplicationController
             diff = '*'
           end
           if (@data[a.alert_date].nil?)
-            @data[a.alert_date] = {sc.code => {'d_date' => "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}}
+            @data[a.alert_date] = {sc.code => {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}}
           else
-            @data[a.alert_date][sc.code] = {'d_date' => "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}
+            @data[a.alert_date][sc.code] = {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}
           end
         else
           if (@data[a.alert_date].nil?)
@@ -312,7 +328,7 @@ class ReportController < ApplicationController
         unless (last_entry[key[1]].nil?)
           prev_alert = last_entry[key[1]]
           date_diff = ((a.alert_date - prev_alert.alert_date)/86400).to_i
-          if (date_diff > 10)
+          if (date_diff > 1)
             if (@toner_low[key[0]].nil?)
               @toner_low[key[0]] = {key[1] => {'date_diff' => date_diff}}
             else
@@ -333,9 +349,7 @@ class ReportController < ApplicationController
             @toner_low[key[0]][key[1]] = {'date_diff' => '*', 'page_diff' => '*'}
           end
         end
-        if (date_diff > 5 or last_entry[key[1]].nil?)
-          last_entry[key[1]] = a 
-        end
+        last_entry[key[1]] = a 
       end
 
     
@@ -360,7 +374,7 @@ class ReportController < ApplicationController
         unless (last_entry[key[1]].nil?)
           prev_alert = last_entry[key[1]]
           date_diff = ((a.alert_date - prev_alert.alert_date)/86400).to_i
-          if (date_diff > 10)
+          if (date_diff > 1)
             if (@toner_out[key[0]].nil?)
               @toner_out[key[0]] = {key[1] => {'date_diff' => date_diff}}
             else
@@ -381,9 +395,7 @@ class ReportController < ApplicationController
             @toner_out[key[0]][key[1]] = {'date_diff' => '*', 'page_diff' => '*'}
           end
         end
-        if (date_diff > 5 or last_entry[key[1]].nil?)
-          last_entry[key[1]] = a 
-        end
+        last_entry[key[1]] = a 
       end
     end
   end

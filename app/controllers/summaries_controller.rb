@@ -66,7 +66,7 @@ class SummariesController < ApplicationController
         @maint[key] = d.alerts.where('alert_msg regexp "maintenance"').select(:alert_date)
         @waste_warn[key] = d.alerts.where('alert_msg regexp "toner collection container"').select(:alert_date)
         @waste_full[key] = d.alerts.where('alert_msg regexp "replace used toner container"').select(:alert_date)
-	@first_alert[key] = d.alerts.order(:created_at).first
+        @first_alert[key] = d.alerts.order(:created_at).first
       end
       
       @devices_by_model.each do |d|

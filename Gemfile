@@ -27,6 +27,7 @@ gem 'jquery-rails'
 gem 'will_paginate'
 gem 'getopt'
 gem 'lazy_high_charts'
+gem 'linear-regression', '~> 0.0.2'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

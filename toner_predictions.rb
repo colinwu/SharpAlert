@@ -16,8 +16,8 @@ devs.each do |dev|
     a = Alert.where(where_array).order('alert_date').joins(:toner_codes).first
     unless (last_low[key[1]].nil?)
       prev_alert = last_low[key[1]]
-      date_diff = ((a.alert_date - prev_alert.alert_date)/86400).to_i
-      if (date_diff > 10)
+      date_diff = (a.alert_date.to_date - prev_alert.alert_date.to_date).to_i
+      if (date_diff > 5)
         toner_low[key[1]] << {'date_diff' => date_diff}
         unless (prev_alert.sheet_count.nil? or a.sheet_count.nil?)
           if (key[1] == 'Bk')
@@ -28,12 +28,40 @@ devs.each do |dev|
         end
       end
     end
-    if (date_diff > 5 or last_low[key[1]].nil?)
+#     if (date_diff > 10 or last_low[key[1]].nil?)
       last_low[key[1]] = a 
-    end
+#     end
   end
 
+  ['Bk','C','M','Y'].each do |c|
+    unless (toner_low[c].length < 2 or last_low[c].nil?)
+      y = toner_low[c].map do |d|
+        d['date_diff']
+      end
+      sd = Regression::Base.new.standard_deviation(y)
+      mean = Regression::Base.new.mean(y)
+      while (y.length > 3) and (sd > 10)
+        y1 = []
+        y.each do |d|
+          if (d > (mean - sd) and d < (mean + sd))
+            y1 << d
+          end
+        end
+        y = Array.new(y1)
+        sd = Regression::Base.new.standard_deviation(y)
+        mean = Regression::Base.new.mean(y)
+      end
+      if sd < 10
+        puts "#{dev.name} (#{dev.serial}): #{c} will run low on #{last_low[c].alert_date.to_date + mean}; sd = #{sd.round(3)}"
+      end
+    end
+  end
+  
+end
+exit
 
+while (false)
+# Work on "add toner" alerts
   where_array = ["(alert_msg regexp 'add toner') and device_id = ?", dev.id]
   @alerts = Alert.where(where_array).joins(:toner_codes).group('date(alert_date)', 'toner_codes.colour').count
 

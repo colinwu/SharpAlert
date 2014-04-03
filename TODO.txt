@@ -174,11 +174,16 @@ Phase IV - Reports *** ON-GOING ***
   - Show date of alerts (not time)
   - Show date interval between successive alerts for the same toner
   - Show appropriate page count difference between alerts for the same toner
+  * Need to think about how to do prediction.
 - Full Jam History
   * Need to translate jam code to something a service tech or manager can understand.
 - Show latest maintenance counters
 - Maintenance Code History
 - Service Code History
+* Predict drum and developer usage (for those devices that send dealer attachments)
+  - Starting from lastest maint_counter go backwards to find the minimum. This will be when they were last changed (or at least when the counters were reset)
+  - For each counter in between record the timestamp (as seconds since epoch) and calculate linear fit coefficients.
+  * for an individual device show graph of previous data points and regression line.
 
 ============= DONE (but keep adding new reports) ==============
 - Clicking on a device (name, model or serial number) from anywhere in the application should take the user to a "What reports are available for this device" screen, one of which would be to edit the device details.

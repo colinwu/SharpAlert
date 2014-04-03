@@ -23,7 +23,7 @@
 %>
   <tr class="<%= bkgrd %>">
     <td><%= mc.alert.alert_date.to_formatted_s(:db) %></td>
-    <td><%= Device.find(id).name %></td>
+    <td><%= Device.find(id).name %> (<%= Device.find(id).serial %>)</td>
     <td><%= mc.drum_life_used_b %></td>
     <td><%= mc.drum_life_used_c %></td>
     <td><%= mc.drum_life_used_m %></td>

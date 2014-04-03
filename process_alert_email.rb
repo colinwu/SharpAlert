@@ -234,7 +234,7 @@ if alert.nil?
   alert.save
 end
 
-unless (alert_msg =~ /paper/i or alert_msg =~ /Job Log/i) 
+# unless (alert_msg =~ /paper/i or alert_msg =~ /Job Log/i) 
   # ignore "Load Paper" and "job log full" alerts, also make sure there are no 
   # SheetCount, MaintCounter and JamStat records already
   if (alert.sheet_count.nil?)
@@ -276,7 +276,7 @@ unless (alert_msg =~ /paper/i or alert_msg =~ /Job Log/i)
       end
     end
   end
-end
+# end
 
 # retrieve (or create using defaults) the notification profile for this device.
 if @d.nil?
