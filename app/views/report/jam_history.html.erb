@@ -1,4 +1,4 @@
-<h1>Jam Code <%= @jam %> History for <%= link_to @dev.name, device_path(@dev) %></h1>
+<h1>Jam Code <%= JamCode.xlate(@jam) %> History for <%= link_to @dev.name, device_path(@dev) %></h1>
 Model: <strong><%= @dev.model %></strong><br />
 Serial#: <strong><%= @dev.serial %></strong><br />
 <br />
@@ -14,28 +14,14 @@ Serial#: <strong><%= @dev.serial %></strong><br />
   <th>B/W Count</th><th>B/W diff</th>
   <th>Color Count</th><th>Color Diff</th>
 </tr>
-<tr class='dark'>
-  <td><%= @alerts[0].alert_date.to_formatted_s(:db) %></td>
-  <td>&nbsp;</td>
-  <td><%= number_with_delimiter(@alerts[0].sheet_count.bw) %></td>
-  <td>&nbsp;</td>
-  <td><%= number_with_delimiter(@alerts[0].sheet_count.color) %></td>
-  <td>&nbsp;</td>
-</tr>
-<% for i in 1...@alerts.length %>
+<% for i in 0..@data['date'].length-1 %>
   <tr class='<%= cycle('light','dark') %>'>
-    <td><%= @alerts[i].alert_date.to_formatted_s(:db) %></td>
-    <%
-      diff = @alerts[i].alert_date - @alerts[i-1].alert_date
-      d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
-    %>
-    <td><%= "#{d.to_i}day, #{"%02d" % h}:#{"%02d" % m}:#{"%02d" % s}" %></td>
-    <td><%= number_with_delimiter(@alerts[i].sheet_count.bw) %></td>
-    <td><%= number_with_delimiter(@alerts[i].sheet_count.bw -
-                                  @alerts[i-1].sheet_count.bw) %></td>
-    <td><%= number_with_delimiter(@alerts[i].sheet_count.color) %></td>
-    <td><%= number_with_delimiter(@alerts[i].sheet_count.color -
-                                  @alerts[i-1].sheet_count.color) %></td>
+    <td><%= @data['date'][i].to_formatted_s(:db) %></td>
+    <td><%= @data['date_diff'][i] %></td>
+    <td><%= number_with_delimiter(@data['bw_count'][i]) %></td>
+    <td><%= number_with_delimiter(@data['bw_diff'][i]) %></td>
+    <td><%= number_with_delimiter(@data['c_count'][i]) %></td>
+    <td><%= number_with_delimiter(@data['c_diff'][i]) %></td>
   </tr>
 <% end %>
 </table>

@@ -11,7 +11,7 @@
 <tr>
   <th>Devices</th>
   <% @code_list.each do |c| %>
-    <th><%= c.jam_code %></th>
+    <th><%= JamCode.xlate(c.jam_code) %></th>
   <% end %>
 </tr>
 
@@ -20,7 +20,7 @@
     <tr class="<%= cycle('dark','light') %>">
       <th><%= link_to d.name, full_jam_history_report_path(d.id) %></th>
       <% @code_list.each do |code| %>
-      <td><% unless (@dev_stats[d.id][code.jam_code].nil?) %><%= link_to @dev_stats[d.id][code.jam_code], jam_history_report_path(d.id,code.jam_code) + "?days=#{@days}", :title => "Jam code: #{code.jam_code}" %><% end %></td>
+      <td><% unless (@dev_stats[d.id][code.jam_code].nil?) %><%= link_to @dev_stats[d.id][code.jam_code], jam_history_report_path(d.id,code.jam_code) + "?days=#{@days}", :title => "Jam code: #{JamCode.xlate(code.jam_code)}" %><% end %></td>
       <% end %>
     </tr>
   <% end %>

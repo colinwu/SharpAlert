@@ -56,6 +56,10 @@ fieldset {
   margin-bottom: .5em;
 }
 
+.DF { color: green; }
+
+.MB { color: blue; }
+
 .light {
   background-color: white;
 }
@@ -116,6 +120,20 @@ fieldset {
 
 .black {
   color: black;
+}
+
+.left_div {
+  display: inline;
+  float: left;
+  width: 49%;
+  margin: 0 auto;
+}
+
+.right_div {
+  display: inline;
+  float: right;
+  width: 49%;
+  margin: auto 1%;
 }
 
 #help-content {

@@ -31,7 +31,7 @@ The data within each cell consist of the time (in days, hours, min, and seconds)
     <td><%= date.to_formatted_s(:db) %></td>
   <% @codes.each do |c| %>
     <% unless (val[c].nil?) %>
-      <td><span title="Code <%= c %>"><%= val[c]['d_date'] %><br />
+      <td><span title="Code <%= c %>"><%= date_time_diff(val[c]['d_date']) %><br />
       <%= number_with_delimiter(val[c]['d_page']) %></span></td>
     <% else %>
       <td>&nbsp;</td>

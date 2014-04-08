@@ -106,8 +106,27 @@ class ReportController < ApplicationController
         where_array << @days
       end
       @alerts = Alert.where(where_array).joins(:jam_stat).order(:alert_date)
+      @data = {'date' => [], 'date_diff' => [], 'bw_count' => [], 'bw_diff' => [], 'c_count' => [], 'c_diff' => []}
+      prev_alert = Alert.new
+      @alerts.each do |a|
+        @data['date'] << a.alert_date
+        @data['bw_count'] << a.sheet_count.bw
+        @data['c_count'] << a.sheet_count.color
+        unless prev_alert.id.nil?
+          diff = a.alert_date.to_i - prev_alert.alert_date.to_i
+          d,h,m,s = (diff/86400).to_i, (diff%86400/3600).to_i, (diff%3600/60).to_i, (diff%60).to_i
+          @data['date_diff'] << ((d > 0) ? ((d == 1) ? "#{d} day " : "#{d} days ") : '') + "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}"
+          @data['bw_diff'] << a.sheet_count.bw - prev_alert.sheet_count.bw
+          @data['c_diff'] << a.sheet_count.color - prev_alert.sheet_count.color
+        else
+          @data['date_diff'] << ' '
+          @data['bw_diff'] << ' '
+          @data['c_diff'] << ' '
+        end
+        prev_alert = a
+      end
     end
-    @title = "Jam Code #{@jam} History for #{@dev.name}"
+    @title = "Jam Code #{JamCode.xlate(@jam)} History for #{@dev.name}"
   end
   
   def full_jam_history
@@ -139,14 +158,18 @@ class ReportController < ApplicationController
       @alerts.each do |a|
         unless last_entry[a.jam_stat.jam_code].nil?
           prev_alert = last_entry[a.jam_stat.jam_code]
-          diff = a.alert_date - prev_alert.alert_date
-          d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
-          diff = (a.sheet_count.bw + a.sheet_count.color) - 
-              (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
+          d_diff = a.alert_date - prev_alert.alert_date
+          if (a.jam_stat.jam_type == 'DF')
+            # Jam is a document feeder misfeed, so count original difference, rather than output
+            p_diff = a.maint_counter.spf_count - prev_alert.maint_counter.spf_count
+          else
+            p_diff = (a.sheet_count.bw + a.sheet_count.color) - 
+                    (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
+          end
           @data[a.alert_date] = 
                     {a.jam_stat.jam_code => 
-                    {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{"%02d" % h}:#{"%02d" % m}:#{"%02d" % s}",
-                      'd_page' => diff}
+                     {'d_date' => d_diff,
+                      'd_page' => p_diff}
                     }
         else
           @data[a.alert_date] = {a.jam_stat.jam_code => {'d_date' => '*', 'd_page' => '*'}}
@@ -160,9 +183,8 @@ class ReportController < ApplicationController
       @codes = ['*']
       @alerts.each do |a|
         unless prev_alert.nil?
-          diff = a.alert_date - prev_alert.alert_date
-          d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
-          @data[a.alert_date] = {'*' => {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{"%02d" % h}:#{"%02d" % m}:#{"%02d" % s}", 'd_page' => ' '}}
+          d_diff = a.alert_date - prev_alert.alert_date
+          @data[a.alert_date] = {'*' => {'d_date' => d_diff, 'd_page' => ' '}}
         else
           @data[a.alert_date] = {"*" => {'d_date' => '*', 'd_page' => ' '}}
         end
@@ -201,17 +223,16 @@ class ReportController < ApplicationController
       a.service_codes.each do |sc|
         unless last_entry[sc.code].nil?
           prev_alert = last_entry[sc.code]
-          diff = a.alert_date - prev_alert.alert_date
-          d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
+          d_diff = a.alert_date - prev_alert.alert_date
           unless (a.sheet_count.nil? or prev_alert.sheet_count.nil?)
-            diff = (a.sheet_count.bw + a.sheet_count.color) - (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
+            p_diff = (a.sheet_count.bw + a.sheet_count.color) - (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
           else
-            diff = '*'
+            p_diff = '-'
           end
           if (@data[a.alert_date].nil?)
-            @data[a.alert_date] = {sc.code => {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}}
+            @data[a.alert_date] = {sc.code => {'d_date' => d_diff, 'd_page' => p_diff}}
           else
-            @data[a.alert_date][sc.code] = {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}
+            @data[a.alert_date][sc.code] = {'d_date' => d_diff, 'd_page' => p_diff}
           end
         else
           if (@data[a.alert_date].nil?)
@@ -252,21 +273,22 @@ class ReportController < ApplicationController
     
     last_entry = Hash.new
     prev_alert = Hash.new
+    d_diff = 0
+    p_diff = 0
     @alerts.each do |a|
       a.maint_codes.each do |sc|
         unless last_entry[sc.code].nil?
           prev_alert = last_entry[sc.code]
-          diff = a.alert_date - prev_alert.alert_date
-          d,h,m,s = diff/86400, diff%86400/3600, diff%3600/60, diff%60
+          d_diff = a.alert_date.to_i - prev_alert.alert_date.to_i
           unless (a.sheet_count.nil? or prev_alert.sheet_count.nil?)
-            diff = (a.sheet_count.bw + a.sheet_count.color) - (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
+            p_diff = (a.sheet_count.bw + a.sheet_count.color) - (prev_alert.sheet_count.bw + prev_alert.sheet_count.color)
           else
-            diff = '*'
+            p_diff = '*'
           end
           if (@data[a.alert_date].nil?)
-            @data[a.alert_date] = {sc.code => {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}}
+            @data[a.alert_date] = {sc.code => {'d_date' => d_diff, 'd_page' => p_diff}}
           else
-            @data[a.alert_date][sc.code] = {'d_date' => (d < 1) ? "#{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}" : "#{d.to_i}day, #{'%02d' % h}:#{'%02d' % m}:#{'%02d' % s}", 'd_page' => diff}
+            @data[a.alert_date][sc.code] = {'d_date' => d_diff, 'd_page' => p_diff}
           end
         else
           if (@data[a.alert_date].nil?)
@@ -328,7 +350,7 @@ class ReportController < ApplicationController
         unless (last_entry[key[1]].nil?)
           prev_alert = last_entry[key[1]]
           date_diff = ((a.alert_date - prev_alert.alert_date)/86400).to_i
-          if (date_diff > 1)
+          if (date_diff > 10)
             if (@toner_low[key[0]].nil?)
               @toner_low[key[0]] = {key[1] => {'date_diff' => date_diff}}
             else
@@ -374,7 +396,7 @@ class ReportController < ApplicationController
         unless (last_entry[key[1]].nil?)
           prev_alert = last_entry[key[1]]
           date_diff = ((a.alert_date - prev_alert.alert_date)/86400).to_i
-          if (date_diff > 1)
+          if (date_diff > 10)
             if (@toner_out[key[0]].nil?)
               @toner_out[key[0]] = {key[1] => {'date_diff' => date_diff}}
             else
@@ -493,9 +515,9 @@ class ReportController < ApplicationController
       end
       @device_id = params[:device][:id]
       @device = Device.find @device_id
-      misfeed_alerts = Alert.where("device_id=#{@device_id} and alert_msg regexp 'misfeed' and alert_date > date_sub(curdate(), interval #{@days}  day)").group('date(alert_date)').count
-      maint_alerts = Alert.where("device_id=#{@device_id} and alert_msg regexp 'maintenance' and alert_date > date_sub(curdate(), interval #{@days} day)").group('date(alert_date)').count
-      service_alerts = Alert.where("device_id=#{@device_id} and alert_msg regexp 'service' and alert_date > date_sub(curdate(), interval #{@days} day)").group('date(alert_date)').count
+      misfeed_alerts = Alert.where(["device_id=? and alert_msg regexp 'misfeed' and alert_date > date_sub(curdate(), interval ? day)",@device_id,@days]).group('date(alert_date)').count
+      maint_alerts = Alert.where(["device_id=? and alert_msg regexp 'maintenance' and alert_date > date_sub(curdate(), interval ? day)",@device_id,@days]).group('date(alert_date)').count
+      service_alerts = Alert.where(["device_id=? and alert_msg regexp 'service' and alert_date > date_sub(curdate(), interval ? day)",@device_id,@days]).group('date(alert_date)').count
       misfeed_data = Hash.new
       maint_data = Hash.new
       service_data = Hash.new
@@ -526,7 +548,7 @@ class ReportController < ApplicationController
   end
 
   # Produce chart of bw and colour (if available) page counts between readings.
-  def volume_graph
+  def device_volume_graph
     @days = 30
     if (params.nil? or params[:device].nil? or params[:device][:id].empty?)
       @chart = LazyHighCharts::HighChart.new('graph') do |f|
@@ -538,7 +560,34 @@ class ReportController < ApplicationController
       end
       @device_id = params[:device][:id]
       @device = Device.find @device_id
-      @last = Counter.latest(@device_id)
+      bw_vol = Hash.new
+      color_vol = Hash.new
+      alerts = Alert.where(["device_id=? and alert_date > date_sub(curdate(), interval ? day)",@device_id,@days]).group('date(alert_date)').each do |a|
+        unless a.sheet_count.nil?
+          bw_vol[a.alert_date.to_date] = a.sheet_count.bw
+          color_vol[a.alert_date.to_date] = a.sheet_count.color
+        end
+      end
+      @chart = LazyHighCharts::HighChart.new('chart') do |f|
+        f.type('scatter')
+        f.title( {:text => "Print volume for #{@device.name}"})
+        f.xAxis( :type => 'datetime')
+        f.yAxis( [{:id => 0, :title => {:text => "Black and White"}},{:id => 1, :opposite => true, :title => {:text => "Colour"}}])
+#         f.yAxis( :id => 1, :opposite => true, :title => {:text => "Colour"})
+        f.series(:type => 'line', :name => 'Black and White',
+                 :pointInterval => 1.day,
+                 :pointStart => @days.days.ago.to_date,
+                 :data => bw_vol.to_a,
+                 :yAxis => 0)
+        f.series(:type => 'line', :name => 'Colour',
+                 :pointInterval => 1.day,
+                 :pointStart => @days.days.ago.to_date,
+                 :data => color_vol.to_a,
+                 :yAxis => 1)
+      end
     end
   end
+  
+  # Produce chart of device drum stats over time
+  
 end

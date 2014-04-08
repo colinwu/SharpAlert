@@ -2,7 +2,9 @@
 Model: <strong><%= @dev.model %></strong><br />
 Serial#: <strong><%= @dev.serial %></strong><br />
 <br />
-
+<!-- 
+TODO Show DF amd MB in different colours: DF in green and MB in blue?
+-->
 <%= form_tag @uri, :method => 'get' do -%>
 Show only alerts for the last 
   <%= select_tag :days, options_for_select([['30 Days', 30],
@@ -21,7 +23,7 @@ The data within each cell consist of the time (in days, hours, min, and seconds)
 
   <tr>
   <% @codes.each do |c| %>
-    <th><%= c %></th>
+    <th><%= JamCode.xlate(c) %></th>
   <% end %>
   </tr>
 
@@ -30,7 +32,7 @@ The data within each cell consist of the time (in days, hours, min, and seconds)
     <td><%= date.to_formatted_s(:db) %></td>
   <% @codes.each do |c| %>
     <% if (val.keys[0] == c) %>
-      <td><span title="Jam code <%= c %>"><%= val[c]['d_date'] %><br />
+      <td><span title="Jam code <%= JamCode.xlate(c) %>"><%= date_time_diff(val[c]['d_date']) %><br />
       <%= val[c]['d_page'] %></span></td>
     <% else %>
       <td>&nbsp;</td>

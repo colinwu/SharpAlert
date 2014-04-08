@@ -13,7 +13,7 @@ SharpApp::Application.routes.draw do
 
   get "report/" => 'report#index', :as => :reports 
   get "report/alerts_graph"
-  get "report/volume_graph"
+  get "report/device_volume_graph"
   get "report/frequency"
   get "report/volume"
   get "report/jam_code_stats" => 'report#jam_code_stats', :as => :jam_code_stats_report

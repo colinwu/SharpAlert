@@ -21,7 +21,7 @@ devlist.each do |device|
     colour = {'b' => 'Black', 'c' => 'Cyan', 'm' => 'Magenta', 'y' => 'Yellow'}
     
     # Ignore the 100% data points because once the ages reache 100% they peg there and would
-    # tend to skew the results if it takes a while before the tech gets there.
+    # tend to skew the results if they're not serviced right away.
     ['b','c','m','y'].each do |color|
       mind[color] = 99
       minv[color] = 99
@@ -71,10 +71,10 @@ devlist.each do |device|
 
     linear = {'drum' => {},
               'dev'  => {}
-            }
+             }
     r2 = {'drum' => {},
-             'dev'  => {}
-            }
+          'dev'  => {}
+         }
     stuff.each do |type,color|
       color.each do |c,data|
         linear[type][c] = Regression::Linear.new(data['time'], data['age'])
@@ -92,7 +92,7 @@ devlist.each do |device|
         unless (slope <= 0 or slope.nan?)
           duedate = ((100 - intercept)/slope).to_i
           if (duedate - now) < threshold
-            status += "#{colour[c]} #{type} due around " + Time.at(duedate).to_date.to_s + " (correlation coefficient = #{r2[type][c].round(3)})\n"
+            status += "#{colour[c]} #{type} due around " + Time.at(duedate).to_date.to_s + " (correlation coeff = #{r2[type][c].round(3)})\n"
             have_output = true
           end
         end

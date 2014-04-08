@@ -51,7 +51,8 @@
 <% end %>
 </div>
 
-<div> <!-- High Print Volume -->
+<div style='display: block; width: 100%'>
+<div class='left_div'> <!-- High Print Volume -->
   <%= form_tag report_volume_path, :method => 'get' do -%>
     <fieldset>
     <legend>High Print Volume Report</legend>
@@ -77,14 +78,14 @@
     </fieldset>
   <% end %>
 </div>
-
-<div> <!-- Graph Misfeed, Maintenance and Service alerts by day -->
-  <%= form_tag report_alerts_graph_url, :method => 'get' do -%>
+<div class='right_div'> <!-- Graph bw and colour output -->
+  <%= form_tag report_device_volume_graph_path, :method => 'get' do -%>
     <fieldset>
-    <legend>Graph Misfeed, Maintenance and Service alerts</legend>
-    <p>This report graphs the number of daily <strong>misfeed</strong>, <strong>maintenance requests</strong> and <strong>service</strong> alerts over the past 30, 60 or 90 days on one chart. Easier to see if there is a corrolation.</p>
+    <legend>Graph Device Print/Copy Volume</legend>
+    <p>This report graphs the number of bw and colour pages produced by this device over the past 30, 60 or 90 days on one chart.</p>
     <table><tr>
       <td>
+        <%= label_tag 'Days' %><br />
         <%= select_tag :days, options_for_select([['30 Days', 30],
                                                   ['60 Days', 60],
                                                   ['90 Days', 90]], @days) -%>
@@ -98,8 +99,31 @@
     </fieldset>
   <% end %>
 </div>
+</div>
 
-<div> <!-- Misfeed type frequency per device -->
+<div style='display: block;; width: 100%'>
+<div class='left_div'> <!-- Graph Misfeed, Maintenance and Service alerts by day -->
+  <%= form_tag report_alerts_graph_url, :method => 'get' do -%>
+    <fieldset>
+    <legend>Graph Misfeed, Maintenance and Service alerts</legend>
+    <p>This report graphs the number of daily <strong>misfeed</strong>, <strong>maintenance requests</strong> and <strong>service</strong> alerts over the past 30, 60 or 90 days on one chart. Easier to see if there is a corrolation.</p>
+    <table><tr>
+      <td>
+        <%= label_tag 'Days' %><br />
+        <%= select_tag :days, options_for_select([['30 Days', 30],
+                                                  ['60 Days', 60],
+                                                  ['90 Days', 90]], @days) -%>
+      </td>
+      <td>
+        <%= label_tag 'Device' %><br />
+        <%= collection_select :device, :id, Device.order('name'), :id, :name_model_serial %>
+      </td>
+      <td><%= submit_tag 'Graph' %></td>
+    </tr></table>
+    </fieldset>
+  <% end %>
+</div>
+<div class='right_div'> <!-- Misfeed type frequency per device -->
   <%= form_tag jam_code_stats_report_path, :method => 'get' do -%>
     <fieldset>
     <legend>Frequency of misfeed alerts</legend>
@@ -118,8 +142,10 @@
     </fieldset>
   <% end %>
 </div>
+</div>
 
-<div> <!-- Drum and Developer Age -->
+<div  style='display: block;'>
+<div class='left_div'> <!-- Drum and Developer Age -->
   <fieldset>
     <legend>Drum and Developer Age</legend>
     <p>
@@ -135,4 +161,4 @@
     <% end %>
   </fieldset>
 </div>
-
+</div>

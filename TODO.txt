@@ -66,7 +66,7 @@ Most likely languages we need to worry about are English and French. Where do we
 - both process_*_email.rb programs.
 - wherever we search for, or process alert messages
 
-============= TODO ==============
+============= IN PROGRESS (See "Phase IV" Below) ==============
 Do something to predict when toner needs to be added based on past usage. Must have at least two data points (i.e. two "add toner" alerts). Predict using linear regression.
 
 * Can not assume there will always be an "Add toner" alert. Some people *may* change
@@ -172,18 +172,32 @@ Phase IV - Reports *** ON-GOING ***
     there's an "add toner" before replacing the toner; but it's more likely they won't
     replace it before a "low" alert.
   - Show date of alerts (not time)
-  - Show date interval between successive alerts for the same toner
+  - Show date interval between successive alert type for the same toner
   - Show appropriate page count difference between alerts for the same toner
   * Need to think about how to do prediction.
+    * One possibility being tested now:
+      - calculate mean and std-dev of date_diff (i.e. number of days between "low" alerts) for particular toner
+      - if std-dev is greater than 10 (an arbitrary number), throw out data points outside of one std-dev from mean
+      - recalculate mean and std-dev until either std-dev < 10 or only 3 data points left
+      - add mean to last "low toner" alert date
 - Full Jam History
   * Need to translate jam code to something a service tech or manager can understand.
+  * Show DF and MB jams in different colours.
 - Show latest maintenance counters
 - Maintenance Code History
 - Service Code History
-* Predict drum and developer usage (for those devices that send dealer attachments)
+- Predict drum and developer usage (for those devices that send dealer attachments)
   - Starting from lastest maint_counter go backwards to find the minimum. This will be when they were last changed (or at least when the counters were reset)
   - For each counter in between record the timestamp (as seconds since epoch) and calculate linear fit coefficients.
   * for an individual device show graph of previous data points and regression line.
-
-============= DONE (but keep adding new reports) ==============
 - Clicking on a device (name, model or serial number) from anywhere in the application should take the user to a "What reports are available for this device" screen, one of which would be to edit the device details.
+
+
+============= TODO =============
+* Automatic alerts
+ * based on same division of "local" and "tech" types
+ * When drum and developer will need to be replaced within 2 weeks
+ * If toner cartridges are being replaced before running out
+ * If there are too many jams (for individual codes, if available) in a span of time. (Define "too many" and "span of time".)
+ * 
+ 

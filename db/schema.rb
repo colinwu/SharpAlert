@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140311172528) do
+ActiveRecord::Schema.define(:version => 20140403190739) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -90,6 +90,11 @@ ActiveRecord::Schema.define(:version => 20140311172528) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "client_id"
+  end
+
+  create_table "jam_codes", :force => true do |t|
+    t.string "red_code"
+    t.string "desc"
   end
 
   create_table "jam_stats", :force => true do |t|

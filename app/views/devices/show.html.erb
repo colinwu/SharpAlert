@@ -19,13 +19,13 @@
   <li><%= link_to_if (@device.alerts.where("alert_msg regexp 'toner supply' or alert_msg regexp 'add toner'").length > 2), "Show Toner History", toner_history_report_path(@device) %></li>
   
 <!-- Report on Misfeed History -->
-  <li><%= link_to_if @device.alerts.where("alert_msg regexp 'misfeed'"), "Show Misfeed History", full_jam_history_report_path(@device.id) %></li>
+  <li><%= link_to_if @device.alerts.where("alert_msg regexp 'misfeed'"), "Show Misfeed History", full_jam_history_report_path(@device.id) + "?days=30" %></li>
 
 <!-- Show call for service history -->
-  <li><%= link_to_if @device.alerts.where("alert_msg regexp 'call for service'"), "Show Call for Service History", full_cfs_history_report_path(@device.id) %></li>
+  <li><%= link_to_if @device.alerts.where("alert_msg regexp 'call for service'"), "Show Call for Service History", full_cfs_history_report_path(@device.id) + "?days=30" %></li>
   
 <!-- Show maintenance required histor -->
-  <li><%= link_to_if @device.alerts.where("alert_msg regexp 'maintenance required'"), "Show Maintenance Required History", full_maint_history_report_path(@device.id) %></li>
+  <li><%= link_to_if @device.alerts.where("alert_msg regexp 'maintenance required'"), "Show Maintenance Required History", full_maint_history_report_path(@device.id) + "?days=30" %></li>
   
 <!-- Show latest maintenance counters -->
   <li><%= link_to_unless @device.alerts.last.maint_counter.nil?, "Latest Maintenance Counters", alert_path(@device.alerts.last) %></li>

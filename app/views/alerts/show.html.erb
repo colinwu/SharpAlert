@@ -3,25 +3,24 @@
 <table>
 <tr><th>Name</th><th>Model</th><th>S/N</th><th>Code</th><th>Client</th><th>Alert Date</th><th>Alert Message</th></tr>
 <tr>
-  <td><%= @alert.device.name %></td>
-  <td><%= @alert.device.model %></td>
-  <td><%= @alert.device.serial %></td>
-  <td><%= @alert.device.code %></td>
-  <td><%= @alert.device.client.name %></td>
-  <td><%= @alert.alert_date.to_formatted_s(:db) %></td>
+  <td><%=h link_to @alert.device.name, "/alerts?name_q=#{@alert.device.name}&model_q=#{@alert.device.model}&serial_q=#{@alert.device.serial}&commit=" %></td>
+  <td><%=h @alert.device.model %></td>
+  <td><%=h @alert.device.serial %></td>
+  <td><%=h @alert.device.code %></td>
+  <td><%=h @alert.device.client.name %></td>
+  <td><%=h @alert.alert_date.to_formatted_s(:db) %></td>
   <td>
-    <% unless (@alert.jam_stat.nil?) %>
-      <%= @alert.alert_msg + " (#{@alert.jam_stat.jam_type} Jam Code: #{@alert.jam_stat.jam_code})" %>
-    <% else %>
-      <%= @alert.alert_msg %>
-    <% end %>
+    <% unless (@alert.jam_stat.nil?)
+         msg = " (#{@alert.jam_stat.jam_type} Jam Code: #{@alert.jam_stat.jam_code})"
+       end %>
+    <%=h link_to @alert.alert_msg, "/alerts?name_q=#{@alert.device.name}&model_q=#{@alert.device.model}&serial_q=#{@alert.device.serial}&msg_q=#{@alert.alert_msg}&commit=" %> <%=h msg %>
   </td>
 </tr>
 </table>
 
 <h2>Counters associated with this alert</h2>
 <table class='counters'>
-<tr><th colspan=2>Total Device Page Count</th></tr>
+<tr><th colspan=2><%= link_to 'Total Device Page Count', "/report/device_volume_graph?device[id]=#{@alert.device_id}" %></th></tr>
 <tr><td>BW</td><td><%=h number_with_delimiter(@sc.bw) %></td></tr>
 <tr><td>Colour</td><td><%=h number_with_delimiter(@sc.color) %></td></tr>
 </table>
@@ -130,14 +129,14 @@
 <tr>
   <th>&nbsp;</th>
   <th colspan = 2>Transfer Units</th>
-  <th>Fuser</th>
+<!--   <th>Fuser</th> -->
 </tr>
 <tr><th>&nbsp;</th><th>Primary</th><th>Secondary</th></tr>
 <tr>
   <th>Print</th>
   <td><%=h number_with_delimiter(@mc.ptu_print) %></td>
   <td><%=h number_with_delimiter(@mc.stu_print) %></td>
-  <td><%=h number_with_delimiter(@mc.fuser_print) %></td>
+<!--   <td><%=h number_with_delimiter(@mc.fuser_print) %></td> -->
   </tr>
 <tr>
   <th>Distance</th>
@@ -148,7 +147,7 @@
   <th>Use (days)</th>
   <td><%=h number_with_delimiter(@mc.ptu_days) %></td>
   <td><%=h number_with_delimiter(@mc.stu_days) %></td>
-  <td><%=h number_with_delimiter(@mc.fuser_days) %></td>
+<!--   <td><%=h number_with_delimiter(@mc.fuser_days) %></td> -->
   </tr>
 
 </table>
