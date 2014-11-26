@@ -564,25 +564,25 @@ class ReportController < ApplicationController
       color_vol = Hash.new
       alerts = Alert.where(["device_id=? and alert_date > date_sub(curdate(), interval ? day)",@device_id,@days]).group('date(alert_date)').each do |a|
         unless a.sheet_count.nil?
-          bw_vol[a.alert_date.to_date] = a.sheet_count.bw
-          color_vol[a.alert_date.to_date] = a.sheet_count.color
+          bw_vol[a.alert_date.to_i] = a.sheet_count.bw
+          color_vol[a.alert_date.to_i] = a.sheet_count.color
         end
       end
       @chart = LazyHighCharts::HighChart.new('chart') do |f|
         f.type('scatter')
         f.title( {:text => "Print volume for #{@device.name}"})
-        f.xAxis( :type => 'datetime')
-        f.yAxis( [{:id => 0, :title => {:text => "Black and White"}},{:id => 1, :opposite => true, :title => {:text => "Colour"}}])
-#         f.yAxis( :id => 1, :opposite => true, :title => {:text => "Colour"})
-        f.series(:type => 'line', :name => 'Black and White',
-                 :pointInterval => 1.day,
-                 :pointStart => @days.days.ago.to_date,
-                 :data => bw_vol.to_a,
-                 :yAxis => 0)
+        f.xAxis( :labels => {:formatter => 'function(){return (new Date(this.value*1000)).toDateString();}'.js_code} )
+        f.yAxis( [{:id => 0, :title => {:text => "Colour"}},{:id => 1, :opposite => true, :title => {:text => "Black and White"}}])
+        f.tooltip( :formatter => 'function(){return("<span style=\"font-size: 10px\">" + (new Date(this.x*1000)).toDateString() + "</span><br /><span style=\"color:" + this.series.color + "\">" + this.series.name + ": " + this.y + "</span><br/>");}'.js_code)
         f.series(:type => 'line', :name => 'Colour',
-                 :pointInterval => 1.day,
-                 :pointStart => @days.days.ago.to_date,
+#                  :pointInterval => 1.day,
+#                  :pointStart => @days.days.ago.to_date,
                  :data => color_vol.to_a,
+                 :yAxis => 0)
+        f.series(:type => 'line', :name => 'Black and White',
+                 #                  :pointInterval => 1.day,
+                 #                  :pointStart => @days.days.ago.to_date,
+                 :data => bw_vol.to_a,
                  :yAxis => 1)
       end
     end

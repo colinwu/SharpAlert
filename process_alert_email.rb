@@ -185,28 +185,27 @@ end
 
 f = $stdin
 
+
 code_list = Array.new
 # Parse the alert message
 while (line = f.gets)
-  if line =~ /^Device Name: (.+)/i
+  if (line =~ /^Device Name: (.+)/i or line =~ /^Nom du périphérique: (.+)/i)
     name = $1
-  elsif line =~ /^Device Model: (.+)/i
+  elsif (line =~ /^Device Model: (.+)/i or line =~ /^Modèle de périphérique: (.+)/i)
     model = $1
-  elsif line =~ /^Serial Number: (\S+)/i
+  elsif (line =~ /^Serial Number: (\S+)/i or line =~ /^Numéro de Série: (\S+)/i)
     serial = $1
-    if serial.empty? # ignore the alert if there is no serial number
-      exit
-    end
-  elsif line =~ /^Machine Code: (.+)/i
+  elsif (line =~ /^Machine Code: (.+)/i or line =~ /^Code de la machine: (.+)/i)
     code = $1
   elsif line =~ /^!!!!! (.+) !!!!!/
     msg = $1
-    if msg =~ /Call for service/
+    if (msg =~ /Call for service/)
       codes = f.gets.strip
-      msg += ": #{codes}"
+      msg = "Call for service: #{codes}"
       code_list = codes.split
-    elsif msg =~ /Maintenance required. Code:(.+)$/
+    elsif (msg =~ /Maintenance required. Code:(.+)$/ or msg =~ /Intervention technicien requise. Code:(.+)$/)
       codes = $1
+      msg = "Maintenance required. Code:#{codes}"
       code_list = codes.split
     elsif msg =~ /toner.+\( (\S+) \)/i
       code_list = $1.split('/')
@@ -217,6 +216,10 @@ while (line = f.gets)
   elsif line =~ /^From: (.+)/
     from = $1
   end
+end
+
+if serial.nil? or serial.empty? # ignore the alert if there is no serial number
+  exit
 end
 
 # Check if this alert already exists (in case we're processing old alerts)
