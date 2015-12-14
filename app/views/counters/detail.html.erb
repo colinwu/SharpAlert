@@ -4,6 +4,7 @@
   <tr>
     <th>Status Date</th>
     <th>Device</th>
+    <th>Serial #</th>
     <th>Copybw</th>
     <th>Copy2c</th>
     <th>Copy1c</th>
@@ -56,6 +57,7 @@
     <tr class='<%= cycle "light", "dark" %>'>
       <td><%= counter.status_date.to_formatted_s(:db) %></td>
       <td><%= counter.device.name %></td>
+      <td><%= counter.device.serial %></td>
       <td><%= counter.copybw %></td>
       <td><%= counter.copy2c %></td>
       <td><%= counter.copy1c %></td>
@@ -103,9 +105,6 @@
       <td><%= counter.tonerleftc %></td>
       <td><%= counter.tonerleftm %></td>
       <td><%= counter.tonerlefty %></td>
-      <td><%= link_to "Show", counter %></td>
-      <td><%= link_to "Edit", edit_counter_path(counter) %></td>
-      <td><%= link_to "Destroy", counter, :confirm => 'Are you sure?', :method => :delete %></td>
     </tr>
   <% end %>
 </table>

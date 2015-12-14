@@ -1,11 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.11'
+# gem 'rails', '3.2.11'
+gem 'rails'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2'
+gem 'mysql2', '~> 0.3.18'
 gem 'minitest'
 
 group :development, :test do
@@ -24,13 +25,14 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'nifty-generators'
+#gem 'nifty-generators'
 gem 'csv-mapper'
 gem 'jquery-rails'
 gem 'will_paginate'
 gem 'getopt'
 gem 'lazy_high_charts'
 gem 'linear-regression', '~> 0.0.2'
+gem 'json'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -42,6 +44,7 @@ gem 'linear-regression', '~> 0.0.2'
 # gem 'unicorn'
 
 # Deploy with Capistrano
+# gem 'capistrano', '~> 2.14.1'
 gem 'capistrano'
 
 # To use debugger

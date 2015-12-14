@@ -1,25 +1,55 @@
 <% title "Maint Counters" %>
-
 <table>
   <tr>
-    <th>Maint Total</th>
-    <th>Maint Color</th>
-    <th>Drum Print B</th>
-    <th>Drum Print C</th>
-    <th>Drum Print M</th>
-    <th>Drum Print Y</th>
+  	<th>Timestamp</th><th>Model</th><th>Serial #</th>
+    <th>Maint Total</th><th>Maint Color</th>
+    <th>Drum Print B</th><th>Drum Print C</th><th>Drum Print M</th><th>Drum Print Y</th>
+    <th>Dev Print B</th><th>Dev Print C</th><th>Dev Print M</th><th>Dev Print Y</th>
+    <th>Drum Dist B</th><th>Drum Dist C</th><th>Drum Dist M</th><th>Drum Dist Y</th>
+    <th>Dev Dist B</th><th>Dev Dist C</th><th>Dev Dist M</th><th>Dev Dist Y</th>
+    <th>Drum Life B</th><th>Drum Life C</th><th>Drum Life M</th><th>Drum Life Y</th>
+    <th>Dev Life B</th><th>Dev Life C</th><th>Dev Life M</th><th>Dev Life Y</th>
+    <th>Scan</th><th>SPF Count</th>
+    <th>PTU Print</th><th>PTU Dist</th><th>PTU Days</th>
+    <th>ADU</th>
+    <th>STU Print</th><th>STU Dist</th><th>STU Days</th>
+    <th>Fuser Print</th><th>Fuser Days</th>
+    <th>Toner Motor Bk</th><th>Toner Motor C</th><th>Toner Motor M</th><th>Toner Motor Y</th>
+    <th>Toner Rotation Bk</th><th>Toner Rotation C</th><th>Toner Rotation M</th><th>Toner Rotation Y</th>
+    <th>MFT Total</th><th>Tray 1</th><th>Tray 2</th><th>Tray 3</th><th>Tray 4</th>
   </tr>
   <% for maint_counter in @maint_counters %>
     <tr>
-      <td><%= maint_counter.maint_total %></td>
-      <td><%= maint_counter.maint_color %></td>
-      <td><%= maint_counter.drum_print_b %></td>
-      <td><%= maint_counter.drum_print_c %></td>
-      <td><%= maint_counter.drum_print_m %></td>
-      <td><%= maint_counter.drum_print_y %></td>
+   	  <td><%= maint_counter.alert.alert_date %></td><td><%= maint_counter.alert.device.model %></td>
+   	  <td><%= maint_counter.alert.device.serial %></td>
+      <td><%= maint_counter.maint_total %></td><td><%= maint_counter.maint_color %></td>
+      <td><%= maint_counter.drum_print_b %></td><td><%= maint_counter.drum_print_c %></td>
+      <td><%= maint_counter.drum_print_m %></td><td><%= maint_counter.drum_print_y %></td>
+      <td><%= maint_counter.dev_print_b %></td><td><%= maint_counter.dev_print_c %></td>
+      <td><%= maint_counter.dev_print_m %></td><td><%= maint_counter.dev_print_y %></td>
+      <td><%= maint_counter.drum_dist_b %></td><td><%= maint_counter.drum_dist_c %></td>
+      <td><%= maint_counter.drum_dist_m %></td><td><%= maint_counter.drum_dist_y %></td>
+      <td><%= maint_counter.dev_dist_b %></td><td><%= maint_counter.dev_dist_c %></td>
+      <td><%= maint_counter.dev_dist_m %></td><td><%= maint_counter.dev_dist_y %></td>
+      <td><%= maint_counter.drum_life_used_b %></td><td><%= maint_counter.drum_life_used_c %></td>
+      <td><%= maint_counter.drum_life_used_m %></td><td><%= maint_counter.drum_life_used_y %></td>
+      <td><%= maint_counter.dev_life_used_b %></td><td><%= maint_counter.dev_life_used_c %></td>
+      <td><%= maint_counter.dev_life_used_m %></td><td><%= maint_counter.dev_life_used_y %></td>
+      <td><%= maint_counter.scan %></td><td><%= maint_counter.spf_count %></td>
+      <td><%= maint_counter.ptu_print %></td><td><%= maint_counter.ptu_dist %></td>
+      <td><%= maint_counter.ptu_days %></td><td><%= maint_counter.adu %></td>
+      <td><%= maint_counter.stu_print %></td><td><%= maint_counter.stu_dist %></td>
+      <td><%= maint_counter.stu_days %></td><td><%= maint_counter.fuser_print %></td>
+      <td><%= maint_counter.fuser_days %></td><td><%= maint_counter.toner_motor_b %></td>
+      <td><%= maint_counter.toner_motor_c %></td><td><%= maint_counter.toner_motor_m %></td>
+      <td><%= maint_counter.toner_motor_y %></td><td><%= maint_counter.toner_rotation_b %></td>
+      <td><%= maint_counter.toner_rotation_c %></td><td><%= maint_counter.toner_rotation_m %></td>
+      <td><%= maint_counter.toner_rotation_y %></td><td><%= maint_counter.mft_total %></td>
+      <td><%= maint_counter.tray1 %></td><td><%= maint_counter.tray2 %></td>
+      <td><%= maint_counter.tray3 %></td><td><%= maint_counter.tray4 %></td>
+       
       <td><%= link_to "Show", maint_counter %></td>
       <td><%= link_to "Edit", edit_maint_counter_path(maint_counter) %></td>
-      <td><%= link_to "Destroy", maint_counter, :confirm => 'Are you sure?', :method => :delete %></td>
     </tr>
   <% end %>
 </table>

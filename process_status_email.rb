@@ -80,8 +80,76 @@
 # Toner Residual (M) = 75-100%
 # Toner Residual (Y) = 75-100%
 
+def getMaintCounter(dir)
+  # returns MaintCounter record id or nil if error or none found
+  unless (!dir.nil? and File.exists?(dir + '/E-mail DIAG Maintenance Counter Data.R09'))
+    puts "Could not find maintenance data file"
+    return nil
+  end
+  f = File.open(dir + '/E-mail DIAG Maintenance Counter Data.R09')
+  title = f.read(15)
+  puts title
+  if (title == 'MAINTE CNT DATA')
+    mc = MaintCounter.new
+    f.read(45)
+    # at 0x003C
+    (mc.maint_total,mc.maint_color) = f.read(8).unpack('L>L>')
+    # 0x0044
+    (mc.drum_print_b,mc.drum_print_c,mc.drum_print_m,mc.drum_print_y) =
+        f.read(16).unpack('L>' * 4)
+    (mc.dev_print_b,mc.dev_print_c,mc.dev_print_m,mc.dev_print_y) =
+        f.read(16).unpack('L>' * 4)
+    f.read(16)
+    # 0x0074
+    (mc.drum_dist_b,mc.drum_dist_c,mc.drum_dist_m,mc.drum_dist_y) =
+        f.read(16).unpack('L>' * 4)
+    (mc.dev_dist_b,mc.dev_dist_c,mc.dev_dist_m,mc.dev_dist_y) =
+        f.read(16).unpack('L>' * 4)
+    f.read(16)
+    # 0x00A4
+    (mc.scan,mc.spf_count) = f.read(8).unpack('L>L>')
+    f.read(44)
+    # 0x00D8
+    mc.mft_total = f.read(4).unpack('L>')[0]
+    (mc.tray1,mc.tray2,mc.tray3,mc.tray4) = f.read(16).unpack('L>' * 4)
+    f.read(8)
+    mc.adu = f.read(4).unpack('L>')[0]
+    (mc.ptu_print,mc.ptu_dist,mc.ptu_days) = f.read(12).unpack('L>' * 3)
+    (mc.stu_print,mc.stu_dist,mc.stu_days) = f.read(12).unpack('L>' * 3)
+    (mc.fuser_print,mc.fuser_days) = f.read(8).unpack('L>' * 2)
+    f.read(4)
+    (mc.toner_motor_b,mc.toner_motor_c,mc.toner_motor_m,mc.toner_motor_y) =
+        f.read(16).unpack('L>' * 4)
+    (mc.toner_rotation_b,mc.toner_rotation_c,mc.toner_rotation_m,mc.toner_rotation_y) =
+        f.read(16).unpack('L>' * 4)
+    (mc.drum_life_used_b,mc.drum_life_used_c,mc.drum_life_used_m,mc.drum_life_used_y) =
+        f.read(16).unpack('L>' * 4)
+    (mc.dev_life_used_b,mc.dev_life_used_c,mc.dev_life_used_m,mc.dev_life_used_y) =
+        f.read(16).unpack('L>' * 4)
+#    mc.save
+    f.close
+    return mc
+  else
+    f.close
+    return nil
+  end
+end
+
+############ End of function defs #############
+
+require 'getopt/std'
+
+opt = Getopt::Std.getopts('d:')
+if opt['d']
+  dir = opt['d']
+  puts dir
+end
+
+f = $stdin
+
+
 # Parse the email
-while (line = gets)
+while (line = f.gets)
   if line =~ /^Device Name: (.+)/i
     name = $1
   elsif line =~ /^Device Model: (.+)$/i
@@ -261,14 +329,26 @@ end
 
 # Check if we have print volume data for this device
 if dev.print_volume.nil?
-  NotifyMailer.nopv_email(dev).deliver
-  exit 1
+#  NotifyMailer.nopv_email(dev).deliver
+#  exit 1
 end
 
 # Send a usage alert message if the ratio is either negative or above 150%
 
-@first = Counter.earliest_or_before(@last.status_date.months_ago(1).to_date, dev.id)
-unless @first.nil?
-  NotifyMailer.counter_alert(@first, @last).deliver
+# @first = Counter.earliest_or_before(@last.status_date.months_ago(1).to_date, dev.id)
+# unless @first.nil?
+#   NotifyMailer.counter_alert(@first, @last).deliver
+# end
+
+mc = getMaintCounter(dir)
+unless mc.nil?
+  # print out .csv
+  mcout = File.open('/tmp/mc.csv', 'a')
+  fsize = File.size?('/tmp/mc.csv')
+  if fsize.nil? or fsize == 0 # if nothing in the output file yet output column header
+    mcout.puts '"Timestamp","Model","Serial #","Maint Total","Maint Color","Drum Print B","Drum Print C","Drum Print M","Drum Print Y","Dev Print B","Dev Print C","Dev Print M","Dev Print Y","Drum Dist B","Drum Dist C","Drum Dist M","Drum Dist Y","Dev Dist B","Dev Dist C","Dev Dist M","Dev Dist Y","Drum Life B","Drum Life C","Drum Life M","Drum Life Y","Dev Life B","Dev Life C","Dev Life M","Dev Life Y","Scan","SPF Count","PTU Print","PTU Dist","PTU Days","ADU","STU Print","STU Dist","STU Days","Fuser Print","Fuser Days","Toner Motor Bk","Toner Motor C","Toner Motor M","Toner Motor Y","Toner Rotation Bk","Toner Rotation C","Toner Rotation M","Toner Rotation Y","MFT Total","Tray 1","Tray 2","Tray 3","Tray 4"'
+  end
+  mcout.puts '"' + status_date + '","' + model + '","' + serial + '",' + mc.to_csv
+  mcout.close
 end
-system("/bin/rm -r #{dir}")
+#system("/bin/rm -r #{dir}")
