@@ -8,3 +8,9 @@ Alert.where("created_at < (localtime - interval 1 month) and
 alert_msg regexp 'Load paper'").each do |a|
   a.delete
 end
+
+Device.all.each do |d|
+  if d.alerts.empty?
+    d.destroy
+  end
+end

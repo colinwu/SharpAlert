@@ -2,11 +2,12 @@
 
 <table>
   <tr>
-    <th>Name</th>
+    <th>Name</th><th>Pattern</th>
   </tr>
   <% for client in @clients %>
     <tr>
       <td><%= client.name %></td>
+      <td><%= client.pattern %></td>
       <td><%= link_to "Show", client %></td>
       <td><%= link_to "Edit", edit_client_path(client) %></td>
       <td><%= link_to "Destroy", client, :confirm => 'Are you sure?', :method => :delete %></td>

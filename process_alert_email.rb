@@ -186,6 +186,7 @@ end
 f = $stdin
 
 
+boundary = nil
 code_list = Array.new
 # Parse the alert message
 while (line = f.gets)
@@ -215,6 +216,14 @@ while (line = f.gets)
     alert_date = $1
   elsif line =~ /^From: (.+)/
     from = $1
+    from =~ /@(.+)>/
+    from_domain = $1
+  elsif line =~ /^--SmTP-MULTIPART-BOUNDARY/
+    if (boundary.nil?)
+      boundary = 1
+    else
+      break
+    end
   end
 end
 
@@ -237,49 +246,46 @@ if alert.nil?
   alert.save
 end
 
-# unless (alert_msg =~ /paper/i or alert_msg =~ /Job Log/i) 
-  # ignore "Load Paper" and "job log full" alerts, also make sure there are no 
-  # SheetCount, MaintCounter and JamStat records already
-  if (alert.sheet_count.nil?)
-    sc = getSheetCount(dir)
-    unless sc.nil?
-      sc.alert_id = alert.id
-      sc.save
+# SheetCount, MaintCounter and JamStat records already
+if (alert.sheet_count.nil?)
+  sc = getSheetCount(dir)
+  unless sc.nil?
+    sc.alert_id = alert.id
+    sc.save
+  end
+end
+if (alert.maint_counter.nil?)
+  mc = getMaintCounter(dir)
+  unless mc.nil?
+    mc.alert_id = alert.id
+    mc.save
+  end
+end
+if (alert_msg =~ /Misfeed/i and alert.jam_stat.nil?)
+  js = getJamCode(dir)
+  unless js.nil?
+    js.alert_id = alert.id
+    js.save
+  end
+elsif (alert_msg =~ /Maintenance/i)
+  code_list.each do |c|
+    if (MaintCode.where(["alert_id = ? and code = ?", alert.id, c]).empty?)
+      alert.maint_codes.create(:code => c)
     end
   end
-  if (alert.maint_counter.nil?)
-    mc = getMaintCounter(dir)
-    unless mc.nil?
-      mc.alert_id = alert.id
-      mc.save
+elsif (alert_msg =~ /Service/i)
+  code_list.each do |c|
+    if (ServiceCode.where(["alert_id = ? and code = ?", alert.id, c]).empty?)
+      alert.service_codes.create(:code => c)
     end
   end
-  if (alert_msg =~ /Misfeed/i and alert.jam_stat.nil?)
-    js = getJamCode(dir)
-    unless js.nil?
-      js.alert_id = alert.id
-      js.save
-    end
-  elsif (alert_msg =~ /Maintenance/i)
-    code_list.each do |c|
-      if (MaintCode.where(["alert_id = ? and code = ?", alert.id, c]).empty?)
-        alert.maint_codes.create(:code => c)
-      end
-    end
-  elsif (alert_msg =~ /Service/i)
-    code_list.each do |c|
-      if (ServiceCode.where(["alert_id = ? and code = ?", alert.id, c]).empty?)
-        alert.service_codes.create(:code => c)
-      end
-    end
-  elsif (alert_msg =~ /toner.+\( \S+ \)/i)
-    code_list.each do |c|
-      if (TonerCode.where(["alert_id = ? and colour = ?", alert.id, c]).empty?)
-        alert.toner_codes.create(:colour => c)
-      end
+elsif (alert_msg =~ /toner.+\( \S+ \)/i)
+  code_list.each do |c|
+    if (TonerCode.where(["alert_id = ? and colour = ?", alert.id, c]).empty?)
+      alert.toner_codes.create(:colour => c)
     end
   end
-# end
+end
 
 # retrieve (or create using defaults) the notification profile for this device.
 if @d.nil?
@@ -301,7 +307,14 @@ if @d.nil?
     :waste_almost_full => ndef.waste_almost_full,
     :waste_full => ndef.waste_full,
     :job_log_full => ndef.job_log_full)
-  NotifyMailer.new_device('wuc@sharpsec.com',@d,from).deliver
+  client = Client.where(["pattern = ?", from_domain]).first
+  if client.nil?
+    NotifyMailer.new_device('wuc@sharpsec.com',@d,from).deliver
+  else
+    @d.client_id = client.id
+    @d.save
+    NotifyMailer.new_device_warn('wuc@sharpsec.com',@d,from).deliver
+  end
 else
   alert.device_id = @d.id
   # keep device name updated - just in case the client changes it.
@@ -310,55 +323,55 @@ else
 end
 alert.save
 
-# figure out if we need to send notification
-if alert.alert_msg =~ /Misfeed/ and not @n.jam.nil?
-  period = @n.jam * 3600
-  last_time = @n.jam_sent
-  send_to = @n.local_admin
-elsif alert.alert_msg =~ /Add toner/ and not @n.toner_empty.nil?
-  period = @n.toner_empty * 3600
-  last_time = @n.toner_empty_sent
-  send_to = @n.local_admin
-elsif alert.alert_msg =~ /Toner supply/i and not @n.toner_low.nil?
-  period = @n.toner_low * 3600
-  last_time = @n.toner_low_sent
-  send_to = @n.local_admin
-elsif alert.alert_msg =~ /Load paper/ and not @n.paper.nil?
-  period = @n.paper * 3600
-  last_time = @n.paper_sent
-  send_to = @n.local_admin
-elsif alert.alert_msg =~ /Call for service/ and not @n.service.nil?
-  period = @n.service * 3600
-  last_time = @n.service_sent
-  send_to = @n.tech
-elsif alert.alert_msg =~ /Maintenance required/ and not @n.pm.nil?
-  period = @n.pm * 3600
-  last_time = @n.pm_sent
-  send_to = @n.tech
-elsif alert.alert_msg =~ /Replace used toner/ and not @n.waste_full.nil?
-  period = @n.waste_full * 3600
-  last_time = @n.waste_full_sent
-  send_to = @n.local_admin
-elsif alert.alert_msg =~ /Replacement the toner/ and not @n.waste_almost_full.nil?
-  period = @n.waste_almost_full * 3600
-  last_time = @n.waste_almost_full_sent
-  send_to = @n.local_admin
-elsif alert.alert_msg =~ /Job/ and not @n.job_log_full.nil?
-  period = @n.job_log_full * 3600
-  last_time = @n.job_log_full_sent
-  send_to = nil
-else
-  period = nil
-  send_to = nil
-end
-
-# TODO: Uncomment the following before deploying
-# system("/bin/rm -r #{dir}")
-
-if not send_to.nil? and not period.nil? and (last_time.nil? or (alert.alert_date <=> last_time + period) > 0)
-  # Send alert
-  NotifyMailer.notify_email(alert).deliver
-#   exit 1
-else
-  exit 1
+# figure out if we need to send notification (ignore if alert is more than a day old)
+if ((Time.now - alert.alert_date) < 86400)
+  if alert.alert_msg =~ /Misfeed/ and not @n.jam.nil?
+    period = @n.jam * 3600
+    last_time = @n.jam_sent
+    send_to = @n.local_admin
+  elsif alert.alert_msg =~ /Add toner/ and not @n.toner_empty.nil?
+    period = @n.toner_empty * 3600
+    last_time = @n.toner_empty_sent
+    send_to = @n.local_admin
+  elsif alert.alert_msg =~ /Toner supply/i and not @n.toner_low.nil?
+    period = @n.toner_low * 3600
+    last_time = @n.toner_low_sent
+    send_to = @n.local_admin
+  elsif alert.alert_msg =~ /Load paper/ and not @n.paper.nil?
+    period = @n.paper * 3600
+    last_time = @n.paper_sent
+    send_to = @n.local_admin
+  elsif alert.alert_msg =~ /Call for service/ and not @n.service.nil?
+    period = @n.service * 3600
+    last_time = @n.service_sent
+    send_to = @n.tech
+  elsif alert.alert_msg =~ /Maintenance required/ and not @n.pm.nil?
+    period = @n.pm * 3600
+    last_time = @n.pm_sent
+    send_to = @n.tech
+  elsif alert.alert_msg =~ /Replace used toner/ and not @n.waste_full.nil?
+    period = @n.waste_full * 3600
+    last_time = @n.waste_full_sent
+    send_to = @n.local_admin
+  elsif alert.alert_msg =~ /Replacement the toner/ and not @n.waste_almost_full.nil?
+    period = @n.waste_almost_full * 3600
+    last_time = @n.waste_almost_full_sent
+    send_to = @n.local_admin
+  elsif alert.alert_msg =~ /Job/ and not @n.job_log_full.nil?
+    period = @n.job_log_full * 3600
+    last_time = @n.job_log_full_sent
+    send_to = nil
+  else
+    period = nil
+    send_to = nil
+  end
+  
+  # TODO: Uncomment the following before deploying
+  # system("/bin/rm -r #{dir}")
+  
+  if not send_to.nil? and not period.nil? and (last_time.nil? or (alert.alert_date <=> last_time + period) > 0)
+    # Send alert
+    NotifyMailer.notify_email(alert).deliver
+  #   exit 1
+  end
 end

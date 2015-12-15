@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140403190739) do
+ActiveRecord::Schema.define(:version => 20151209134041) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20140403190739) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "pattern"
   end
 
   create_table "counters", :force => true do |t|

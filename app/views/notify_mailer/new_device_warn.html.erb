@@ -6,7 +6,7 @@
   <body>
     <h2>New Device Detected: <%=h @device.name -%></h2>
     <p>
-    I just saw a new device. Please go to the device's <%= link_to "info page", "http://seclcsglab.sharpamericas.com" + edit_device_path(@device) -%> to customize its  settings.</p>
+    I just saw a new device belonging to <%=h @device.client.name -%>. Please go to the device's <%= link_to "info page", "http://172.29.109.122" + edit_device_path(@device) -%> if you need to customize its settings.</p>
     <table style="border: 0; padding: .1em .5em; width:80%">
     <tr>
       <td>Sent from:</td><td><strong><%=h @from -%></strong></td>

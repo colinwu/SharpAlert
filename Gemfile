@@ -2,12 +2,14 @@ source 'https://rubygems.org'
 
 # gem 'rails', '3.2.11'
 gem 'rails'
+gem 'passenger'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'mysql2', '~> 0.3.18'
 gem 'minitest'
+gem 'test-unit'
 
 group :development, :test do
   gem 'railroady'
@@ -44,7 +46,8 @@ gem 'json'
 # gem 'unicorn'
 
 # Deploy with Capistrano
-# gem 'capistrano', '~> 2.14.1'
+gem 'capistrano-rails'
+gem 'capistrano-passenger'
 gem 'capistrano'
 
 # To use debugger
