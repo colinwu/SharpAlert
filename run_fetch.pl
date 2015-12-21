@@ -3,8 +3,11 @@ for ($i = 0; $i <= (4500); $i++) {
   system("fetchmail -kB40");
   do {
     sleep 10;
-    chomp($num = `/usr/bin/ps -ef | /usr/bin/grep rails | /usr/bin/wc -l`);
+    @mailq = `/usr/bin/mailq`;
+    @line = grep(/\d+ Requests./, @mailq);
+    $line[0] =~ /(\d+) Requests./;
+    $num = $1;
     print "$num ..";
-  } while ($num > 10);
+  } while ($num > 100);
   print "\n";
 }

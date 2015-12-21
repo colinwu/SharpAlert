@@ -185,7 +185,10 @@ end
 
 f = $stdin
 
-
+model = nil
+serial = nil
+name = nil
+code = nil
 boundary = nil
 code_list = Array.new
 # Parse the alert message
