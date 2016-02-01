@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151209134041) do
+ActiveRecord::Schema.define(:version => 20160201142833) do
 
   create_table "alerts", :force => true do |t|
     t.datetime "alert_date"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(:version => 20151209134041) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "client_id"
+    t.string   "ip"
   end
 
   create_table "jam_codes", :force => true do |t|

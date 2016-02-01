@@ -8,7 +8,9 @@
   Serial:
   <strong><%= @device.serial %></strong><br />
   Code:
-  <strong><%= @device.code %></strong>
+  <strong><%= @device.code %></strong><br />
+  IP Addr:
+  <strong><%= link_to @device.ip, "http://#{@device.ip}" %></strong>
 </div>
 
 <ul>

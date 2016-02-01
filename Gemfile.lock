@@ -113,6 +113,9 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (2.0.0)
+    rvm1-capistrano3 (1.4.0)
+      capistrano (~> 3.0)
+      sshkit (>= 1.2)
     sass (3.4.20)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -161,9 +164,13 @@ DEPENDENCIES
   mysql2 (~> 0.3.18)
   passenger
   railroady
-  rails
+  rails (~> 3.2.22)
+  rvm1-capistrano3
   sass-rails (~> 3.2.3)
   test-unit
   therubyracer
   uglifier (>= 1.0.3)
   will_paginate
+
+BUNDLED WITH
+   1.11.2

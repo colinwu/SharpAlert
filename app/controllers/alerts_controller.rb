@@ -94,7 +94,7 @@ class AlertsController < ApplicationController
     else
       page_to_show = params[:page]
     end
-    @alerts = Alert.where(condition_array).order(@sort).paginate(:page => page_to_show, :per_page => 30, :include => {:device => :client})
+    @alerts = Alert.where(condition_array).joins(:device => :client).order(@sort).paginate(:page => page_to_show, :per_page => 30, :include => {:device => :client})
     if (params[:commit] == 'Export')
       @request.sub!(/commit=Export/,'commit=Find')
       csv_data = '"alert date","device name","model","serial number","machine code","client","message"' + "\n"

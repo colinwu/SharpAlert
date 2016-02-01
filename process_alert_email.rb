@@ -186,13 +186,16 @@ end
 f = $stdin
 
 model = nil
-serial = nil
+serial = ''
 name = nil
 code = nil
 boundary = nil
+dev_ip = nil
+
 code_list = Array.new
 # Parse the alert message
 while (line = f.gets)
+  line.rstrip!
   if (line =~ /^Device Name: (.+)/i or line =~ /^Nom du périphérique: (.+)/i)
     name = $1
   elsif (line =~ /^Device Model: (.+)/i or line =~ /^Modèle de périphérique: (.+)/i)
@@ -207,7 +210,7 @@ while (line = f.gets)
       codes = f.gets.strip
       msg = "Call for service: #{codes}"
       code_list = codes.split
-    elsif (msg =~ /Maintenance required. Code:(.+)$/ or msg =~ /Intervention technicien requise. Code:(.+)$/)
+    elsif (msg =~ /Maintenance required. Code:(.+)/ or msg =~ /Intervention technicien requise. Code:(.+)/)
       codes = $1
       msg = "Maintenance required. Code:#{codes}"
       code_list = codes.split
@@ -221,6 +224,8 @@ while (line = f.gets)
     from = $1
     from =~ /@(.+)>/
     from_domain = $1
+  elsif line =~ /^Received: from .*[\(\[](\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/
+    dev_ip = $1
   elsif line =~ /^--SmTP-MULTIPART-BOUNDARY/
     if (boundary.nil?)
       boundary = 1
@@ -231,6 +236,15 @@ while (line = f.gets)
 end
 
 if serial.nil? or serial.empty? # ignore the alert if there is no serial number
+  exit
+end
+
+if name.nil? or name.empty?
+  name = dev_ip
+end
+
+# ignore Load Paper messages that are more than a day old
+if alert_msg =~ /Load Paper/i and (alert_date.to_i < Time.now.to_i - 86400)
   exit
 end
 
@@ -297,7 +311,8 @@ if @d.nil?
     :serial => serial,
     :model => model,
     :name => name,
-    :code => code)
+    :code => code,
+    :ip => dev_ip)
   @n = @d.create_notify_control(
     :tech => ndef.tech,
     :local_admin => ndef.local_admin,
@@ -310,18 +325,19 @@ if @d.nil?
     :waste_almost_full => ndef.waste_almost_full,
     :waste_full => ndef.waste_full,
     :job_log_full => ndef.job_log_full)
-  client = Client.where(["pattern = ?", from_domain]).first
+  client = Client.find_by_pattern(from_domain)
   if client.nil?
     NotifyMailer.new_device('wuc@sharpsec.com',@d,from).deliver
   else
     @d.client_id = client.id
-    @d.save
     NotifyMailer.new_device_warn('wuc@sharpsec.com',@d,from).deliver
   end
+  @d.save
 else
   alert.device_id = @d.id
   # keep device name updated - just in case the client changes it.
-  @d.update_attribute('name', name)
+  @d.update_attributes(:name => name, :ip => dev_ip)
+  @d.save
   @n = @d.notify_control
 end
 alert.save

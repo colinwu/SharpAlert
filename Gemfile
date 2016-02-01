@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
 # gem 'rails', '3.2.11'
-gem 'rails'
+gem 'rails', '~> 3.2.22'
 gem 'passenger'
+gem 'rvm1-capistrano3', require: false
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
