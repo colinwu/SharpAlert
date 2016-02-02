@@ -224,8 +224,20 @@ while (line = f.gets)
     from = $1
     from =~ /@(.+)>/
     from_domain = $1
-  elsif line =~ /^Received: from .*[\(\[](\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/
+  elsif line =~ /^Received: from /
+    while (tmp = f.gets)
+      if (tmp =~ /^\s+/)
+        tmp.rstrip!
+        line += tmp
+      else
+        f.seek(0-tmp.length,:CUR)
+        break
+      end
+    end
+    puts line
+    line =~ /^Received: from.*[\(\[](\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/
     dev_ip = $1
+    puts "IP: #{dev_ip}"
   elsif line =~ /^--SmTP-MULTIPART-BOUNDARY/
     if (boundary.nil?)
       boundary = 1
