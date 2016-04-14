@@ -193,8 +193,14 @@ boundary = nil
 dev_ip = nil
 
 code_list = Array.new
+# Suck in the entire input (hopefully it's not too much)
+rawdata = Array.new
+rawdata = f.readlines
+rawdata.reverse!
+
 # Parse the alert message
-while (line = f.gets)
+while (rawdata.length > 0)
+  line = rawdata.pop
   line.rstrip!
   if (line =~ /^Device Name: (.+)/i or line =~ /^Nom du périphérique: (.+)/i)
     name = $1
@@ -207,7 +213,7 @@ while (line = f.gets)
   elsif line =~ /^!!!!! (.+) !!!!!/
     msg = $1
     if (msg =~ /Call for service/)
-      codes = f.gets.strip
+      codes = rawdata.pop.strip
       msg = "Call for service: #{codes}"
       code_list = codes.split
     elsif (msg =~ /Maintenance required. Code:(.+)/ or msg =~ /Intervention technicien requise. Code:(.+)/)
@@ -225,17 +231,16 @@ while (line = f.gets)
     from =~ /@(.+)>/
     from_domain = $1
   elsif line =~ /^Received: from /
-    while (tmp = f.gets)
+    while (tmp = rawdata.pop)
       if (tmp =~ /^\s+/)
-        tmp.rstrip!
+        tmp.strip!
         line += tmp
       else
-        f.seek(0-tmp.length,:CUR)
+        rawdata.push(tmp)
         break
       end
     end
-    puts line
-    line =~ /^Received: from.*[\(\[](\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/
+    line =~ /^Received: from.+[\(\[](\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})[\)\]]+\s+by/
     dev_ip = $1
     puts "IP: #{dev_ip}"
   elsif line =~ /^--SmTP-MULTIPART-BOUNDARY/

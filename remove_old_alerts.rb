@@ -10,7 +10,7 @@ alert_msg regexp 'Load paper'").each do |a|
 end
 
 Device.all.each do |d|
-  if d.alerts.empty?
+  if d.alerts.empty? and d.name != 'default'
     d.destroy
   end
 end
