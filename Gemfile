@@ -47,6 +47,7 @@ gem 'json'
 # gem 'unicorn'
 
 # Deploy with Capistrano
+gem 'capistrano-bundler'
 gem 'capistrano-rails'
 gem 'capistrano-passenger'
 gem 'capistrano'
