@@ -14,6 +14,7 @@ gem 'test-unit'
 
 group :development, :test do
   gem 'railroady'
+  gem 'byebug'
 end
 
 # Gems used only for assets and not required
@@ -36,7 +37,6 @@ gem 'getopt'
 gem 'lazy_high_charts'
 gem 'linear-regression', '~> 0.0.2'
 gem 'json'
-
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

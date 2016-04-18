@@ -1,6 +1,6 @@
 # Remove Alert records that are more than 1 year old
 
-Alert.where("created_at < (localtime - interval 1 year)").each do |a|
+Alert.where("created_at < (localtime - interval 2 year)").each do |a|
   a.delete
 end
 

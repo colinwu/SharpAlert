@@ -4,7 +4,7 @@
 # You can define all roles on a single server, or split them:
 set :deploy_to, "/var/www/SharpAlert"
 
-server '172.29.109.113', user: 'sharpalert', roles: %w{app db web}, 
+server '172.29.109.114', user: 'sharpalert', roles: %w{app db web}, 
     ssh_options: {
      user: 'sharpalert', # overrides user setting above
      keys: %w(/home/wucolin/.ssh/id_rsa),

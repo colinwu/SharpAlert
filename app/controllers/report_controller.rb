@@ -316,7 +316,7 @@ class ReportController < ApplicationController
     end
   end
   
-  # Toner history for one device. Access as /report/:id/toner_history?days=N
+  # Toner history for one device. Access as /report/:id/toner_history?days=N  
   def toner_history
     if (params.nil?)
       # should show an error message
@@ -333,7 +333,7 @@ class ReportController < ApplicationController
       @toner_low = Hash.new
       # @toner_low's structure is:
       # {alert_date.to_date => {
-      #                          colour => {'date_diff' => d, 'page_diff' => p},
+      #                          colour => {'date_diff' => d, 'page_diff' => p, 'type' => 'toner_low'},
       #                          ...
       #                        }
       # }
@@ -347,6 +347,7 @@ class ReportController < ApplicationController
         where_array[-1] = key[0]
         where_array[-2] = key[1]
         a = Alert.where(where_array).order('alert_date').joins(:toner_codes).first
+        
         unless (last_entry[key[1]].nil?)
           prev_alert = last_entry[key[1]]
           date_diff = ((a.alert_date - prev_alert.alert_date)/86400).to_i
@@ -373,7 +374,9 @@ class ReportController < ApplicationController
         end
         last_entry[key[1]] = a 
       end
-
+      @toner_low.each_value do |toners|
+        toners['type'] = 'toner_low'
+      end
     
       where_array = ["(alert_msg regexp 'add toner') and device_id = ?", @dev.id]
       unless @days.nil? or @days.empty?
@@ -419,7 +422,18 @@ class ReportController < ApplicationController
         end
         last_entry[key[1]] = a 
       end
+      @toner_out.each_value do |toners|
+        toners['type'] = 'toner_out'
+      end
+      # Sort the combined @toner_out and @toner_low results
+      date_list = (@toner_out.keys + @toner_low.keys).sort.uniq
+      @toner_alerts = []
+      date_list.each do |d|
+        @toner_alerts << {d => @toner_low[d]} unless @toner_low[d].nil?
+        @toner_alerts << {d => @toner_out[d]} unless @toner_out[d].nil?
+      end
     end
+    
   end
   
     

@@ -10,7 +10,7 @@ set :stage, :staging
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 set :deploy_to, "/home/sharpalert/src"
 
-server '172.29.109.113', user: 'sharpalert', roles: %w{app}, 
+server '172.29.109.114', user: 'sharpalert', roles: %w{app}, 
     ssh_options: {
      user: 'sharpalert', # overrides user setting above
      keys: %w(/home/wucolin/.ssh/id_rsa),

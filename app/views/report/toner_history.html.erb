@@ -6,7 +6,7 @@ Model: <strong><%= @dev.model %></strong><br />
 Serial#: <strong><%= @dev.serial %></strong><br />
 <br />
 <table class='counters'>
-<caption>Based on "Toner Supply is Low" alerts</caption>
+<caption>Toner Low alerts are in <span class=toner_low>this</span> colour; Add Toner alerts are in <span class=toner_out>this.</span></caption>
 <tr>
   <th rowspan=2>Alert Date</th>
   <th colspan=2>Black</th>
@@ -22,22 +22,28 @@ Serial#: <strong><%= @dev.serial %></strong><br />
 </tr>
 
 <% 
-  @toner_low.keys.sort.each do |d|
+  @toner_alerts.each do |alert|
     bkgrd = cycle('light','dark')
+    d = alert.keys[0]
+    css_class = alert[d]['type']
 %>
     <tr class='<%= bkgrd %>'>
       <td><%= d %></td>
 <%
     for c in ['Bk','C','M','Y'] 
-      if (@toner_low[d][c].nil?) 
+      if (alert[d][c].nil?) 
 %>
       <td>&nbsp;</td><td>&nbsp;</td>
 <%
       else
         for v in ['date_diff','page_diff']
-          disp_val = @toner_low[d][c][v].nil? ? ' ' : @toner_low[d][c][v]
+          unless alert[d][c][v].nil?
+            disp_val = alert[d][c][v]
+          else
+            disp_val = ''
+          end
 %>
-          <td><%= disp_val %></td>
+          <td class=<%= css_class %>><%= disp_val %></td>
 <%
         end
       end  
@@ -46,44 +52,3 @@ Serial#: <strong><%= @dev.serial %></strong><br />
 <% end %>
 </table>
 
-<br />
-<table class='counters'>
-<caption>Based on "Add Toner" alerts</caption>
-<tr>
-<th rowspan=2>Alert Date</th>
-<th colspan=2>Black</th>
-<th colspan=2>Cyan</th>
-<th colspan=2>Magenta</th>
-<th colspan=2>Yellow</th>
-</tr>
-<tr>
-<th>Date diff</th><th>B/W Diff</th>
-<th>Date diff</th><th>Color Diff</th>
-<th>Date diff</th><th>Color Diff</th>
-<th>Date diff</th><th>Color Diff</th>
-</tr>
-
-<% 
-@toner_out.keys.sort.each do |d|
-bkgrd = cycle('light','dark')
-%>
-<tr class='<%= bkgrd %>'>
-<td><%= d %></td>
-<%
-for c in ['Bk','C','M','Y'] 
-  if (@toner_out[d][c].nil?) 
-%>
-  <td>&nbsp;</td><td>&nbsp;</td>
-<%
-  else
-    for v in ['date_diff','page_diff']
-      disp_val = @toner_out[d][c][v].nil? ? ' ' : @toner_out[d][c][v]
-%>
-      <td><%= disp_val %></td>
-<%
-    end
-  end  
-end %>
-</tr>
-<% end %>
-</table>
