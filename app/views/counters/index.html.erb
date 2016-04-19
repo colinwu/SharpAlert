@@ -11,6 +11,7 @@
   <tr>
     <th>Status Date</th>
     <th>Device</th>
+    <th>Model</th>
     <th>Client</th>
     <th>B&amp;W Total</th>
     <th>Color Total</th>
@@ -26,6 +27,9 @@
       <% unless d.device.name.nil? %>
         <%=h link_to d.device.name, "/counters/detail?model_q=#{d.device.model}&serial_q=#{d.device.serial}&commit=Find", :title => "Click to show all meter reads for this #{d.device.model}" %> 
       <% end %>
+    </td>
+    <td rowspan=2>
+      <%= d.device.model %>
     </td>
     <td rowspan=2>
       <%= d.device.client.nil? ? link_to("<Edit Device Info>", edit_device_path(d.device)) : d.device.client.name %>
