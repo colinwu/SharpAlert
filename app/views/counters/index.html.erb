@@ -53,7 +53,7 @@
     <td><%=h @last[d.device_id].status_date.to_formatted_s(:db) %></td>
     <td class="right-justify"><%=h number_with_delimiter(@newbw[d.device_id]) %></td>
     <td class="right-justify"><%=h number_with_delimiter(@newc[d.device_id]) %></td>
-    <% age = ((@newbw[d.device_id] + @newc[d.device_id]) * 100.0 / @lifetime[d.device_id]).round(1) %>
+    <% age = @lifetime[d.device_id].nil? ? '' : ((@newbw[d.device_id] + @newc[d.device_id]) * 100.0 / @lifetime[d.device_id]).round(1) %>
     <td class="right-justify"><%=h age %>%</td>
   </tr>
   <% end %>
