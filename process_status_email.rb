@@ -264,13 +264,40 @@ while (line = f.gets)
     totalprintbw = $1
   elsif line =~ /^From:\s*(.+)/
     from = $1
-  elsif line =~ /^.+ = .+/
+    from =~ /@(.+)>/
+    from_domain = $1
+  elsif line =~ /^Received: from /
+    while (tmp = rawdata.pop)
+      if (tmp =~ /^\s+/)
+        tmp.strip!
+        line += tmp
+      else
+        rawdata.push(tmp)
+        break
+      end
+    end
+    line =~ /^Received: from.+[\(\[](\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})[\)\]]+\s+by/
+    dev_ip = $1
+  elsif line =~ /^--SmTP-MULTIPART-BOUNDARY/
+    if (boundary.nil?)
+      boundary = 1
+    else
+      break
+    end
+  end
+elsif line =~ /^.+ = .+/
     puts "Unrecognized line: [#{line}]"
   end
 end
 dev = Device.where(["model = ? and serial = ?", model, serial]).first
 if dev.nil?
-  dev = Device.create(:name => name, :model => model, :serial => serial, :code => code)
+  client = Client.find_by_pattern(from_domain)
+  if client.nil?
+    c_id = nil
+  else
+    c_id = client.id
+  end
+  dev = Device.create(:name => name, :model => model, :serial => serial, :code => code, :dev_ip => dev_ip, :client_id => c_id)
   ndef = NotifyControl.joins(:device).where("devices.serial = 'default'").first
   nc = dev.create_notify_control(:tech => ndef.tech, :local_admin => ndef.local_admin, :jam => ndef.jam, :toner_low => ndef.toner_low, :toner_empty => ndef.toner_empty, :paper => ndef.paper, :service => ndef.service, :pm => ndef.pm, :waste_almost_full => ndef.waste_almost_full, :waste_full => ndef.waste_full, :job_log_full => ndef.job_log_full)
   NotifyMailer.new_device('wuc@sharpsec.com',dev,from).deliver
