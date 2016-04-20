@@ -144,6 +144,8 @@ if opt['d']
   dir = opt['d']
   puts dir
 end
+boundary = nil
+dev_ip = nil
 
 f = $stdin
 
@@ -358,7 +360,7 @@ end
 
 # Check if we have print volume data for this device
 if dev.print_volume.nil?
-#  NotifyMailer.nopv_email(dev).deliver
+  NotifyMailer.nopv_email(dev).deliver
 #  exit 1
 end
 
