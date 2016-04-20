@@ -147,9 +147,12 @@ end
 
 f = $stdin
 
+rawdata = Array.new
+rawdata = f.readlines
 
 # Parse the email
-while (line = f.gets)
+while (rawdata.length > 0)
+  line = rawdata.shift
   if line =~ /^Device Name: (.+)/i
     name = $1.strip
   elsif line =~ /^Device Model: (.+)/i
@@ -267,12 +270,12 @@ while (line = f.gets)
     from =~ /@(.+)>/
     from_domain = $1
   elsif line =~ /^Received: from /
-    while (tmp = rawdata.pop)
+    while (tmp = rawdata.shift)
       if (tmp =~ /^\s+/)
         tmp.strip!
         line += tmp
       else
-        rawdata.push(tmp)
+        rawdata.unshift(tmp)
         break
       end
     end
@@ -284,8 +287,7 @@ while (line = f.gets)
     else
       break
     end
-  end
-elsif line =~ /^.+ = .+/
+  elsif line =~ /^.+ = .+/
     puts "Unrecognized line: [#{line}]"
   end
 end
