@@ -476,6 +476,7 @@ class ReportController < ApplicationController
     
     @all_devices.each do |d|
       @last[d.device_id] = Counter.latest(d.device_id)
+      next if (Time.now - @last[d.device_id].status_date) > 7776000 # ignore devices where the latest counter data if more than 90 days old
       @newc[d.device_id] = @last[d.device_id].totalprint1c.to_i + @last[d.device_id].totalprint2c.to_i + @last[d.device_id].totalprintc.to_i
       @newbw[d.device_id] = @last[d.device_id].totalprintbw.to_i
       
@@ -493,6 +494,8 @@ class ReportController < ApplicationController
           @healthbw[d.device_id] = 'red'
         elsif (@bw_ratio[d.device_id] <= 1.5 and @bw_ratio[d.device_id] > 1)
           @healthbw[d.device_id] = 'yellow'
+        elsif (@bw_ratio[d.device_id] < 0.1)
+          @healthbw[d.device_id] = 'cyan'
         end
         unless (d.device.print_volume.ave_c.nil? or d.device.print_volume.ave_c == 0)
           @c_ratio[d.device_id] = (totalc * 30 / days) / d.device.print_volume.ave_c
@@ -500,13 +503,15 @@ class ReportController < ApplicationController
             @healthc[d.device_id] = 'red'
           elsif (@c_ratio[d.device_id] <= 1.5 and @c_ratio[d.device_id] > 1)
             @healthc[d.device_id] = 'yellow'
+          elsif (@c_ratio[d.device_id] < 0.1)
+            @healthc[d.device_id] = 'cyan'
           end
         end
       else
         @oldc[d.device_id] = 0
         @oldbw[d.device_id] = 0
       end
-      if ((not @bw_ratio[d.device_id].nil? and @bw_ratio[d.device_id] > 1) or (not @c_ratio[d.device_id].nil? and @c_ratio[d.device_id] > 1))
+      if ((not @bw_ratio[d.device_id].nil? and (@bw_ratio[d.device_id] > 1 or @bw_ratio[d.device_id] < 0.1)) or (not @c_ratio[d.device_id].nil? and (@c_ratio[d.device_id] > 1 or @c_ratio[d.device_id] < 0.1)))
         @devices << d
       end
     end
