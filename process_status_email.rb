@@ -301,7 +301,7 @@ if dev.nil?
   else
     c_id = client.id
   end
-  dev = Device.create(:name => name, :model => model, :serial => serial, :code => code, :dev_ip => dev_ip, :client_id => c_id)
+  dev = Device.create(:name => name, :model => model, :serial => serial, :code => code, :ip => dev_ip, :client_id => c_id)
   ndef = NotifyControl.joins(:device).where("devices.serial = 'default'").first
   nc = dev.create_notify_control(:tech => ndef.tech, :local_admin => ndef.local_admin, :jam => ndef.jam, :toner_low => ndef.toner_low, :toner_empty => ndef.toner_empty, :paper => ndef.paper, :service => ndef.service, :pm => ndef.pm, :waste_almost_full => ndef.waste_almost_full, :waste_full => ndef.waste_full, :job_log_full => ndef.job_log_full)
   NotifyMailer.new_device('wuc@sharpsec.com',dev,from).deliver
