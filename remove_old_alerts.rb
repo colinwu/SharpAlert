@@ -9,8 +9,12 @@ alert_msg regexp 'Load paper'").each do |a|
   a.delete
 end
 
+Counter.where("created_at < (localtime - interval 2 year)").each do |c|
+  c.delete
+end
+
 Device.all.each do |d|
-  if d.alerts.empty? and d.name != 'default'
+  if d.alerts.empty? and d.counters.empty? and d.name != 'default'
     d.destroy
   end
 end

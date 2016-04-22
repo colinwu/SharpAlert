@@ -8,6 +8,7 @@
     <td><%= text_field_tag 'model_q', @model_q, :size => 10, :placeholder => "Model" -%></td>
     <td><%= text_field_tag 'serial_q', @serial_q, :size => 10, :placeholder => "Serial #" -%></td>
     <td><%= text_field_tag 'code_q', @code_q, :size => 10, :placeholder => "Machine Code" -%></td>
+    <td><%= text_field_tag 'ip_q', @ip_q, :size => 10, :placeholder => "IP Addr" -%></td>
     <td><%= text_field_tag "client_q", @client_q, :size => 10, :placeholder => "Client Name" -%></td>
     <td colspan=9><%= submit_tag 'Filter' -%></td>
   <%end%>  
@@ -18,6 +19,7 @@
     <th><%= link_to 'Model', "/devices?sort=model&#{@request}", :title => "Sort by Model" -%></th>
     <th><%= link_to "Serial", "/devices?sort=serial&#{@request}", :title => "Sort by Serial Number" -%></th>
     <th><%= link_to "Code", "/devices?sort=code&#{@request}", :title => "Sort by machine code" -%></th>
+    <th>IP Address</th>
     <th>Client</th>
   </tr>
   <% for device in @devices %>
@@ -30,6 +32,7 @@
       <td><%= device.model %></td>
       <td><%= device.serial %></td>
       <td><%= device.code %></td>
+      <td><%= device.ip %></td>
       <td><%= device.client.nil? ? link_to('<Edit device details>', edit_device_path(device)) : device.client.name %></td>
       <td>
         <%= link_to "Edit", edit_device_path(device) %> | 
