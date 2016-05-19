@@ -281,10 +281,8 @@ while (rawdata.length > 0)
         break
       end
     end
-    puts line
     line =~ /^Received: from.+[\(\[](\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})[\)\]]+\s+by/
     dev_ip = $1
-    puts dev_ip
   elsif line =~ /^--SmTP-MULTIPART-BOUNDARY/
     if (boundary.nil?)
       boundary = 1
