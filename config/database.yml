@@ -15,7 +15,7 @@ development:
   database: SharpApp_development
   pool: 5
   username: root
-  password:
+  password: 56tyghbn
   host: localhost
 
 # Warning: The database defined as "test" will be erased and
@@ -38,5 +38,5 @@ production:
   database: SharpApp_production
   pool: 5
   username: root
-  password:
+  password: 5TGBnhy6
   host: localhost

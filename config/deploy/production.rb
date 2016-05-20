@@ -2,15 +2,14 @@
 # ======================
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
-set :deploy_to, "/var/www/SharpAlert"
+set :deploy_to, "/home/wucolin/apps/SharpAlert"
 
-server '172.29.109.114', user: 'sharpalert', roles: %w{app db web}, 
+server '172.29.97.44', user: 'wucolin', roles: %w{app db web}, 
     ssh_options: {
-     user: 'sharpalert', # overrides user setting above
+     user: 'wucolin', # overrides user setting above
      keys: %w(/home/wucolin/.ssh/id_rsa),
      forward_agent: false,
      auth_methods: %w(publickey)
-     # password: 'please use keys'
    }
 
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
