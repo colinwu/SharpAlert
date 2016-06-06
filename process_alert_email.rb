@@ -368,11 +368,11 @@ if ((Time.now - alert.alert_date) < 86400)
   elsif alert.alert_msg =~ /Add toner/ and not @n.toner_empty.nil?
     period = @n.toner_empty * 3600
     last_time = @n.toner_empty_sent
-    send_to = @n.local_admin
+    send_to = @n.local_admin + ',' + 'wuc@sharpsec.com'
   elsif alert.alert_msg =~ /Toner supply/i and not @n.toner_low.nil?
     period = @n.toner_low * 3600
     last_time = @n.toner_low_sent
-    send_to = @n.local_admin
+    send_to = @n.local_admin + ',' + 'wuc@sharpsec.com'
   elsif alert.alert_msg =~ /Load paper/ and not @n.paper.nil?
     period = @n.paper * 3600
     last_time = @n.paper_sent

@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # gem 'rails', '3.2.11'
 gem 'rails', '~> 3.2.22'
-gem 'passenger'
+# gem 'passenger'
 gem 'bundler'
 
 # Bundle edge Rails instead:
