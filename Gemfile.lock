@@ -81,9 +81,6 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (3.0.1)
-    passenger (5.0.22)
-      rack
-      rake (>= 0.8.1)
     polyglot (0.3.5)
     power_assert (0.2.6)
     rack (1.4.7)
@@ -164,7 +161,6 @@ DEPENDENCIES
   minitest
   mocha
   mysql2 (~> 0.3.18)
-  passenger
   railroady
   rails (~> 3.2.22)
   rvm1-capistrano3
@@ -175,4 +171,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.12.4
+   1.12.5
