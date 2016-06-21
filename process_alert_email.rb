@@ -344,10 +344,10 @@ if @d.nil?
     :job_log_full => ndef.job_log_full)
   client = Client.find_by_pattern(from_domain)
   if client.nil?
-    NotifyMailer.new_device('wuc@sharpsec.com',@d,from).deliver
+    NotifyMailer.new_device('wuc@sharpsec.com,torica@sharpsec.com',@d,from).deliver
   else
     @d.client_id = client.id
-    NotifyMailer.new_device_warn('wuc@sharpsec.com',@d,from).deliver
+    NotifyMailer.new_device_warn('wuc@sharpsec.com,torica@sharpsec.com',@d,from).deliver
   end
   @d.save
 else
@@ -361,53 +361,56 @@ alert.save
 
 # figure out if we need to send notification (ignore if alert is more than a day old)
 if ((Time.now - alert.alert_date) < 86400)
-  if alert.alert_msg =~ /Misfeed/ and not @n.jam.nil?
-    period = @n.jam * 3600
-    last_time = @n.jam_sent
-    send_to = @n.local_admin
-  elsif alert.alert_msg =~ /Add toner/ and not @n.toner_empty.nil?
-    period = @n.toner_empty * 3600
-    last_time = @n.toner_empty_sent
-    send_to = @n.local_admin + ',' + 'wuc@sharpsec.com'
-  elsif alert.alert_msg =~ /Toner supply/i and not @n.toner_low.nil?
-    period = @n.toner_low * 3600
-    last_time = @n.toner_low_sent
-    send_to = @n.local_admin + ',' + 'wuc@sharpsec.com'
-  elsif alert.alert_msg =~ /Load paper/ and not @n.paper.nil?
-    period = @n.paper * 3600
-    last_time = @n.paper_sent
-    send_to = @n.local_admin
-  elsif alert.alert_msg =~ /Call for service/ and not @n.service.nil?
-    period = @n.service * 3600
-    last_time = @n.service_sent
-    send_to = @n.tech
-  elsif alert.alert_msg =~ /Maintenance required/ and not @n.pm.nil?
-    period = @n.pm * 3600
-    last_time = @n.pm_sent
-    send_to = @n.tech
-  elsif alert.alert_msg =~ /Replace used toner/ and not @n.waste_full.nil?
-    period = @n.waste_full * 3600
-    last_time = @n.waste_full_sent
-    send_to = @n.local_admin
-  elsif alert.alert_msg =~ /Replacement the toner/ and not @n.waste_almost_full.nil?
-    period = @n.waste_almost_full * 3600
-    last_time = @n.waste_almost_full_sent
-    send_to = @n.local_admin
-  elsif alert.alert_msg =~ /Job/ and not @n.job_log_full.nil?
-    period = @n.job_log_full * 3600
-    last_time = @n.job_log_full_sent
-    send_to = nil
-  else
-    period = nil
-    send_to = nil
-  end
   
-  # TODO: Uncomment the following before deploying
-  # system("/bin/rm -r #{dir}")
+  NotifyMailer.notify_email(alert).deliver
   
-  if not send_to.nil? and not period.nil? and (last_time.nil? or (alert.alert_date <=> last_time + period) > 0)
-    # Send alert
-    NotifyMailer.notify_email(alert).deliver
-  #   exit 1
-  end
+#   if alert.alert_msg =~ /Misfeed/ and not @n.jam.nil?
+#     period = @n.jam * 3600
+#     last_time = @n.jam_sent
+#     send_to = @n.local_admin.empty? ? 'wuc@sharpsec.com' : [@n.local_admin,'wuc@sharpsec.com'].join(',')
+#   elsif alert.alert_msg =~ /Add toner/ and not @n.toner_empty.nil?
+#     period = @n.toner_empty * 3600
+#     last_time = @n.toner_empty_sent
+#     send_to = @n.local_admin.empty? ? 'wuc@sharpsec.com' : [@n.local_admin,'wuc@sharpsec.com'].join(',')
+#   elsif alert.alert_msg =~ /Toner supply/i and not @n.toner_low.nil?
+#     period = @n.toner_low * 3600
+#     last_time = @n.toner_low_sent
+#     send_to = @n.local_admin.empty? ? 'wuc@sharpsec.com' : [@n.local_admin,'wuc@sharpsec.com'].join(',')
+#   elsif alert.alert_msg =~ /Load paper/ and not @n.paper.nil?
+#     period = @n.paper * 3600
+#     last_time = @n.paper_sent
+#     send_to = @n.local_admin
+#   elsif alert.alert_msg =~ /Call for service/ and not @n.service.nil?
+#     period = @n.service * 3600
+#     last_time = @n.service_sent
+#     send_to = @n.tech
+#   elsif alert.alert_msg =~ /Maintenance required/ and not @n.pm.nil?
+#     period = @n.pm * 3600
+#     last_time = @n.pm_sent
+#     send_to = @n.tech.empty? ? 'wuc@sharpsec.com' : [@n.tech,'wuc@sharpsec.com'].join(',')
+#   elsif alert.alert_msg =~ /Replace used toner/ and not @n.waste_full.nil?
+#     period = @n.waste_full * 3600
+#     last_time = @n.waste_full_sent
+#     send_to = @n.local_admin
+#   elsif alert.alert_msg =~ /Replacement the toner/ and not @n.waste_almost_full.nil?
+#     period = @n.waste_almost_full * 3600
+#     last_time = @n.waste_almost_full_sent
+#     send_to = @n.local_admin
+#   elsif alert.alert_msg =~ /Job/ and not @n.job_log_full.nil?
+#     period = @n.job_log_full * 3600
+#     last_time = @n.job_log_full_sent
+#     send_to = nil
+#   else
+#     period = nil
+#     send_to = nil
+#   end
+#   
+#   # TODO: Uncomment the following before deploying
+#   # system("/bin/rm -r #{dir}")
+#   
+#   if not send_to.nil? and not period.nil? and (last_time.nil? or (alert.alert_date <=> last_time + period) > 0)
+#     # Send alert
+#     NotifyMailer.notify_email(send_to, alert).deliver
+#   #   exit 1
+#   end
 end

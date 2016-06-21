@@ -1,51 +1,63 @@
 class NotifyMailer < ActionMailer::Base
-  default from: "sharpmon@seclcsglab.sharpamericas.com"
+  default from: "REDMonitor@sharpamericas.com"
 
   def notify_email(alert)
     @alert = alert
     @n = Device.find(@alert.device_id).notify_control
     # figure out which alert this is so we know which control to use
     if alert.alert_msg =~ /Misfeed/ and not @n.jam.nil?
+      period = @n.jam * 3600
       @last_sent = @n.jam_sent
       @who = @n.local_admin
       @n.jam_sent = alert.alert_date
     elsif alert.alert_msg =~ /Add toner/ and not @n.toner_empty.nil?
       @last_sent = @n.toner_empty_sent
-      @who = @n.local_admin
+      period = @n.toner_empty * 3600
+      @who = (@n.local_admin.nil? or @n.local_admin.empty?) ? 'rpdesk@sharpsec.com' : [@n.local_admin,'rpdesk@sharpsec.com'].join(',')
       @n.toner_empty_sent = alert.alert_date
     elsif alert.alert_msg =~ /Toner supply/i and not @n.toner_low.nil?
       @last_sent = @n.toner_low_sent
-      @who = @n.local_admin
+      period = @n.toner_low * 3600
+      @who = (@n.local_admin.nil? or @n.local_admin.empty?) ? 'rpdesk@sharpsec.com' : [@n.local_admin,'rpdesk@sharpsec.com'].join(',')
       @n.toner_low_sent = alert.alert_date
     elsif alert.alert_msg =~ /Load paper/ and not @n.paper.nil?
       @last_sent = @n.paper_sent
+      period = @n.paper * 3600
       @who = @n.local_admin
       @n.paper_sent = alert.alert_date
     elsif alert.alert_msg =~ /Call for service/ and not @n.service.nil?
       @last_sent = @n.service_sent
+      period = @n.service * 3600
       @who = @n.tech
       @n.service_sent = alert.alert_date
     elsif alert.alert_msg =~ /Maintenance required/ and not @n.pm.nil?
       @last_sent = @n.pm_sent
+      period = @n.pm * 3600
       @who = @n.tech
       @n.pm_sent = alert.alert_date
     elsif alert.alert_msg =~ /Replace used toner/ and not @n.waste_full.nil?
       @last_sent = @n.waste_full_sent
+      period = @n.waste_full * 3600
       @who = @n.local_admin
       @n.waste_full_sent = alert.alert_date
     elsif alert.alert_msg =~ /Replacement the toner/ and not @n.waste_almost_full.nil?
       @last_sent = @n.waste_almost_full_sent
+      period = @n.waste_almost_full * 3600
       @who = @n.local_admin
       @n.waste_almost_full_sent = alert.alert_date
     elsif alert.alert_msg =~ /Job/ and not @n.job_log_full.nil?
       @last_sent = @n.job_log_full_sent
+      period = @n.job_log_full * 3600
       @who = @n.local_admin
       @n.job_log_full_sent = alert.alert_date
     else
       @last_sent = nil
+      period = nil
     end
-    unless @last_sent.nil?
-      @num_past_alerts = Alert.joins(:device).where(['alert_msg = ? and devices.name = ? and alert_date > ? and alert_date < ?', alert.alert_msg, alert.device.name, @last_sent, alert.alert_date]).count
+    if not (@who.nil? or @who.empty?) and not period.nil? and (@last_sent.nil? or (alert.alert_date <=> @last_sent + period) > 0)
+      unless @last_sent.nil?
+        @num_past_alerts = Alert.joins(:device).where(['alert_msg = ? and devices.name = ? and alert_date > ? and alert_date < ?', alert.alert_msg, alert.device.name, @last_sent, alert.alert_date]).count
+      end
     end
     mail(:to => @who, :subject => "#{alert.device.name} - Alert Message - #{alert.alert_msg}")
     @n.save
