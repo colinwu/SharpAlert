@@ -261,7 +261,7 @@ if name.nil? or name.empty?
 end
 
 # ignore Load Paper messages that are more than a day old
-if alert_msg =~ /Load Paper/i and (alert_date.to_i < Time.now.to_i - 86400)
+if alert_msg =~ /Load Paper/i and (Time.parse(alert_date) < (Time.now - 86400))
   exit
 end
 
