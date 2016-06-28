@@ -32,6 +32,8 @@
     <% if not @last_sent.nil? and (@num_past_alerts > 0) %>
     <p>NOTE: Since the last notice (<%= @last_sent.to_formatted_s(:db) -%>) there have been <strong><%= @num_past_alerts -%></strong> alerts for this condition.</p><br />
     <% end %>
-    
+    <% if (@num_past_alerts > 0) and (@alert.alert_msg =~ /toner/i) %>
+    <p>See toner usage history for this device <%= link_to 'here', toner_history_report_url(@alert.device) %></p><br />
+    <% end %>
   </body>
 </html>
