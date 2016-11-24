@@ -473,12 +473,23 @@ class ReportController < ApplicationController
     @healthc = Hash.new
     @bw_ratio = Hash.new
     @c_ratio = Hash.new
+    @age = Hash.new
     
     @all_devices.each do |d|
       @last[d.device_id] = Counter.latest(d.device_id)
       next if (Time.now - @last[d.device_id].status_date) > 7776000 # ignore devices where the latest counter data if more than 90 days old
       @newc[d.device_id] = @last[d.device_id].totalprint1c.to_i + @last[d.device_id].totalprint2c.to_i + @last[d.device_id].totalprintc.to_i
       @newbw[d.device_id] = @last[d.device_id].totalprintbw.to_i
+      age = (@newc[d.device_id] + @newbw[d.device_id]) * 100.0 / PrintVolume.find_by_model(d.device.model).lifetime
+      if (age > 100)
+        @age[d.device_id] = 'red'
+      elsif (age > 80)
+        @age[d.device_id] = 'yellow'
+      elsif (age < 10)
+        @age[d.device_id] = 'cyan'
+      else
+        @age[d.device_id] = ''
+      end
       
       first_date = @last[d.device_id].status_date - @days*86400
       @first[d.device_id] = Counter.earliest_or_before(first_date,d.device_id)
@@ -496,6 +507,8 @@ class ReportController < ApplicationController
           @healthbw[d.device_id] = 'yellow'
         elsif (@bw_ratio[d.device_id] < 0.1)
           @healthbw[d.device_id] = 'cyan'
+        else
+          @healthbw[d.device_id] = ''
         end
         unless (d.device.print_volume.ave_c.nil? or d.device.print_volume.ave_c == 0)
           @c_ratio[d.device_id] = (totalc * 30 / days) / d.device.print_volume.ave_c
@@ -505,6 +518,8 @@ class ReportController < ApplicationController
             @healthc[d.device_id] = 'yellow'
           elsif (@c_ratio[d.device_id] < 0.1)
             @healthc[d.device_id] = 'cyan'
+          else
+            @healthc[d.device_id] = ''
           end
         end
       else

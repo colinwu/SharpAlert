@@ -2,7 +2,7 @@ class DevicesController < ApplicationController
   def index
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
     if params[:sort].nil? or params[:sort].empty?
-      @sort = 'name'
+      @sort = 'devices.name'
     else
       @sort = params[:sort]
     end
