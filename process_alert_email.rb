@@ -252,7 +252,7 @@ while (rawdata.length > 0)
   end
 end
 
-if serial.nil? or serial.length == 0 # ignore the alert if there is no serial number
+if serial.nil? or (serial.length < 6) # ignore the alert if there is no serial valid number
   exit
 end
 

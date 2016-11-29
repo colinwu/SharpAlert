@@ -14,12 +14,22 @@ class NotifyMailer < ActionMailer::Base
     elsif alert.alert_msg =~ /Add toner/ and not @n.toner_empty.nil?
       @last_sent = @n.toner_empty_sent
       period = @n.toner_empty * 3600
-      @who = (@n.local_admin.nil? or @n.local_admin.empty?) ? 'rpdesk@sharpsec.com' : [@n.local_admin,'rpdesk@sharpsec.com'].join(',')
+      # THIS IS A HACK!!! For now only want Toner alerts to go to rpdesk if the client is 'IBEW Local 353'
+      if (@alert.device.client.name == 'IBEW Local 353')
+        @who = (@n.local_admin.nil? or @n.local_admin.empty?) ? 'rpdesk@sharpsec.com' : [@n.local_admin,'rpdesk@sharpsec.com'].join(',')
+      else
+        @who = @n.local_admin
+      end
       @n.toner_empty_sent = alert.alert_date
     elsif alert.alert_msg =~ /Toner supply/i and not @n.toner_low.nil?
       @last_sent = @n.toner_low_sent
       period = @n.toner_low * 3600
-      @who = (@n.local_admin.nil? or @n.local_admin.empty?) ? 'rpdesk@sharpsec.com' : [@n.local_admin,'rpdesk@sharpsec.com'].join(',')
+      # THIS IS A HACK!!! For now only want Toner alerts to go to rpdesk if the client is 'IBEW Local 353'
+      if (@alert.device.client.name == 'IBEW Local 353')
+        @who = (@n.local_admin.nil? or @n.local_admin.empty?) ? 'rpdesk@sharpsec.com' : [@n.local_admin,'rpdesk@sharpsec.com'].join(',')
+      else
+        @who = @n.local_admin
+      end
       @n.toner_low_sent = alert.alert_date
     elsif alert.alert_msg =~ /Load paper/ and not @n.paper.nil?
       @last_sent = @n.paper_sent
