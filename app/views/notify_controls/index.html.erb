@@ -10,6 +10,7 @@
       <td><%= text_field_tag 'name_q', @name_q, :size => 10, :placeholder => "Device Name" -%></td>
       <td><%= text_field_tag 'tech_q', @tech_q, :size => 10, :placeholder => "Tech email" -%></td>
       <td><%= text_field_tag 'local_q', @local_q, :size => 10, :placeholder => "Local admin email" -%></td>
+      <td><%= text_field_tag 'toner_q', @tech_q, :size => 10, :placeholder => "Toner email" -%></td>
       <td><%= text_field_tag 'client_q', @client_q, :size => 10, :placeholder => "Search Client" -%></td>
       <td colspan=9><%= submit_tag 'Filter' -%></td>
     <%end%>  
@@ -19,6 +20,7 @@
     <th>Device Name</th>
     <th>Tech Email</th>
     <th>Local Admin</th>
+    <th>Toner Email</th>
     <th>Client</th>
     <th>Misfeed</th>
     <th>Paper<br />Out</th>
@@ -44,6 +46,7 @@
       </td>
       <td><span title="<%=h n.tech -%>"><%=h truncate(n.tech, :length => 20) -%></span></td>
       <td><span title="<%=h n.local_admin -%>"><%=h truncate(n.local_admin, :length => 20) -%></span></td>
+      <td><span title="<%=h n.toner_admin -%>"><%=h truncate(n.toner_admin, :length => 20) -%></span></td>
       <td><%= n.device.client.nil? ? link_to('Please edit controls', edit_notify_control_path(n)) : n.device.client.name -%></td>
       <td>
         <% unless n.jam_sent.nil? %>

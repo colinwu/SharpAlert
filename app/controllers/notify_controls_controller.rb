@@ -19,6 +19,11 @@ class NotifyControlsController < ApplicationController
         condition_array << @local_q.condition
         where_array << @local_q.where('local_admin')
       end
+      if(not params['toner_q'].nil? and not params['toner_q'].empty?)
+        @toner_q = params[:toner_q]
+        condition_array << @toner_q.condition
+        where_array << @toner_q.where('toner_admin')
+      end
       if (not params['client_q'].nil? and not params['client_q'].empty?)
         @client_q = params[:client_q]
         where_array << @client_q.where('clients.name')

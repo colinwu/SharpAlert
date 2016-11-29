@@ -4,7 +4,7 @@ class NotifyMailer < ActionMailer::Base
 
   def notify_email(alert)
     @alert = alert
-    @n = Device.find(@alert.device_id).notify_control
+    @n = @alert.device.notify_control
     # figure out which alert this is so we know which control to use
     if alert.alert_msg =~ /Misfeed/ and not @n.jam.nil?
       period = @n.jam * 3600
@@ -14,21 +14,33 @@ class NotifyMailer < ActionMailer::Base
     elsif alert.alert_msg =~ /Add toner/ and not @n.toner_empty.nil?
       @last_sent = @n.toner_empty_sent
       period = @n.toner_empty * 3600
-      # THIS IS A HACK!!! For now only want Toner alerts to go to rpdesk if the client is 'IBEW Local 353'
-      if (@alert.device.client.name == 'IBEW Local 353')
-        @who = (@n.local_admin.nil? or @n.local_admin.empty?) ? 'rpdesk@sharpsec.com' : [@n.local_admin,'rpdesk@sharpsec.com'].join(',')
+      @who = ''
+      unless (@n.local_admin.nil? or @n.local_admin.empty?)
+        unless (@n.toner_admin.nil? or @n.toner_admin.empty?)
+          @who = "#{@n.local_admin},#{@n.toner_admin}"
+        else
+          @who = @n.local_admin
+        end
       else
-        @who = @n.local_admin
+        unless (@n.toner_admin.nil? or @n.toner_admin.empty?)
+          @who = @n.toner_admin
+        end
       end
       @n.toner_empty_sent = alert.alert_date
     elsif alert.alert_msg =~ /Toner supply/i and not @n.toner_low.nil?
       @last_sent = @n.toner_low_sent
       period = @n.toner_low * 3600
-      # THIS IS A HACK!!! For now only want Toner alerts to go to rpdesk if the client is 'IBEW Local 353'
-      if (@alert.device.client.name == 'IBEW Local 353')
-        @who = (@n.local_admin.nil? or @n.local_admin.empty?) ? 'rpdesk@sharpsec.com' : [@n.local_admin,'rpdesk@sharpsec.com'].join(',')
+      @who = ''
+      unless (@n.local_admin.nil? or @n.local_admin.empty?)
+        unless (@n.toner_admin.nil? or @n.toner_admin.empty?)
+          @who = "#{@n.local_admin},#{@n.toner_admin}"
+        else
+          @who = @n.local_admin
+        end
       else
-        @who = @n.local_admin
+        unless (@n.toner_admin.nil? or @n.toner_admin.empty?)
+          @who = @n.toner_admin
+        end
       end
       @n.toner_low_sent = alert.alert_date
     elsif alert.alert_msg =~ /Load paper/ and not @n.paper.nil?
