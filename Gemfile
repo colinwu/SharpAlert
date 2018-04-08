@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
-# gem 'rails', '3.2.11'
-gem 'rails', '~> 3.2.22'
+gem 'rails', '4.2.9'
 # gem 'passenger'
 gem 'bundler'
 
@@ -13,14 +12,15 @@ gem 'minitest'
 gem 'test-unit'
 
 group :development, :test do
+  gem 'byebug'
   gem 'railroady'
 end
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'sass-rails'
+  gem 'coffee-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', :platforms => :ruby

@@ -1,5 +1,4 @@
 class Client < ActiveRecord::Base
-  attr_accessible :name, :pattern
   before_destroy :reset_device_ownership
   has_many :devices
   

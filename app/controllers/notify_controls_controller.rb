@@ -1,4 +1,6 @@
 class NotifyControlsController < ApplicationController
+  before_action :set_nc, only: [:show, :edit, :update, :destroy]
+
   def index
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
     unless (params[:commit].nil?)
@@ -40,7 +42,6 @@ class NotifyControlsController < ApplicationController
   end
 
   def show
-    @notify_control = NotifyControl.find(params[:id])
   end
 
   def new
@@ -48,7 +49,7 @@ class NotifyControlsController < ApplicationController
   end
 
   def create
-    @notify_control = NotifyControl.new(params[:notify_control])
+    @notify_control = NotifyControl.new(nc_params)
     if @notify_control.save
       redirect_to @notify_control, :notice => "Successfully created notify control."
     else
@@ -83,7 +84,6 @@ class NotifyControlsController < ApplicationController
   end
   
   def edit
-    @notify_control = NotifyControl.find(params[:id])
     @name = (@notify_control.device.serial == 'default') ? 'Default Settings' : @notify_control.device.name
     @selected = []
     @title = "Edit Notify Controls for Device #{@name}"
@@ -96,8 +96,7 @@ class NotifyControlsController < ApplicationController
   end
 
   def update
-    @notify_control = NotifyControl.find(params[:id])
-    if @notify_control.update_attributes(params[:notify_control])
+    if @notify_control.update(nc_params)
       redirect_to notify_controls_url, :notice  => "Successfully updated notify control."
     else
       render :action => 'edit'
@@ -105,8 +104,17 @@ class NotifyControlsController < ApplicationController
   end
 
   def destroy
-    @notify_control = NotifyControl.find(params[:id])
     @notify_control.destroy
     redirect_to notify_controls_url, :notice => "Successfully destroyed notify control."
+  end
+
+  private
+
+  def set_nc
+    @notify_control = NotifyControl.find(params[:id])
+  end
+
+  def nc_params
+    params.require(:notify_control).permit(:local_admin, :tech, :jam, :toner_low, :toner_empty, :paper, :service, :pm, :waste_almost_full, :waste_full, :job_log_full, :jam_sent, :toner_low_sent, :toner_empty_sent, :paper_sent, :service_sent, :pm_sent, :waste_almost_full_sent, :waste_full_sent, :job_log_full_sent, :device_id, :toner_admin)
   end
 end

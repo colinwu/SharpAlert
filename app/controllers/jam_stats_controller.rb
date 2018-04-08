@@ -1,10 +1,11 @@
 class JamStatsController < ApplicationController
+  before_action :set_js, only: [:show, :edit, :create, :destroy]
+
   def index
     @jam_stats = JamStat.all
   end
 
   def show
-    @jam_stat = JamStat.find(params[:id])
   end
 
   def new
@@ -12,7 +13,7 @@ class JamStatsController < ApplicationController
   end
 
   def create
-    @jam_stat = JamStat.new(params[:jam_stat])
+    @jam_stat = JamStat.new(js_params)
     if @jam_stat.save
       redirect_to @jam_stat, :notice => "Successfully created jam stat."
     else
@@ -21,12 +22,10 @@ class JamStatsController < ApplicationController
   end
 
   def edit
-    @jam_stat = JamStat.find(params[:id])
   end
 
   def update
-    @jam_stat = JamStat.find(params[:id])
-    if @jam_stat.update_attributes(params[:jam_stat])
+    if @jam_stat.update(js_params)
       redirect_to @jam_stat, :notice  => "Successfully updated jam stat."
     else
       render :action => 'edit'
@@ -34,8 +33,17 @@ class JamStatsController < ApplicationController
   end
 
   def destroy
-    @jam_stat = JamStat.find(params[:id])
     @jam_stat.destroy
     redirect_to jam_stats_url, :notice => "Successfully destroyed jam stat."
+  end
+
+  private
+
+  def set_js
+    @jam_stat = JamStat.find(params[:id])
+  end
+
+  def js_params
+    params.require(:jam_stat).require(:jam_code, :paper_type, :paper_code, :jam_type, :alert_id)
   end
 end

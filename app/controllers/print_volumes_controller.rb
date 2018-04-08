@@ -1,10 +1,11 @@
 class PrintVolumesController < ApplicationController
+  before_action :set_pv, only: [:show, :edit, :update, :destroy]
+  
   def index
     @print_volumes = PrintVolume.order(:model).paginate(:page => params[:page], :per_page => 30)
   end
 
   def show
-    @print_volume = PrintVolume.find(params[:id])
   end
 
   def new
@@ -12,7 +13,7 @@ class PrintVolumesController < ApplicationController
   end
 
   def create
-    @print_volume = PrintVolume.new(params[:print_volume])
+    @print_volume = PrintVolume.new(pv_params)
     if @print_volume.save
       redirect_to print_volumes_url :notice => "Successfully created print volume."
     else
@@ -21,12 +22,10 @@ class PrintVolumesController < ApplicationController
   end
 
   def edit
-    @print_volume = PrintVolume.find(params[:id])
   end
 
   def update
-    @print_volume = PrintVolume.find(params[:id])
-    if @print_volume.update_attributes(params[:print_volume])
+    if @print_volume.update(pv_params)
       redirect_to print_volumes_url :notice  => "Successfully updated print volume."
     else
       render :action => 'edit'
@@ -34,8 +33,17 @@ class PrintVolumesController < ApplicationController
   end
 
   def destroy
-    @print_volume = PrintVolume.find(params[:id])
     @print_volume.destroy
     redirect_to print_volumes_url, :notice => "Successfully destroyed print volume."
+  end
+
+  private
+  
+  def set_pv
+    @print_volume = PrintVolume.find(params[:id])
+  end
+
+  def pv_params
+    params.require(:print_volume).permit(:model, :ave_bw, :max_bw, :ave_c, :max_c, :lifetime)
   end
 end

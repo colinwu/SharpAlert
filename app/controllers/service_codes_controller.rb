@@ -1,10 +1,10 @@
 class ServiceCodesController < ApplicationController
+  before_action :set_service_code, only: [:show, :edit, :update, :destroy]
   def index
     @service_codes = ServiceCode.all
   end
 
   def show
-    @service_code = ServiceCode.find(params[:id])
   end
 
   def new
@@ -12,7 +12,7 @@ class ServiceCodesController < ApplicationController
   end
 
   def create
-    @service_code = ServiceCode.new(params[:service_code])
+    @service_code = ServiceCode.new(service_code_params)
     if @service_code.save
       redirect_to @service_code, :notice => "Successfully created service code."
     else
@@ -21,12 +21,10 @@ class ServiceCodesController < ApplicationController
   end
 
   def edit
-    @service_code = ServiceCode.find(params[:id])
   end
 
   def update
-    @service_code = ServiceCode.find(params[:id])
-    if @service_code.update_attributes(params[:service_code])
+    if @service_code.update_attributes(service_code_params)
       redirect_to @service_code, :notice  => "Successfully updated service code."
     else
       render :action => 'edit'
@@ -34,8 +32,17 @@ class ServiceCodesController < ApplicationController
   end
 
   def destroy
-    @service_code = ServiceCode.find(params[:id])
     @service_code.destroy
     redirect_to service_codes_url, :notice => "Successfully destroyed service code."
+  end
+
+  private
+
+  def set_service_code
+    @service_code = ServiceCode.find(params[:id])
+  end
+  
+  def service_code_params
+    params.require(:service_code).permit(:code, :alert_id)
   end
 end

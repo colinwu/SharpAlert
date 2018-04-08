@@ -1,10 +1,11 @@
 class AlertsController < ApplicationController
+  before_action :set_alert, only: [:create, :show]
+
   def new
     @alert = Alert.new
   end
 
   def create
-    @alert = Alert.new(params[:alert])
     if @alert.save
       redirect_to alerts_url, :notice => "Successfully created alert."
     else
@@ -13,7 +14,6 @@ class AlertsController < ApplicationController
   end
 
   def show
-    @alert = Alert.find(params[:id])
     @mc = @alert.maint_counter
     @sc = @alert.sheet_count
   end
@@ -79,9 +79,9 @@ class AlertsController < ApplicationController
         condition_array << @msg_q.condition
         comment_array << "Message = #{@msg_q}"
       end
-#       if(not params['sort'].nil? and not params['sort'].empty?)
-#         @sort = params['sort']
-#       end
+      # if(not params['sort'].nil? and not params['sort'].empty?)
+      #   @sort = params['sort']
+      # end
       unless where_array.empty?
         condition_array[0] = where_array.join(' and ')
         comment = comment_array.join(' and ')
@@ -94,7 +94,8 @@ class AlertsController < ApplicationController
     else
       page_to_show = params[:page]
     end
-    @alerts = Alert.where(condition_array).joins(:device => :client).order(@sort).paginate(:page => page_to_show, :per_page => 30, :include => {:device => :client})
+    # @alerts = Alert.where(condition_array).joins(:device => :client).order(@sort).paginate(:page => page_to_show, :per_page => 30, :include => {:device => :client})
+    @alerts = Alert.where(condition_array).joins(:device => :client).order(@sort).paginate(:page => page_to_show, :per_page => 30)
     if (params[:commit] == 'Export')
       @request.sub!(/commit=Export/,'commit=Find')
       csv_data = '"alert date","device name","model","serial number","machine code","client","message"' + "\n"
@@ -108,4 +109,13 @@ class AlertsController < ApplicationController
     end
   end
   
+  private
+
+  def set_alert
+    @alert = Alert.find(params[:id])
+  end
+
+  def alert_params
+    params.require(:alert).permit(:alert_date, :alert_msg, :notify_control_id)
+  end
 end

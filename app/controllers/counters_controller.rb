@@ -1,4 +1,6 @@
 class CountersController < ApplicationController
+  before_action :set_counter, only: [:edit, :show, :update, :destroy]
+
   def index
     where_array = Array.new
     conditions_array = ['place holder']
@@ -19,7 +21,7 @@ class CountersController < ApplicationController
       conditions_array = []
     end
                                           
-    @devices = Counter.group(:device_id).order('devices.name').select(:device_id).where(conditions_array).paginate(:page => params[:page], :per_page => 15, :include => {:device => :client})
+    @devices = Counter.joins(:device).group(:device_id).order('devices.name').select(:device_id).where(conditions_array).paginate(:page => params[:page], :per_page => 15)
     @first = Hash.new
     @last = Hash.new
     @oldbw = Hash.new
@@ -112,7 +114,6 @@ class CountersController < ApplicationController
   end
 
   def show
-    @counter = Counter.find(params[:id])
   end
 
   def new
@@ -129,12 +130,10 @@ class CountersController < ApplicationController
   end
 
   def edit
-    @counter = Counter.find(params[:id])
   end
 
   def update
-    @counter = Counter.find(params[:id])
-    if @counter.update_attributes(params[:counter])
+    if @counter.update(counter_params)
       redirect_to @counter, :notice  => "Successfully updated counter."
     else
       render :action => 'edit'
@@ -142,8 +141,17 @@ class CountersController < ApplicationController
   end
 
   def destroy
-    @counter = Counter.find(params[:id])
     @counter.destroy
     redirect_to counters_url, :notice => "Successfully destroyed counter."
+  end
+
+  private
+
+  def set_counter
+    @counter = Counter.find(params[:id])
+  end
+
+  def counter_params
+    params.require(:counter).permit(:status_date, :copybw, :copy2c, :copy1c, :copyfc, :printbw, :printfc, :totalprintbw, :totalprint2c, :totalprint1c, :totalprintc, :scanbw, :scan2c, :scan1c, :scanfc, :fileprintbw, :fileprint2c, :fileprint1c, :fileprintfc, :faxin, :faxinline1, :faxinline3, :otherprintbw, :otherprintc, :faxout, :faxoutline1, :faxoutline2, :faxoutline3, :hddscanbw, :hddscan2c, :hddscan1c, :hddscanfc, :tonerbkin, :tonercin, :tonermin, :toneryin, :tonernnendbk, :tonernnendc, :tonernnendm, :tonernnendy, :tonerendbk, :tonerendc, :tonerendm, :tonerendy, :tonerleftbk, :tonerleftc, :tonerleftm, :tonerlefty, :device_id)
   end
 end

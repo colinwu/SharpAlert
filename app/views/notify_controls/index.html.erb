@@ -30,7 +30,7 @@
     <th>Waste<br />Full</th>
     <th>Service</th>
     <th>Maint.</th>
-    <th>Job Log<br />Full</th>
+<!--     <th>Job Log<br />Full</th> -->
   </tr>
   <%= form_tag batch_edit_notify_controls_url, :method => :get do %>
   <% for n in @notify_controls %>
@@ -44,9 +44,9 @@
           <%= link_to h(n.device.name), alerts_path + "?name_q=#{n.device.name}&commit=Find", :title => "Click to view all alerts for this device" %>
         <% end %>
       </td>
-      <td><span title="<%=h n.tech -%>"><%=h truncate(n.tech, :length => 20) -%></span></td>
-      <td><span title="<%=h n.local_admin -%>"><%=h truncate(n.local_admin, :length => 20) -%></span></td>
-      <td><span title="<%=h n.toner_admin -%>"><%=h truncate(n.toner_admin, :length => 20) -%></span></td>
+      <td><span title="<%=h n.tech -%>"><%=h truncate(n.tech, :length => 15) -%></span></td>
+      <td><span title="<%=h n.local_admin -%>"><%=h truncate(n.local_admin, :length => 15) -%></span></td>
+      <td><span title="<%=h n.toner_admin -%>"><%=h truncate(n.toner_admin, :length => 15) -%></span></td>
       <td><%= n.device.client.nil? ? link_to('Please edit controls', edit_notify_control_path(n)) : n.device.client.name -%></td>
       <td>
         <% unless n.jam_sent.nil? %>
@@ -104,13 +104,13 @@
           <span><%=h n.pm %></span>
         <% end %>
       </td>
-      <td>
+<!--      <td>
         <% unless n.job_log_full_sent.nil? %>
           <%= link_to n.job_log_full.to_s, alerts_path + device_query_string + "&date_q=#{n.job_log_full_sent.to_formatted_s(:db)}", :title => "Last notice sent: #{n.job_log_full_sent.to_formatted_s(:db)}" -%>
         <% else %>
           <span><%=h n.job_log_full %></span>
         <% end %>
-      </td>
+      </td>-->
       <td><%= link_to 'Edit', edit_notify_control_path(n), :title => "Click to edit controls for this device" %></td>
     </tr>
   <% end %>

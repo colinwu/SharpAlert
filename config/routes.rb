@@ -21,7 +21,7 @@ SharpApp::Application.routes.draw do
   get 'report/:id/full_cfs_history' => 'report#full_cfs_history', :as => :full_cfs_history_report
   get 'report/:id/full_maint_history' => 'report#full_maint_history', :as => :full_maint_history_report
   get 'report/:id/toner_history' => 'report#toner_history', :as => :toner_history_report
-  match 'report/drum_dev_age', :as => :drum_dev_age_report
+  get 'report/drum_dev_age', :as => :drum_dev_age_report
   get 'report/:id/full_jam_history' => 'report#full_jam_history', :as => :full_jam_history_report
   
   

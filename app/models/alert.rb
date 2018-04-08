@@ -1,5 +1,4 @@
 class Alert < ActiveRecord::Base
-  attr_accessible :alert_date, :alert_msg, :notify_control_id
 
   belongs_to :device
   has_one :jam_stat, :dependent => :destroy

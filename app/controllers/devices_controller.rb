@@ -1,4 +1,6 @@
 class DevicesController < ApplicationController
+  before_action :set_device, only: [:edit, :update, :show, :destroy]
+
   def index
     @request = request.env['QUERY_STRING'].sub(/sort=[^&]+&*/,'')
     if params[:sort].nil? or params[:sort].empty?
@@ -43,11 +45,10 @@ class DevicesController < ApplicationController
         condition_array = []
       end
     end
-    @devices = Device.order(@sort).where(condition_array).paginate(:page => params[:page], :per_page => 30, :include => :client)
+    @devices = Device.order(@sort).where(condition_array).paginate(:page => params[:page], :per_page => 30)
   end
 
   def show
-    @device = Device.find(params[:id])
     @title = "Reports Available for #{@device.name}"
   end
 
@@ -82,7 +83,7 @@ class DevicesController < ApplicationController
   end
   
   def create
-    @device = Device.new(params[:device])
+    @device = Device.new(device_params)
     if @device.save
       redirect_to @device, :notice => "Successfully created device."
     else
@@ -91,12 +92,10 @@ class DevicesController < ApplicationController
   end
 
   def edit
-    @device = Device.find(params[:id])
   end
 
   def update
-    @device = Device.find(params[:id])
-    if @device.update_attributes(params[:device])
+    if @device.update(device_params)
       redirect_to edit_notify_control_path(@device.notify_control), :notice  => "Successfully updated device."
     else
       render :action => 'edit'
@@ -104,8 +103,17 @@ class DevicesController < ApplicationController
   end
 
   def destroy
-    @device = Device.find(params[:id])
     @device.destroy
     redirect_to devices_url, :notice => "Successfully destroyed device."
+  end
+
+  private
+
+  def set_device
+    @device = Device.find(params[:id])
+  end
+
+  def device_params
+    params.require(:device).permit(:name, :model, :serial, :code, :client_id, :ip)
   end
 end

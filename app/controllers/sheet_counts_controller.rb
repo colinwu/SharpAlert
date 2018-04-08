@@ -1,10 +1,11 @@
 class SheetCountsController < ApplicationController
+  before_action :set_sheet_count, only: [:show, :edit, :update, :destroy]
+
   def index
     @sheet_counts = SheetCount.all
   end
 
   def show
-    @sheet_count = SheetCount.find(params[:id])
   end
 
   def new
@@ -12,7 +13,7 @@ class SheetCountsController < ApplicationController
   end
 
   def create
-    @sheet_count = SheetCount.new(params[:sheet_count])
+    @sheet_count = SheetCount.new(sheet_count_params)
     if @sheet_count.save
       redirect_to @sheet_count, :notice => "Successfully created sheet count."
     else
@@ -21,12 +22,10 @@ class SheetCountsController < ApplicationController
   end
 
   def edit
-    @sheet_count = SheetCount.find(params[:id])
   end
 
   def update
-    @sheet_count = SheetCount.find(params[:id])
-    if @sheet_count.update_attributes(params[:sheet_count])
+    if @sheet_count.update_attributes(sheet_count_params)
       redirect_to @sheet_count, :notice  => "Successfully updated sheet count."
     else
       render :action => 'edit'
@@ -34,8 +33,18 @@ class SheetCountsController < ApplicationController
   end
 
   def destroy
-    @sheet_count = SheetCount.find(params[:id])
     @sheet_count.destroy
     redirect_to sheet_counts_url, :notice => "Successfully destroyed sheet count."
   end
+
+  private
+
+  def set_sheet_count
+    @sheet_count = SheetCount.find(params[:id])
+  end
+
+  def sheet_count_params
+    params.require(:sheet_count).permit(:bw, :color, :alert_id)
+  end
+
 end
