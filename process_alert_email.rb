@@ -66,23 +66,23 @@ def getJamCode(dir)
       return js
     else
       # see if there is a matching MB jam history
-      mbcount = f.read(2).unpack('S>')[0]
-      if (mbcount > 0)
+      mbcount = f.read(2).unpack1('S>')
+      if mbcount.positive?
         f.read(1)
         jamcode = '%02x' % f.read(1).ord
-        yr = "%02x" % f.read(1).ord
-        mon = "%02x" % f.read(1).ord
-        day = "%02x" % f.read(1).ord
-        hr = "%02x" % f.read(1).ord
-        min = "%02x" % f.read(1).ord
-        sec = "%02x" % f.read(1).ord
+        yr = '%02x' % f.read(1).ord
+        mon = '%02x' % f.read(1).ord
+        day = '%02x' % f.read(1).ord
+        hr = '%02x' % f.read(1).ord
+        min = '%02x' % f.read(1).ord
+        sec = '%02x' % f.read(1).ord
         recdate = yr + mon + day + hr + min
         
-        paper_code = "%02x" % f.read(1).ord
-        paper_type = "%02x" % f.read(1).ord
+        paper_code = '%02x' % f.read(1).ord
+        paper_type = '%02x' % f.read(1).ord
         f.read(2) # skip over the 0xffff
-        sheet_count_bw = f.read(4).unpack('L>')[0]
-        sheet_count_colour = f.read(4).unpack('L>')[0]
+        sheet_count_bw = f.read(4).unpack1('L>')
+        sheet_count_colour = f.read(4).unpack1('L>')
       end
       if (sentdate == recdate)
         js.jam_code = jamcode
@@ -105,12 +105,12 @@ end
 
 def getSheetCount(dir)
   # returns SheetCount record id or nil if error or none found
-  unless (!dir.nil? and File.exists?(dir + '/E-mail DIAG Job Counter Data.R08'))
+  unless !dir.nil? && File.exist?(dir + '/E-mail DIAG Job Counter Data.R08')
     return nil
   end
   f = File.open(dir + '/E-mail DIAG Job Counter Data.R08')
   title = f.read(16)
-  if (title == 'JOB COUNTER DATA')
+  if title == 'JOB COUNTER DATA'
     sc = SheetCount.new()
     f.read(216)
     (sc.bw, sc.color) = f.read(8).unpack('L>L>')
@@ -125,48 +125,48 @@ end
 
 def getMaintCounter(dir)
   # returns MaintCounter record id or nil if error or none found
-  unless (!dir.nil? and File.exists?(dir + '/E-mail DIAG Maintenance Counter Data.R09'))
+  unless !dir.nil? && File.exist?(dir + '/E-mail DIAG Maintenance Counter Data.R09')
     return nil
   end
   f = File.open(dir + '/E-mail DIAG Maintenance Counter Data.R09')
   title = f.read(15)
-  if (title == 'MAINTE CNT DATA')
+  if title == 'MAINTE CNT DATA'
     mc = MaintCounter.new
     f.read(45)
     # at 0x003C
     (mc.maint_total,mc.maint_color) = f.read(8).unpack('L>L>')
     # 0x0044
     (mc.drum_print_b,mc.drum_print_c,mc.drum_print_m,mc.drum_print_y) =
-        f.read(16).unpack('L>' * 4)
+      f.read(16).unpack('L>' * 4)
     (mc.dev_print_b,mc.dev_print_c,mc.dev_print_m,mc.dev_print_y) =
-        f.read(16).unpack('L>' * 4)
+      f.read(16).unpack('L>' * 4)
     f.read(16)
     # 0x0074
     (mc.drum_dist_b,mc.drum_dist_c,mc.drum_dist_m,mc.drum_dist_y) =
-        f.read(16).unpack('L>' * 4)
+      f.read(16).unpack('L>' * 4)
     (mc.dev_dist_b,mc.dev_dist_c,mc.dev_dist_m,mc.dev_dist_y) =
-        f.read(16).unpack('L>' * 4)
+      f.read(16).unpack('L>' * 4)
     f.read(16)
     # 0x00A4
     (mc.scan,mc.spf_count) = f.read(8).unpack('L>L>')
     f.read(44)
     # 0x00D8
-    mc.mft_total = f.read(4).unpack('L>')[0]
+    mc.mft_total = f.read(4).unpack1('L>')
     (mc.tray1,mc.tray2,mc.tray3,mc.tray4) = f.read(16).unpack('L>' * 4)
     f.read(8)
-    mc.adu = f.read(4).unpack('L>')[0]
+    mc.adu = f.read(4).unpack1('L>')
     (mc.ptu_print,mc.ptu_dist,mc.ptu_days) = f.read(12).unpack('L>' * 3)
     (mc.stu_print,mc.stu_dist,mc.stu_days) = f.read(12).unpack('L>' * 3)
     (mc.fuser_print,mc.fuser_days) = f.read(8).unpack('L>' * 2)
     f.read(4)
     (mc.toner_motor_b,mc.toner_motor_c,mc.toner_motor_m,mc.toner_motor_y) =
-        f.read(16).unpack('L>' * 4)
+      f.read(16).unpack('L>' * 4)
     (mc.toner_rotation_b,mc.toner_rotation_c,mc.toner_rotation_m,mc.toner_rotation_y) =
-        f.read(16).unpack('L>' * 4)
+      f.read(16).unpack('L>' * 4)
     (mc.drum_life_used_b,mc.drum_life_used_c,mc.drum_life_used_m,mc.drum_life_used_y) =
-        f.read(16).unpack('L>' * 4)
+      f.read(16).unpack('L>' * 4)
     (mc.dev_life_used_b,mc.dev_life_used_c,mc.dev_life_used_m,mc.dev_life_used_y) =
-        f.read(16).unpack('L>' * 4)
+      f.read(16).unpack('L>' * 4)
     mc.save
     f.close
     return mc
@@ -212,11 +212,11 @@ while (rawdata.length > 0)
     code = $1
   elsif line =~ /^!!!!! (.+) !!!!!/
     msg = $1
-    if (msg =~ /Call for service/)
+    if msg.match?('Call for service')
       codes = rawdata.pop.strip
       msg = "Call for service: #{codes}"
       code_list = codes.split
-    elsif (msg =~ /Maintenance required. Code:(.+)/ or msg =~ /Intervention technicien requise. Code:(.+)/)
+    elsif msg =~ /Maintenance required. Code:(.+)/ || msg =~ /Intervention technicien requise. Code:(.+)/
       codes = $1
       msg = "Maintenance required. Code:#{codes}"
       code_list = codes.split
@@ -230,7 +230,7 @@ while (rawdata.length > 0)
     from = $1
     from =~ /@(.+)>/
     from_domain = $1
-  elsif line =~ /^Received: from /
+  elsif line.match?('^Received: from ')
     while (tmp = rawdata.pop)
       if (tmp =~ /^\s+/)
         tmp.strip!
@@ -242,9 +242,8 @@ while (rawdata.length > 0)
     end
     line =~ /^Received: from.+[\(\[](\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})[\)\]]+\s+by/
     dev_ip = $1
-    puts "IP: #{dev_ip}"
-  elsif line =~ /^--SmTP-MULTIPART-BOUNDARY/
-    if (boundary.nil?)
+  elsif line.match?('^--SmTP-MULTIPART-BOUNDARY')
+    if boundary.nil?
       boundary = 1
     else
       break
