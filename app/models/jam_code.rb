@@ -1,4 +1,4 @@
-class JamCode < ActiveRecord::Base
+class JamCode < ApplicationRecord
   
   def self.xlate(rc)
     j = self.find_by_red_code(rc)

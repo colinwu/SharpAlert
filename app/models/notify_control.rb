@@ -1,4 +1,4 @@
-class NotifyControl < ActiveRecord::Base
+class NotifyControl < ApplicationRecord
 
   belongs_to :device
   

@@ -1,19 +1,25 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.9'
+gem 'rails', '~> 5.2.0'
 # gem 'passenger'
 gem 'bundler'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2', '~> 0.3.18'
+gem 'mysql2'
+gem 'responders'
+
 gem 'minitest'
 gem 'test-unit'
 
 group :development, :test do
   gem 'byebug'
   gem 'railroady'
+end
+
+group :development do
+  gem 'listen'
 end
 
 # Gems used only for assets and not required
@@ -23,9 +29,11 @@ group :assets do
   gem 'coffee-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyracer', :platforms => :ruby
+  # gem 'therubyracer', :platforms => :ruby
+  gem 'mini_racer', :platforms => :ruby
+  gem 'turbolinks', '~> 5'
 
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier'
 end
 
 #gem 'nifty-generators'

@@ -1,2 +1,2 @@
-class ServiceCode < ActiveRecord::Base
+class ServiceCode < ApplicationRecord
 end

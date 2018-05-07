@@ -1,4 +1,4 @@
-class Client < ActiveRecord::Base
+class Client < ApplicationRecord
   before_destroy :reset_device_ownership
   has_many :devices
   

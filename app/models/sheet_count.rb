@@ -1,3 +1,3 @@
-class SheetCount < ActiveRecord::Base
+class SheetCount < ApplicationRecord
   belongs_to :alert
 end

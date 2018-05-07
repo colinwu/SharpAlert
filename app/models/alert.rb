@@ -1,4 +1,4 @@
-class Alert < ActiveRecord::Base
+class Alert < ApplicationRecord
 
   belongs_to :device
   has_one :jam_stat, :dependent => :destroy

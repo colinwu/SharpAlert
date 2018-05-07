@@ -1,2 +1,2 @@
-class MaintCode < ActiveRecord::Base
+class MaintCode < ApplicationRecord
 end

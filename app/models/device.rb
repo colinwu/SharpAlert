@@ -1,4 +1,4 @@
-class Device < ActiveRecord::Base
+class Device < ApplicationRecord
   has_many   :alerts, :dependent => :destroy
   has_one    :notify_control, :dependent => :destroy
   has_many   :counters, :dependent => :destroy

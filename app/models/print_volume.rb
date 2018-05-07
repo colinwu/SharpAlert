@@ -1,4 +1,4 @@
-class PrintVolume < ActiveRecord::Base
+class PrintVolume < ApplicationRecord
   
   validates_uniqueness_of :model
   

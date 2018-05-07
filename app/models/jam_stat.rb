@@ -1,4 +1,4 @@
-class JamStat < ActiveRecord::Base
+class JamStat < ApplicationRecord
 
   belongs_to :alert
   

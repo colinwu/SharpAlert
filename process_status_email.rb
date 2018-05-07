@@ -293,6 +293,15 @@ while (rawdata.length > 0)
     puts "Unrecognized line: [#{line}]"
   end
 end
+
+if serial.nil? or (serial.length < 6) # ignore the alert if there is no serial number
+  exit
+end
+
+if name.nil? or name.empty?
+  name = dev_ip
+end
+
 dev = Device.where(["model = ? and serial = ?", model, serial]).first
 if dev.nil?
   client = Client.find_by_pattern(from_domain)

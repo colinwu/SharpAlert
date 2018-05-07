@@ -1,4 +1,4 @@
-class Counter < ActiveRecord::Base
+class Counter < ApplicationRecord
   
   belongs_to :device
   
